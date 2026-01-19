@@ -1,6 +1,6 @@
-using UniversityManagement.Domain.Common;     // for BaseEntity
-using UniversityManagement.Domain.Interfaces; // for IRepository<T>
-using UniversityManagement.Domain.Entities;   // for Announcement, StudentProgram, etc.
+using UniversityManagement.Domain.Common;     
+using UniversityManagement.Domain.Interfaces; 
+using UniversityManagement.Domain.Entities;   
 
 
 namespace UniversityManagement.Infrastructure.Repositories;
