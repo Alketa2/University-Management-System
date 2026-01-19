@@ -7,6 +7,7 @@ namespace UniversityManagement.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Produces("application/json")]
 public class StudentsController : ControllerBase
 {
     private readonly IStudentService _studentService;
@@ -17,6 +18,8 @@ public class StudentsController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(StudentResponseDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<StudentResponseDto>> CreateStudent([FromBody] CreateStudentDto createStudentDto)
     {
         var student = await _studentService.CreateStudentAsync(createStudentDto);
@@ -24,6 +27,9 @@ public class StudentsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(typeof(StudentResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<StudentResponseDto>> UpdateStudent(Guid id, [FromBody] UpdateStudentDto updateStudentDto)
     {
         if (id != updateStudentDto.Id)
@@ -41,6 +47,8 @@ public class StudentsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(StudentResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<StudentResponseDto>> GetStudentById(Guid id)
     {
         var student = await _studentService.GetStudentByIdAsync(id);
@@ -51,6 +59,7 @@ public class StudentsController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(List<StudentResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<StudentResponseDto>>> GetAllStudents()
     {
         var students = await _studentService.GetAllStudentsAsync();
@@ -58,6 +67,8 @@ public class StudentsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteStudent(Guid id)
     {
         var result = await _studentService.DeleteStudentAsync(id);
@@ -68,6 +79,8 @@ public class StudentsController : ControllerBase
     }
 
     [HttpPost("admit-to-program")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> AdmitStudentToProgram([FromBody] AdmitStudentToProgramDto admitDto)
     {
         var result = await _studentService.AdmitStudentToProgramAsync(admitDto);
@@ -78,6 +91,7 @@ public class StudentsController : ControllerBase
     }
 
     [HttpGet("{id}/programs")]
+    [ProducesResponseType(typeof(List<ProgramResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<ProgramResponseDto>>> GetStudentPrograms(Guid id)
     {
         var programs = await _studentService.GetStudentProgramsAsync(id);

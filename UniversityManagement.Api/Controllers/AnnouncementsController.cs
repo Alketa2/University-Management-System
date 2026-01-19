@@ -6,6 +6,7 @@ namespace UniversityManagement.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Produces("application/json")]
 public class AnnouncementsController : ControllerBase
 {
     private readonly IAnnouncementService _announcementService;
@@ -16,6 +17,8 @@ public class AnnouncementsController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(AnnouncementResponseDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<AnnouncementResponseDto>> CreateAnnouncement([FromBody] CreateAnnouncementDto createAnnouncementDto)
     {
         var announcement = await _announcementService.CreateAnnouncementAsync(createAnnouncementDto);
@@ -23,6 +26,9 @@ public class AnnouncementsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(typeof(AnnouncementResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<AnnouncementResponseDto>> UpdateAnnouncement(Guid id, [FromBody] UpdateAnnouncementDto updateAnnouncementDto)
     {
         if (id != updateAnnouncementDto.Id)
@@ -40,6 +46,8 @@ public class AnnouncementsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(AnnouncementResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<AnnouncementResponseDto>> GetAnnouncementById(Guid id)
     {
         var announcement = await _announcementService.GetAnnouncementByIdAsync(id);
@@ -50,6 +58,7 @@ public class AnnouncementsController : ControllerBase
     }
 
     [HttpGet("active")]
+    [ProducesResponseType(typeof(List<AnnouncementResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<AnnouncementResponseDto>>> GetActiveAnnouncements(
         [FromQuery] Guid? programId = null,
         [FromQuery] Guid? subjectId = null)
@@ -59,6 +68,7 @@ public class AnnouncementsController : ControllerBase
     }
 
     [HttpGet("teacher/{teacherId}")]
+    [ProducesResponseType(typeof(List<AnnouncementResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<AnnouncementResponseDto>>> GetAnnouncementsByTeacher(Guid teacherId)
     {
         var announcements = await _announcementService.GetAnnouncementsByTeacherAsync(teacherId);
@@ -66,6 +76,8 @@ public class AnnouncementsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteAnnouncement(Guid id)
     {
         var result = await _announcementService.DeleteAnnouncementAsync(id);

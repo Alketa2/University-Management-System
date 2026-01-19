@@ -6,6 +6,7 @@ namespace UniversityManagement.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Produces("application/json")]
 public class TeachersController : ControllerBase
 {
     private readonly ITeacherService _teacherService;
@@ -16,6 +17,8 @@ public class TeachersController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(TeacherResponseDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<TeacherResponseDto>> CreateTeacher([FromBody] CreateTeacherDto createTeacherDto)
     {
         var teacher = await _teacherService.CreateTeacherAsync(createTeacherDto);
@@ -23,6 +26,9 @@ public class TeachersController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(typeof(TeacherResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<TeacherResponseDto>> UpdateTeacher(Guid id, [FromBody] UpdateTeacherDto updateTeacherDto)
     {
         if (id != updateTeacherDto.Id)
@@ -40,6 +46,8 @@ public class TeachersController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(TeacherResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<TeacherResponseDto>> GetTeacherById(Guid id)
     {
         var teacher = await _teacherService.GetTeacherByIdAsync(id);
@@ -50,6 +58,7 @@ public class TeachersController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(List<TeacherResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<TeacherResponseDto>>> GetAllTeachers()
     {
         var teachers = await _teacherService.GetAllTeachersAsync();
@@ -57,6 +66,8 @@ public class TeachersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteTeacher(Guid id)
     {
         var result = await _teacherService.DeleteTeacherAsync(id);

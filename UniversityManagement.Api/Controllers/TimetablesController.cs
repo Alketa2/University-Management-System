@@ -6,6 +6,7 @@ namespace UniversityManagement.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Produces("application/json")]
 public class TimetablesController : ControllerBase
 {
     private readonly ITimetableService _timetableService;
@@ -16,6 +17,8 @@ public class TimetablesController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(TimetableResponseDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<TimetableResponseDto>> CreateTimetable([FromBody] CreateTimetableDto createTimetableDto)
     {
         var timetable = await _timetableService.CreateTimetableAsync(createTimetableDto);
@@ -23,6 +26,9 @@ public class TimetablesController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(typeof(TimetableResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<TimetableResponseDto>> UpdateTimetable(Guid id, [FromBody] UpdateTimetableDto updateTimetableDto)
     {
         if (id != updateTimetableDto.Id)
@@ -40,6 +46,8 @@ public class TimetablesController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(TimetableResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<TimetableResponseDto>> GetTimetableById(Guid id)
     {
         var timetable = await _timetableService.GetTimetableByIdAsync(id);
@@ -50,6 +58,7 @@ public class TimetablesController : ControllerBase
     }
 
     [HttpGet("program/{programId}")]
+    [ProducesResponseType(typeof(List<TimetableResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<TimetableResponseDto>>> GetTimetableByProgram(
         Guid programId,
         [FromQuery] string? semester = null)
@@ -59,6 +68,8 @@ public class TimetablesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteTimetable(Guid id)
     {
         var result = await _timetableService.DeleteTimetableAsync(id);

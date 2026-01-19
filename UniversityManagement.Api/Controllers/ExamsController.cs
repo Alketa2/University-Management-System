@@ -6,6 +6,7 @@ namespace UniversityManagement.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Produces("application/json")]
 public class ExamsController : ControllerBase
 {
     private readonly IExamService _examService;
@@ -16,6 +17,8 @@ public class ExamsController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(ExamResponseDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ExamResponseDto>> CreateExam([FromBody] CreateExamDto createExamDto)
     {
         var exam = await _examService.CreateExamAsync(createExamDto);
@@ -23,6 +26,9 @@ public class ExamsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(typeof(ExamResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ExamResponseDto>> UpdateExam(Guid id, [FromBody] UpdateExamDto updateExamDto)
     {
         if (id != updateExamDto.Id)
@@ -40,6 +46,8 @@ public class ExamsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(ExamResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ExamResponseDto>> GetExamById(Guid id)
     {
         var exam = await _examService.GetExamByIdAsync(id);
@@ -50,6 +58,7 @@ public class ExamsController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(List<ExamResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<ExamResponseDto>>> GetAllExams()
     {
         var exams = await _examService.GetAllExamsAsync();
@@ -57,6 +66,7 @@ public class ExamsController : ControllerBase
     }
 
     [HttpGet("subject/{subjectId}")]
+    [ProducesResponseType(typeof(List<ExamResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<ExamResponseDto>>> GetExamsBySubject(Guid subjectId)
     {
         var exams = await _examService.GetExamsBySubjectAsync(subjectId);
@@ -64,6 +74,8 @@ public class ExamsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteExam(Guid id)
     {
         var result = await _examService.DeleteExamAsync(id);

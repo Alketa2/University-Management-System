@@ -6,6 +6,7 @@ namespace UniversityManagement.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Produces("application/json")]
 public class AttendanceController : ControllerBase
 {
     private readonly IAttendanceService _attendanceService;
@@ -16,6 +17,8 @@ public class AttendanceController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(AttendanceResponseDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<AttendanceResponseDto>> CreateAttendance([FromBody] CreateAttendanceDto createAttendanceDto)
     {
         var attendance = await _attendanceService.CreateAttendanceAsync(createAttendanceDto);
@@ -23,6 +26,8 @@ public class AttendanceController : ControllerBase
     }
 
     [HttpPost("bulk")]
+    [ProducesResponseType(typeof(List<AttendanceResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<List<AttendanceResponseDto>>> CreateBulkAttendance([FromBody] BulkAttendanceDto bulkAttendanceDto)
     {
         var attendances = await _attendanceService.CreateBulkAttendanceAsync(bulkAttendanceDto);
@@ -30,6 +35,9 @@ public class AttendanceController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(typeof(AttendanceResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<AttendanceResponseDto>> UpdateAttendance(Guid id, [FromBody] UpdateAttendanceDto updateAttendanceDto)
     {
         if (id != updateAttendanceDto.Id)
@@ -47,6 +55,8 @@ public class AttendanceController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(AttendanceResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<AttendanceResponseDto>> GetAttendanceById(Guid id)
     {
         var attendance = await _attendanceService.GetAttendanceByIdAsync(id);
@@ -57,6 +67,7 @@ public class AttendanceController : ControllerBase
     }
 
     [HttpGet("student/{studentId}")]
+    [ProducesResponseType(typeof(List<AttendanceResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<AttendanceResponseDto>>> GetAttendanceByStudent(
         Guid studentId,
         [FromQuery] Guid? subjectId = null,
@@ -68,6 +79,7 @@ public class AttendanceController : ControllerBase
     }
 
     [HttpGet("subject/{subjectId}")]
+    [ProducesResponseType(typeof(List<AttendanceResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<AttendanceResponseDto>>> GetAttendanceBySubject(
         Guid subjectId,
         [FromQuery] DateTime date)

@@ -6,6 +6,7 @@ namespace UniversityManagement.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Produces("application/json")]
 public class ProgramsController : ControllerBase
 {
     private readonly IProgramService _programService;
@@ -16,6 +17,8 @@ public class ProgramsController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(ProgramResponseDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ProgramResponseDto>> CreateProgram([FromBody] CreateProgramDto createProgramDto)
     {
         var program = await _programService.CreateProgramAsync(createProgramDto);
@@ -23,6 +26,9 @@ public class ProgramsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(typeof(ProgramResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProgramResponseDto>> UpdateProgram(Guid id, [FromBody] UpdateProgramDto updateProgramDto)
     {
         if (id != updateProgramDto.Id)
@@ -40,6 +46,8 @@ public class ProgramsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(ProgramResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProgramResponseDto>> GetProgramById(Guid id)
     {
         var program = await _programService.GetProgramByIdAsync(id);
@@ -50,6 +58,7 @@ public class ProgramsController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(List<ProgramResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<ProgramResponseDto>>> GetAllPrograms()
     {
         var programs = await _programService.GetAllProgramsAsync();
@@ -57,6 +66,8 @@ public class ProgramsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteProgram(Guid id)
     {
         var result = await _programService.DeleteProgramAsync(id);
