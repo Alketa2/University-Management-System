@@ -9,3 +9,4 @@ C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBack
 C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBackend\UniversityManagement.Domain\obj\Debug\net8.0\refint\UniversityManagement.Domain.dll
 C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBackend\UniversityManagement.Domain\obj\Debug\net8.0\UniversityManagement.Domain.pdb
 C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBackend\UniversityManagement.Domain\obj\Debug\net8.0\ref\UniversityManagement.Domain.dll
+C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBackend\UniversityManagement.Domain\obj\Debug\net8.0\UniversityManagement.Domain.sourcelink.json

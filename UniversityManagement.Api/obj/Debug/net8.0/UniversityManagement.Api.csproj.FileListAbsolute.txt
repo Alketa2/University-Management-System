@@ -38,5 +38,5 @@ C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBack
 C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBackend\UniversityManagement.Api\obj\Debug\net8.0\UniversityManagement.Api.pdb
 C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBackend\UniversityManagement.Api\obj\Debug\net8.0\UniversityManagement.Api.genruntimeconfig.cache
 C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBackend\UniversityManagement.Api\obj\Debug\net8.0\ref\UniversityManagement.Api.dll
-C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBackend\UniversityManagement.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBackend\UniversityManagement.Api\obj\Debug\net8.0\UniversityManagement.Api.sourcelink.json
+C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBackend\UniversityManagement.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

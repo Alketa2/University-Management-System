@@ -13,3 +13,4 @@ C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBack
 C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBackend\UniversityManagement.Infrastructure\obj\Debug\net8.0\refint\UniversityManagement.Infrastructure.dll
 C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBackend\UniversityManagement.Infrastructure\obj\Debug\net8.0\UniversityManagement.Infrastructure.pdb
 C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBackend\UniversityManagement.Infrastructure\obj\Debug\net8.0\ref\UniversityManagement.Infrastructure.dll
+C:\Users\Alketa\source\repos\UniversityManagementSystem\UniversityManagementBackend\UniversityManagement.Infrastructure\obj\Debug\net8.0\UniversityManagement.Infrastructure.sourcelink.json

@@ -1,8 +1,9 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "UniversityManagement.Api",
-    "version": "1.0"
+    "title": "University Management System API",
+    "description": "API for managing university students, programs, teachers, subjects, attendance, exams, timetables, and announcements",
+    "version": "v1"
   },
   "paths": {
     "/api/Announcements": {
@@ -45,7 +46,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -104,7 +143,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -114,7 +191,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -152,7 +267,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -183,7 +336,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -304,7 +495,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -355,7 +584,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -414,7 +681,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -424,7 +729,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -462,7 +805,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -608,7 +989,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -687,7 +1106,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -697,7 +1154,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -735,7 +1230,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -766,7 +1299,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -847,7 +1418,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -926,7 +1535,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -936,7 +1583,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -974,7 +1659,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1005,7 +1728,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1053,7 +1814,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1132,7 +1931,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1142,7 +1979,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1180,7 +2055,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1211,7 +2124,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1252,7 +2203,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1333,7 +2322,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1412,7 +2439,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1422,7 +2487,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1460,7 +2563,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1491,7 +2632,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1572,7 +2751,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1651,7 +2868,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1661,7 +2916,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1699,7 +2992,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1730,7 +3061,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1778,7 +3147,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1837,7 +3244,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1847,7 +3292,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1885,7 +3368,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -1916,7 +3437,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the problem type",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the problem type",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem",
+                      "nullable": true
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem",
+                      "nullable": true
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
+                    }
+                  }
                 }
               }
             }
@@ -2445,33 +4004,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "ProblemDetails": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "nullable": true
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "status": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "detail": {
-            "type": "string",
-            "nullable": true
-          },
-          "instance": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": { }
       },
       "ProgramResponseDto": {
         "type": "object",
