@@ -17,32 +17,48 @@ public class AnnouncementsController : ControllerBase
     }
 
     [HttpPost]
-    [Consumes("application/json")]
     [ProducesResponseType(typeof(AnnouncementResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<AnnouncementResponseDto>> CreateAnnouncement(
-        [FromBody] CreateAnnouncementDto dto)
+        [FromBody] CreateAnnouncementDto createAnnouncementDto)
     {
-        var announcement = await _announcementService.CreateAnnouncementAsync(dto);
+        var announcement = await _announcementService.CreateAnnouncementAsync(createAnnouncementDto);
 
         return CreatedAtAction(
             nameof(GetAnnouncementById),
             new { id = announcement.Id },
-            announcement
-        );
+            announcement);
     }
 
-    [HttpGet("{id}")]
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(AnnouncementResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<AnnouncementResponseDto>> UpdateAnnouncement(
+        Guid id,
+        [FromBody] UpdateAnnouncementDto updateAnnouncementDto)
+    {
+        if (id != updateAnnouncementDto.Id)
+            return BadRequest("ID mismatch");
+
+        try
+        {
+            var announcement = await _announcementService.UpdateAnnouncementAsync(updateAnnouncementDto);
+            return Ok(announcement);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(AnnouncementResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<AnnouncementResponseDto>> GetAnnouncementById(Guid id)
     {
         var announcement = await _announcementService.GetAnnouncementByIdAsync(id);
-
-        if (announcement == null)
-            return NotFound();
-
-        return Ok(announcement);
+        return announcement is null ? NotFound() : Ok(announcement);
     }
 
     [HttpGet("active")]
@@ -51,33 +67,24 @@ public class AnnouncementsController : ControllerBase
         [FromQuery] Guid? programId = null,
         [FromQuery] Guid? subjectId = null)
     {
-        var announcements = await _announcementService
-            .GetActiveAnnouncementsAsync(programId, subjectId);
-
+        var announcements = await _announcementService.GetActiveAnnouncementsAsync(programId, subjectId);
         return Ok(announcements);
     }
 
-    [HttpGet("teacher/{teacherId}")]
+    [HttpGet("teacher/{teacherId:guid}")]
     [ProducesResponseType(typeof(List<AnnouncementResponseDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<AnnouncementResponseDto>>> GetAnnouncementsByTeacher(
-        Guid teacherId)
+    public async Task<ActionResult<List<AnnouncementResponseDto>>> GetAnnouncementsByTeacher(Guid teacherId)
     {
-        var announcements = await _announcementService
-            .GetAnnouncementsByTeacherAsync(teacherId);
-
+        var announcements = await _announcementService.GetAnnouncementsByTeacherAsync(teacherId);
         return Ok(announcements);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteAnnouncement(Guid id)
     {
-        var deleted = await _announcementService.DeleteAnnouncementAsync(id);
-
-        if (!deleted)
-            return NotFound();
-
-        return NoContent();
+        var result = await _announcementService.DeleteAnnouncementAsync(id);
+        return result ? NoContent() : NotFound();
     }
 }

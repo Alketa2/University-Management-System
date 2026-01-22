@@ -15,17 +15,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateAnnouncementDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.CreateAnnouncementDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateAnnouncementDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.CreateAnnouncementDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateAnnouncementDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.CreateAnnouncementDto"
               }
             }
           }
@@ -36,7 +36,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnnouncementResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.AnnouncementResponseDto"
                 }
               }
             }
@@ -112,17 +112,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateAnnouncementDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.UpdateAnnouncementDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateAnnouncementDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.UpdateAnnouncementDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateAnnouncementDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.UpdateAnnouncementDto"
               }
             }
           }
@@ -133,7 +133,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnnouncementResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.AnnouncementResponseDto"
                 }
               }
             }
@@ -257,7 +257,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnnouncementResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.AnnouncementResponseDto"
                 }
               }
             }
@@ -413,7 +413,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AnnouncementResponseDto"
+                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.AnnouncementResponseDto"
                   }
                 }
               }
@@ -446,7 +446,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AnnouncementResponseDto"
+                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.AnnouncementResponseDto"
                   }
                 }
               }
@@ -464,17 +464,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateAttendanceDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.CreateAttendanceDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateAttendanceDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.CreateAttendanceDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateAttendanceDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.CreateAttendanceDto"
               }
             }
           }
@@ -485,7 +485,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AttendanceResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.AttendanceResponseDto"
                 }
               }
             }
@@ -550,17 +550,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/BulkAttendanceDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.BulkAttendanceDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/BulkAttendanceDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.BulkAttendanceDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/BulkAttendanceDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.BulkAttendanceDto"
               }
             }
           }
@@ -573,7 +573,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AttendanceResponseDto"
+                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.AttendanceResponseDto"
                   }
                 }
               }
@@ -650,17 +650,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateAttendanceDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.UpdateAttendanceDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateAttendanceDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.UpdateAttendanceDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateAttendanceDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.UpdateAttendanceDto"
               }
             }
           }
@@ -671,7 +671,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AttendanceResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.AttendanceResponseDto"
                 }
               }
             }
@@ -795,7 +795,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AttendanceResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.AttendanceResponseDto"
                 }
               }
             }
@@ -899,7 +899,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AttendanceResponseDto"
+                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.AttendanceResponseDto"
                   }
                 }
               }
@@ -940,7 +940,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AttendanceResponseDto"
+                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.AttendanceResponseDto"
                   }
                 }
               }
@@ -958,17 +958,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateExamDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.CreateExamDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateExamDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.CreateExamDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateExamDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.CreateExamDto"
               }
             }
           }
@@ -979,7 +979,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExamResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.ExamResponseDto"
                 }
               }
             }
@@ -1046,7 +1046,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ExamResponseDto"
+                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.ExamResponseDto"
                   }
                 }
               }
@@ -1075,17 +1075,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateExamDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.UpdateExamDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateExamDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.UpdateExamDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateExamDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.UpdateExamDto"
               }
             }
           }
@@ -1096,7 +1096,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExamResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.ExamResponseDto"
                 }
               }
             }
@@ -1220,7 +1220,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExamResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.ExamResponseDto"
                 }
               }
             }
@@ -1369,7 +1369,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ExamResponseDto"
+                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.ExamResponseDto"
                   }
                 }
               }
@@ -1387,17 +1387,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateProgramDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.CreateProgramDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateProgramDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.CreateProgramDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateProgramDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.CreateProgramDto"
               }
             }
           }
@@ -1408,7 +1408,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProgramResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.ProgramResponseDto"
                 }
               }
             }
@@ -1475,7 +1475,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProgramResponseDto"
+                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.ProgramResponseDto"
                   }
                 }
               }
@@ -1504,17 +1504,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateProgramDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.UpdateProgramDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateProgramDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.UpdateProgramDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateProgramDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.UpdateProgramDto"
               }
             }
           }
@@ -1525,7 +1525,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProgramResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.ProgramResponseDto"
                 }
               }
             }
@@ -1649,7 +1649,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProgramResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.ProgramResponseDto"
                 }
               }
             }
@@ -1783,17 +1783,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateStudentDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.CreateStudentDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateStudentDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.CreateStudentDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateStudentDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.CreateStudentDto"
               }
             }
           }
@@ -1804,7 +1804,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StudentResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.StudentResponseDto"
                 }
               }
             }
@@ -1871,7 +1871,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/StudentResponseDto"
+                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.StudentResponseDto"
                   }
                 }
               }
@@ -1900,17 +1900,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateStudentDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.UpdateStudentDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateStudentDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.UpdateStudentDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateStudentDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.UpdateStudentDto"
               }
             }
           }
@@ -1921,7 +1921,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StudentResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.StudentResponseDto"
                 }
               }
             }
@@ -2045,7 +2045,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StudentResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.StudentResponseDto"
                 }
               }
             }
@@ -2179,17 +2179,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AdmitStudentToProgramDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.AdmitStudentToProgramDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/AdmitStudentToProgramDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.AdmitStudentToProgramDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/AdmitStudentToProgramDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.AdmitStudentToProgramDto"
               }
             }
           }
@@ -2273,7 +2273,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProgramResponseDto"
+                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.ProgramResponseDto"
                   }
                 }
               }
@@ -2291,17 +2291,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateSubjectDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.CreateSubjectDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateSubjectDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.CreateSubjectDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateSubjectDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.CreateSubjectDto"
               }
             }
           }
@@ -2312,7 +2312,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SubjectResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.SubjectResponseDto"
                 }
               }
             }
@@ -2379,7 +2379,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SubjectResponseDto"
+                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.SubjectResponseDto"
                   }
                 }
               }
@@ -2408,17 +2408,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateSubjectDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.UpdateSubjectDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateSubjectDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.UpdateSubjectDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateSubjectDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.UpdateSubjectDto"
               }
             }
           }
@@ -2429,7 +2429,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SubjectResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.SubjectResponseDto"
                 }
               }
             }
@@ -2553,7 +2553,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SubjectResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.SubjectResponseDto"
                 }
               }
             }
@@ -2702,7 +2702,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SubjectResponseDto"
+                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.SubjectResponseDto"
                   }
                 }
               }
@@ -2720,17 +2720,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTeacherDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.CreateTeacherDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTeacherDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.CreateTeacherDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTeacherDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.CreateTeacherDto"
               }
             }
           }
@@ -2741,7 +2741,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TeacherResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.TeacherResponseDto"
                 }
               }
             }
@@ -2808,7 +2808,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TeacherResponseDto"
+                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.TeacherResponseDto"
                   }
                 }
               }
@@ -2837,17 +2837,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateTeacherDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.UpdateTeacherDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateTeacherDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.UpdateTeacherDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateTeacherDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.UpdateTeacherDto"
               }
             }
           }
@@ -2858,7 +2858,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TeacherResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.TeacherResponseDto"
                 }
               }
             }
@@ -2982,7 +2982,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TeacherResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.TeacherResponseDto"
                 }
               }
             }
@@ -3116,17 +3116,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTimetableDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.CreateTimetableDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTimetableDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.CreateTimetableDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTimetableDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.CreateTimetableDto"
               }
             }
           }
@@ -3137,7 +3137,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TimetableResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.TimetableResponseDto"
                 }
               }
             }
@@ -3213,17 +3213,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateTimetableDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.UpdateTimetableDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateTimetableDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.UpdateTimetableDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateTimetableDto"
+                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.UpdateTimetableDto"
               }
             }
           }
@@ -3234,7 +3234,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TimetableResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.TimetableResponseDto"
                 }
               }
             }
@@ -3358,7 +3358,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TimetableResponseDto"
+                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.TimetableResponseDto"
                 }
               }
             }
@@ -3514,7 +3514,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TimetableResponseDto"
+                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.TimetableResponseDto"
                   }
                 }
               }
@@ -3526,26 +3526,7 @@
   },
   "components": {
     "schemas": {
-      "AdmitStudentToProgramDto": {
-        "type": "object",
-        "properties": {
-          "studentId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "programId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "admissionDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "AnnouncementResponseDto": {
+      "UniversityManagement.Application.DTOs.Announcement.AnnouncementResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -3614,7 +3595,84 @@
         },
         "additionalProperties": false
       },
-      "AttendanceResponseDto": {
+      "UniversityManagement.Application.DTOs.Announcement.CreateAnnouncementDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "teacherId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "targetAudience": {
+            "type": "string",
+            "nullable": true
+          },
+          "programId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UniversityManagement.Application.DTOs.Announcement.UpdateAnnouncementDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "targetAudience": {
+            "type": "string",
+            "nullable": true
+          },
+          "programId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UniversityManagement.Application.DTOs.Attendance.AttendanceResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -3661,7 +3719,7 @@
         },
         "additionalProperties": false
       },
-      "BulkAttendanceDto": {
+      "UniversityManagement.Application.DTOs.Attendance.BulkAttendanceDto": {
         "type": "object",
         "properties": {
           "subjectId": {
@@ -3675,51 +3733,14 @@
           "studentAttendances": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/StudentAttendanceDto"
+              "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.StudentAttendanceDto"
             },
             "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "CreateAnnouncementDto": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "content": {
-            "type": "string",
-            "nullable": true
-          },
-          "teacherId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "targetAudience": {
-            "type": "string",
-            "nullable": true
-          },
-          "programId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "subjectId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "expiryDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateAttendanceDto": {
+      "UniversityManagement.Application.DTOs.Attendance.CreateAttendanceDto": {
         "type": "object",
         "properties": {
           "studentId": {
@@ -3745,7 +3766,55 @@
         },
         "additionalProperties": false
       },
-      "CreateExamDto": {
+      "UniversityManagement.Application.DTOs.Attendance.StudentAttendanceDto": {
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UniversityManagement.Application.DTOs.Attendance.UpdateAttendanceDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "studentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "attendanceDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UniversityManagement.Application.DTOs.Exam.CreateExamDto": {
         "type": "object",
         "properties": {
           "name": {
@@ -3783,174 +3852,7 @@
         },
         "additionalProperties": false
       },
-      "CreateProgramDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "duration": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "creditsRequired": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateStudentDto": {
-        "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "phone": {
-            "type": "string",
-            "nullable": true
-          },
-          "dateOfBirth": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "address": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateSubjectDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "credits": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "programId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "teacherId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "semester": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateTeacherDto": {
-        "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "phone": {
-            "type": "string",
-            "nullable": true
-          },
-          "department": {
-            "type": "string",
-            "nullable": true
-          },
-          "hireDate": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateTimetableDto": {
-        "type": "object",
-        "properties": {
-          "programId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "subjectId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "dayOfWeek": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-span"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-span"
-          },
-          "room": {
-            "type": "string",
-            "nullable": true
-          },
-          "semester": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "academicYear": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ExamResponseDto": {
+      "UniversityManagement.Application.DTOs.Exam.ExamResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -4005,7 +3907,84 @@
         },
         "additionalProperties": false
       },
-      "ProgramResponseDto": {
+      "UniversityManagement.Application.DTOs.Exam.UpdateExamDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "examType": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "examDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "maxMarks": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UniversityManagement.Application.DTOs.Program.CreateProgramDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "creditsRequired": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UniversityManagement.Application.DTOs.Program.ProgramResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -4056,25 +4035,111 @@
         },
         "additionalProperties": false
       },
-      "StudentAttendanceDto": {
+      "UniversityManagement.Application.DTOs.Program.UpdateProgramDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "creditsRequired": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UniversityManagement.Application.DTOs.Student.AdmitStudentToProgramDto": {
         "type": "object",
         "properties": {
           "studentId": {
             "type": "string",
             "format": "uuid"
           },
-          "status": {
+          "programId": {
             "type": "string",
+            "format": "uuid"
+          },
+          "admissionDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UniversityManagement.Application.DTOs.Student.CreateStudentDto": {
+        "required": [
+          "dateOfBirth",
+          "email",
+          "firstName",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "email": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "phone": {
+            "maxLength": 30,
+            "type": "string",
+            "format": "tel",
             "nullable": true
           },
-          "notes": {
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "address": {
+            "maxLength": 300,
             "type": "string",
             "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "StudentResponseDto": {
+      "UniversityManagement.Application.DTOs.Student.StudentResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -4125,7 +4190,95 @@
         },
         "additionalProperties": false
       },
-      "SubjectResponseDto": {
+      "UniversityManagement.Application.DTOs.Student.UpdateStudentDto": {
+        "required": [
+          "dateOfBirth",
+          "email",
+          "firstName",
+          "id",
+          "lastName",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "email": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "phone": {
+            "maxLength": 30,
+            "type": "string",
+            "format": "tel",
+            "nullable": true
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "address": {
+            "maxLength": 300,
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UniversityManagement.Application.DTOs.Subject.CreateSubjectDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "credits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "programId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teacherId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "semester": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UniversityManagement.Application.DTOs.Subject.SubjectResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -4183,7 +4336,78 @@
         },
         "additionalProperties": false
       },
-      "TeacherResponseDto": {
+      "UniversityManagement.Application.DTOs.Subject.UpdateSubjectDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "credits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "programId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teacherId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "semester": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UniversityManagement.Application.DTOs.Teacher.CreateTeacherDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "hireDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UniversityManagement.Application.DTOs.Teacher.TeacherResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -4230,7 +4454,79 @@
         },
         "additionalProperties": false
       },
-      "TimetableResponseDto": {
+      "UniversityManagement.Application.DTOs.Teacher.UpdateTeacherDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UniversityManagement.Application.DTOs.Timetable.CreateTimetableDto": {
+        "type": "object",
+        "properties": {
+          "programId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "dayOfWeek": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "room": {
+            "type": "string",
+            "nullable": true
+          },
+          "semester": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "academicYear": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UniversityManagement.Application.DTOs.Timetable.TimetableResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -4293,274 +4589,7 @@
         },
         "additionalProperties": false
       },
-      "UpdateAnnouncementDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "content": {
-            "type": "string",
-            "nullable": true
-          },
-          "targetAudience": {
-            "type": "string",
-            "nullable": true
-          },
-          "programId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "subjectId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "expiryDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "isActive": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateAttendanceDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "studentId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "subjectId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "attendanceDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "status": {
-            "type": "string",
-            "nullable": true
-          },
-          "notes": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateExamDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "examType": {
-            "type": "string",
-            "nullable": true
-          },
-          "subjectId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "examDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-span"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-span"
-          },
-          "location": {
-            "type": "string",
-            "nullable": true
-          },
-          "maxMarks": {
-            "type": "number",
-            "format": "double"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateProgramDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "duration": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "creditsRequired": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "isActive": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateStudentDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "firstName": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "phone": {
-            "type": "string",
-            "nullable": true
-          },
-          "dateOfBirth": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "address": {
-            "type": "string",
-            "nullable": true
-          },
-          "status": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateSubjectDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "credits": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "programId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "teacherId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "semester": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "isActive": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateTeacherDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "firstName": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "phone": {
-            "type": "string",
-            "nullable": true
-          },
-          "department": {
-            "type": "string",
-            "nullable": true
-          },
-          "status": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateTimetableDto": {
+      "UniversityManagement.Application.DTOs.Timetable.UpdateTimetableDto": {
         "type": "object",
         "properties": {
           "id": {
