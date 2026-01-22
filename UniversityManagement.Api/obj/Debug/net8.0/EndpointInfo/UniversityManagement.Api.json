@@ -4098,43 +4098,44 @@
       },
       "UniversityManagement.Application.DTOs.Student.CreateStudentDto": {
         "required": [
+          "address",
           "dateOfBirth",
           "email",
           "firstName",
-          "lastName"
+          "lastName",
+          "phone"
         ],
         "type": "object",
         "properties": {
           "firstName": {
-            "maxLength": 100,
+            "maxLength": 50,
             "minLength": 1,
             "type": "string"
           },
           "lastName": {
-            "maxLength": 100,
+            "maxLength": 50,
             "minLength": 1,
             "type": "string"
           },
           "email": {
-            "maxLength": 255,
+            "maxLength": 120,
             "minLength": 1,
             "type": "string",
             "format": "email"
           },
           "phone": {
-            "maxLength": 30,
-            "type": "string",
-            "format": "tel",
-            "nullable": true
+            "minLength": 1,
+            "pattern": "^\\+?[0-9\\s\\-()]{7,20}$",
+            "type": "string"
           },
           "dateOfBirth": {
             "type": "string",
             "format": "date-time"
           },
           "address": {
-            "maxLength": 300,
-            "type": "string",
-            "nullable": true
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4192,11 +4193,13 @@
       },
       "UniversityManagement.Application.DTOs.Student.UpdateStudentDto": {
         "required": [
+          "address",
           "dateOfBirth",
           "email",
           "firstName",
           "id",
           "lastName",
+          "phone",
           "status"
         ],
         "type": "object",
@@ -4206,38 +4209,36 @@
             "format": "uuid"
           },
           "firstName": {
-            "maxLength": 100,
+            "maxLength": 50,
             "minLength": 1,
             "type": "string"
           },
           "lastName": {
-            "maxLength": 100,
+            "maxLength": 50,
             "minLength": 1,
             "type": "string"
           },
           "email": {
-            "maxLength": 255,
+            "maxLength": 120,
             "minLength": 1,
             "type": "string",
             "format": "email"
           },
           "phone": {
-            "maxLength": 30,
-            "type": "string",
-            "format": "tel",
-            "nullable": true
+            "minLength": 1,
+            "pattern": "^\\+?[0-9\\s\\-()]{7,20}$",
+            "type": "string"
           },
           "dateOfBirth": {
             "type": "string",
             "format": "date-time"
           },
           "address": {
-            "maxLength": 300,
-            "type": "string",
-            "nullable": true
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
           },
           "status": {
-            "maxLength": 20,
             "minLength": 1,
             "type": "string"
           }
