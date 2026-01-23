@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UniversityManagement.Application.Interfaces;
 using UniversityManagement.Application.Services;
@@ -9,7 +9,7 @@ using UniversityManagement.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// -------------------- Controllers + Validation responses --------------------
+// Controllers + Validation response
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
@@ -21,54 +21,11 @@ builder.Services.AddControllers()
         };
     });
 
-// -------------------- Swagger --------------------
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    {
-        Title = "University Management System API",
-        Version = "v1",
-        Description = "API for managing university students, programs, teachers, subjects, attendance, exams, timetables, and announcements"
-    });
+builder.Services.AddSwaggerGen();
 
-    // Swagger documentation for validation errors (ProblemDetails)
-    c.MapType<Microsoft.AspNetCore.Mvc.ProblemDetails>(() => new Microsoft.OpenApi.Models.OpenApiSchema
-    {
-        Type = "object",
-        Properties = new Dictionary<string, Microsoft.OpenApi.Models.OpenApiSchema>
-        {
-            ["type"] = new Microsoft.OpenApi.Models.OpenApiSchema { Type = "string", Nullable = true, Description = "A URI reference that identifies the problem type" },
-            ["title"] = new Microsoft.OpenApi.Models.OpenApiSchema { Type = "string", Nullable = true, Description = "A short, human-readable summary of the problem type" },
-            ["status"] = new Microsoft.OpenApi.Models.OpenApiSchema { Type = "integer", Format = "int32", Nullable = true, Description = "The HTTP status code" },
-            ["detail"] = new Microsoft.OpenApi.Models.OpenApiSchema { Type = "string", Nullable = true, Description = "A human-readable explanation specific to this occurrence of the problem" },
-            ["instance"] = new Microsoft.OpenApi.Models.OpenApiSchema { Type = "string", Nullable = true, Description = "A URI reference that identifies the specific occurrence of the problem" },
-            ["errors"] = new Microsoft.OpenApi.Models.OpenApiSchema
-            {
-                Type = "object",
-                Description = "Validation errors (only present for 400 Bad Request with validation errors)",
-                AdditionalProperties = new Microsoft.OpenApi.Models.OpenApiSchema
-                {
-                    Type = "array",
-                    Items = new Microsoft.OpenApi.Models.OpenApiSchema { Type = "string" }
-                }
-            }
-        }
-    });
-
-    // XML docs (optional)
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath))
-    {
-        c.IncludeXmlComments(xmlPath);
-    }
-
-    // Fix schemaId collisions
-    c.CustomSchemaIds(type => type.FullName);
-});
-
-// -------------------- CORS for React frontend --------------------
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
@@ -80,33 +37,16 @@ builder.Services.AddCors(options =>
     });
 });
 
-// -------------------- EF Core (MySQL) --------------------
-var connectionString = builder.Configuration.GetConnectionString("MySql");
-if (string.IsNullOrWhiteSpace(connectionString))
-{
-    throw new InvalidOperationException("Missing connection string 'ConnectionStrings:MySql' in appsettings.json");
-}
-
+// ✅ DbContext (Pomelo MySQL)
+var cs = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<UniversityDbContext>(options =>
 {
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    options.UseMySql(cs, ServerVersion.AutoDetect(cs));
 });
 
-// Generic EF repository (only if your services use IRepository<T>)
+// Repositories
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
-// -------------------- Repositories (SCOPED, not singleton) --------------------
-// Generic IRepository<T> registrations (if used anywhere)
-builder.Services.AddScoped<IRepository<Student>, StudentRepository>();
-builder.Services.AddScoped<IRepository<UniversityManagement.Domain.Entities.Program>, ProgramRepository>();
-builder.Services.AddScoped<IRepository<Teacher>, TeacherRepository>();
-builder.Services.AddScoped<IRepository<Subject>, SubjectRepository>();
-builder.Services.AddScoped<IRepository<Attendance>, AttendanceRepository>();
-builder.Services.AddScoped<IRepository<Exam>, ExamRepository>();
-builder.Services.AddScoped<IRepository<Timetable>, TimetableRepository>();
-builder.Services.AddScoped<IRepository<Announcement>, AnnouncementRepository>();
-
-// Specific repositories
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentProgramRepository, StudentProgramRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
@@ -115,7 +55,7 @@ builder.Services.AddScoped<IExamRepository, ExamRepository>();
 builder.Services.AddScoped<ITimetableRepository, TimetableRepository>();
 builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
 
-// -------------------- Services (Scoped) --------------------
+// Services
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IProgramService, ProgramService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
@@ -127,20 +67,12 @@ builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 
 var app = builder.Build();
 
-// -------------------- Middleware --------------------
 app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "University Management System API v1");
-    c.RoutePrefix = "swagger";
-});
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
-
 app.UseCors("AllowReactApp");
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
