@@ -1,37 +1,39 @@
+using System;
 using System.ComponentModel.DataAnnotations;
-using UniversityManagement.Domain.Common;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace UniversityManagement.Domain.Entities;
-
-public class Subject : BaseEntity
+namespace UniversityManagement.Domain.Entities
 {
-    [Required, MaxLength(200)]
-    public string Name { get; set; } = string.Empty;
+    public class Subject
+    {
+        [Key]
+        public Guid Id { get; set; } = Guid.NewGuid();
 
-    [Required, MaxLength(50)]
-    public string Code { get; set; } = string.Empty;
+        [Required, StringLength(200)]
+        public string Name { get; set; } = string.Empty;
 
-    [MaxLength(2000)]
-    public string? Description { get; set; }
+        [Required, StringLength(50)]
+        public string Code { get; set; } = string.Empty;
 
-    [Range(0, 60)]
-    public int Credits { get; set; }
+        [StringLength(2000)]
+        public string? Description { get; set; }
 
-    [Required]
-    public Guid ProgramId { get; set; }
+        [Range(1, 60)]
+        public int Credits { get; set; }
 
-    [Required]
-    public Guid TeacherId { get; set; }
+        [Required]
+        public Guid ProgramId { get; set; }
 
-    [Range(1, 40)]
-    public int Semester { get; set; }
-    public bool IsActive { get; set; } = true;
+        [Required]
+        public Guid TeacherId { get; set; }
 
-    // Navigation properties
-    public Program Program { get; set; } = null!;
-    public Teacher Teacher { get; set; } = null!;
-    public ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
-    public ICollection<Exam> Exams { get; set; } = new List<Exam>();
-    public ICollection<Timetable> Timetables { get; set; } = new List<Timetable>();
-    public ICollection<Announcement> Announcements { get; set; } = new List<Announcement>();
+        [Range(1, 12)]
+        public int Semester { get; set; }
+
+        public bool IsActive { get; set; } = true;
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? UpdatedAt { get; set; }
+    }
 }

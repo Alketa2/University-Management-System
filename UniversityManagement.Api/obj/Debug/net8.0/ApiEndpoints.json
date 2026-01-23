@@ -925,99 +925,33 @@
   },
   {
     "ContainingType": "UniversityManagement.Api.Controllers.SubjectsController",
-    "Method": "CreateSubject",
+    "Method": "GetAll",
+    "RelativePath": "api/Subjects",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UniversityManagement.Api.Controllers.SubjectsController",
+    "Method": "Create",
     "RelativePath": "api/Subjects",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createSubjectDto",
-        "Type": "UniversityManagement.Application.DTOs.Subject.CreateSubjectDto",
+        "Name": "dto",
+        "Type": "UniversityManagement.Application.DTOs.Subjects.CreateSubjectDto",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "UniversityManagement.Application.DTOs.Subject.SubjectResponseDto",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 201
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 400
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "UniversityManagement.Api.Controllers.SubjectsController",
-    "Method": "GetAllSubjects",
-    "RelativePath": "api/Subjects",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[UniversityManagement.Application.DTOs.Subject.SubjectResponseDto, UniversityManagement.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "UniversityManagement.Api.Controllers.SubjectsController",
-    "Method": "UpdateSubject",
-    "RelativePath": "api/Subjects/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "updateSubjectDto",
-        "Type": "UniversityManagement.Application.DTOs.Subject.UpdateSubjectDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "UniversityManagement.Application.DTOs.Subject.SubjectResponseDto",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 400
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 404
-      }
-    ]
-  },
-  {
-    "ContainingType": "UniversityManagement.Api.Controllers.SubjectsController",
-    "Method": "GetSubjectById",
+    "Method": "GetById",
     "RelativePath": "api/Subjects/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1029,75 +963,7 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "UniversityManagement.Application.DTOs.Subject.SubjectResponseDto",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 404
-      }
-    ]
-  },
-  {
-    "ContainingType": "UniversityManagement.Api.Controllers.SubjectsController",
-    "Method": "DeleteSubject",
-    "RelativePath": "api/Subjects/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 204
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 404
-      }
-    ]
-  },
-  {
-    "ContainingType": "UniversityManagement.Api.Controllers.SubjectsController",
-    "Method": "GetSubjectsByProgram",
-    "RelativePath": "api/Subjects/program/{programId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "programId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[UniversityManagement.Application.DTOs.Subject.SubjectResponseDto, UniversityManagement.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "UniversityManagement.Api.Controllers.TeachersController",

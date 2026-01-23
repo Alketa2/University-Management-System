@@ -1,12 +1,29 @@
-namespace UniversityManagement.Application.DTOs.Subject;
+using System;
+using System.ComponentModel.DataAnnotations;
 
-public class CreateSubjectDto
+namespace UniversityManagement.Application.DTOs.Subjects
 {
-    public string Name { get; set; } = string.Empty;
-    public string Code { get; set; } = string.Empty;
-    public string? Description { get; set; }
-    public int Credits { get; set; }
-    public Guid ProgramId { get; set; }
-    public Guid TeacherId { get; set; }
-    public int Semester { get; set; }
+    public class CreateSubjectDto
+    {
+        [Required, StringLength(200)]
+        public string Name { get; set; } = string.Empty;
+
+        [Required, StringLength(50)]
+        public string Code { get; set; } = string.Empty;
+
+        [StringLength(2000)]
+        public string? Description { get; set; }
+
+        [Range(1, 60)]
+        public int Credits { get; set; }
+
+        [Required]
+        public Guid ProgramId { get; set; }
+
+        [Required]
+        public Guid TeacherId { get; set; }
+
+        [Range(1, 12)]
+        public int Semester { get; set; }
+    }
 }

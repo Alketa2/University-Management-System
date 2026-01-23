@@ -1,13 +1,15 @@
-using UniversityManagement.Application.DTOs.Subject;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UniversityManagement.Application.DTOs.Subjects;
+using UniversityManagement.Domain.Entities;
 
-namespace UniversityManagement.Application.Interfaces;
-
-public interface ISubjectService
+namespace UniversityManagement.Application.Interfaces
 {
-    Task<SubjectResponseDto> CreateSubjectAsync(CreateSubjectDto createSubjectDto);
-    Task<SubjectResponseDto> UpdateSubjectAsync(UpdateSubjectDto updateSubjectDto);
-    Task<SubjectResponseDto?> GetSubjectByIdAsync(Guid id);
-    Task<List<SubjectResponseDto>> GetAllSubjectsAsync();
-    Task<List<SubjectResponseDto>> GetSubjectsByProgramIdAsync(Guid programId);
-    Task<bool> DeleteSubjectAsync(Guid id);
+    public interface ISubjectService
+    {
+        Task<List<Subject>> GetAllAsync();
+        Task<Subject?> GetByIdAsync(Guid id);
+        Task<Subject> CreateAsync(CreateSubjectDto dto);
+    }
 }

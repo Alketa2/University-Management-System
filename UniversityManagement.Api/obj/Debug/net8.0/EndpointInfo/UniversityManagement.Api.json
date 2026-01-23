@@ -1,9 +1,8 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "University Management System API",
-    "description": "API for managing university students, programs, teachers, subjects, attendance, exams, timetables, and announcements",
-    "version": "v1"
+    "title": "UniversityManagement.Api",
+    "version": "1.0"
   },
   "paths": {
     "/api/Announcements": {
@@ -15,17 +14,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.CreateAnnouncementDto"
+                "$ref": "#/components/schemas/CreateAnnouncementDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.CreateAnnouncementDto"
+                "$ref": "#/components/schemas/CreateAnnouncementDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.CreateAnnouncementDto"
+                "$ref": "#/components/schemas/CreateAnnouncementDto"
               }
             }
           }
@@ -36,7 +35,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.AnnouncementResponseDto"
+                  "$ref": "#/components/schemas/AnnouncementResponseDto"
                 }
               }
             }
@@ -46,45 +45,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -112,17 +73,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.UpdateAnnouncementDto"
+                "$ref": "#/components/schemas/UpdateAnnouncementDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.UpdateAnnouncementDto"
+                "$ref": "#/components/schemas/UpdateAnnouncementDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.UpdateAnnouncementDto"
+                "$ref": "#/components/schemas/UpdateAnnouncementDto"
               }
             }
           }
@@ -133,7 +94,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.AnnouncementResponseDto"
+                  "$ref": "#/components/schemas/AnnouncementResponseDto"
                 }
               }
             }
@@ -143,45 +104,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -191,45 +114,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -257,7 +142,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.AnnouncementResponseDto"
+                  "$ref": "#/components/schemas/AnnouncementResponseDto"
                 }
               }
             }
@@ -267,45 +152,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -336,45 +183,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -413,7 +222,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.AnnouncementResponseDto"
+                    "$ref": "#/components/schemas/AnnouncementResponseDto"
                   }
                 }
               }
@@ -446,7 +255,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Announcement.AnnouncementResponseDto"
+                    "$ref": "#/components/schemas/AnnouncementResponseDto"
                   }
                 }
               }
@@ -464,17 +273,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.CreateAttendanceDto"
+                "$ref": "#/components/schemas/CreateAttendanceDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.CreateAttendanceDto"
+                "$ref": "#/components/schemas/CreateAttendanceDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.CreateAttendanceDto"
+                "$ref": "#/components/schemas/CreateAttendanceDto"
               }
             }
           }
@@ -485,7 +294,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.AttendanceResponseDto"
+                  "$ref": "#/components/schemas/AttendanceResponseDto"
                 }
               }
             }
@@ -495,45 +304,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -550,17 +321,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.BulkAttendanceDto"
+                "$ref": "#/components/schemas/BulkAttendanceDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.BulkAttendanceDto"
+                "$ref": "#/components/schemas/BulkAttendanceDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.BulkAttendanceDto"
+                "$ref": "#/components/schemas/BulkAttendanceDto"
               }
             }
           }
@@ -573,7 +344,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.AttendanceResponseDto"
+                    "$ref": "#/components/schemas/AttendanceResponseDto"
                   }
                 }
               }
@@ -584,45 +355,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -650,17 +383,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.UpdateAttendanceDto"
+                "$ref": "#/components/schemas/UpdateAttendanceDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.UpdateAttendanceDto"
+                "$ref": "#/components/schemas/UpdateAttendanceDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.UpdateAttendanceDto"
+                "$ref": "#/components/schemas/UpdateAttendanceDto"
               }
             }
           }
@@ -671,7 +404,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.AttendanceResponseDto"
+                  "$ref": "#/components/schemas/AttendanceResponseDto"
                 }
               }
             }
@@ -681,45 +414,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -729,45 +424,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -795,7 +452,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.AttendanceResponseDto"
+                  "$ref": "#/components/schemas/AttendanceResponseDto"
                 }
               }
             }
@@ -805,45 +462,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -899,7 +518,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.AttendanceResponseDto"
+                    "$ref": "#/components/schemas/AttendanceResponseDto"
                   }
                 }
               }
@@ -940,7 +559,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.AttendanceResponseDto"
+                    "$ref": "#/components/schemas/AttendanceResponseDto"
                   }
                 }
               }
@@ -958,17 +577,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.CreateExamDto"
+                "$ref": "#/components/schemas/CreateExamDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.CreateExamDto"
+                "$ref": "#/components/schemas/CreateExamDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.CreateExamDto"
+                "$ref": "#/components/schemas/CreateExamDto"
               }
             }
           }
@@ -979,7 +598,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.ExamResponseDto"
+                  "$ref": "#/components/schemas/ExamResponseDto"
                 }
               }
             }
@@ -989,45 +608,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1046,7 +627,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.ExamResponseDto"
+                    "$ref": "#/components/schemas/ExamResponseDto"
                   }
                 }
               }
@@ -1075,17 +656,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.UpdateExamDto"
+                "$ref": "#/components/schemas/UpdateExamDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.UpdateExamDto"
+                "$ref": "#/components/schemas/UpdateExamDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.UpdateExamDto"
+                "$ref": "#/components/schemas/UpdateExamDto"
               }
             }
           }
@@ -1096,7 +677,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.ExamResponseDto"
+                  "$ref": "#/components/schemas/ExamResponseDto"
                 }
               }
             }
@@ -1106,45 +687,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1154,45 +697,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1220,7 +725,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.ExamResponseDto"
+                  "$ref": "#/components/schemas/ExamResponseDto"
                 }
               }
             }
@@ -1230,45 +735,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1299,45 +766,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1369,7 +798,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Exam.ExamResponseDto"
+                    "$ref": "#/components/schemas/ExamResponseDto"
                   }
                 }
               }
@@ -1387,17 +816,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.CreateProgramDto"
+                "$ref": "#/components/schemas/CreateProgramDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.CreateProgramDto"
+                "$ref": "#/components/schemas/CreateProgramDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.CreateProgramDto"
+                "$ref": "#/components/schemas/CreateProgramDto"
               }
             }
           }
@@ -1408,7 +837,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.ProgramResponseDto"
+                  "$ref": "#/components/schemas/ProgramResponseDto"
                 }
               }
             }
@@ -1418,45 +847,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1475,7 +866,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.ProgramResponseDto"
+                    "$ref": "#/components/schemas/ProgramResponseDto"
                   }
                 }
               }
@@ -1504,17 +895,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.UpdateProgramDto"
+                "$ref": "#/components/schemas/UpdateProgramDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.UpdateProgramDto"
+                "$ref": "#/components/schemas/UpdateProgramDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.UpdateProgramDto"
+                "$ref": "#/components/schemas/UpdateProgramDto"
               }
             }
           }
@@ -1525,7 +916,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.ProgramResponseDto"
+                  "$ref": "#/components/schemas/ProgramResponseDto"
                 }
               }
             }
@@ -1535,45 +926,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1583,45 +936,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1649,7 +964,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.ProgramResponseDto"
+                  "$ref": "#/components/schemas/ProgramResponseDto"
                 }
               }
             }
@@ -1659,45 +974,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1728,45 +1005,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1783,17 +1022,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.CreateStudentDto"
+                "$ref": "#/components/schemas/CreateStudentDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.CreateStudentDto"
+                "$ref": "#/components/schemas/CreateStudentDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.CreateStudentDto"
+                "$ref": "#/components/schemas/CreateStudentDto"
               }
             }
           }
@@ -1804,7 +1043,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.StudentResponseDto"
+                  "$ref": "#/components/schemas/StudentResponseDto"
                 }
               }
             }
@@ -1814,45 +1053,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1871,7 +1072,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.StudentResponseDto"
+                    "$ref": "#/components/schemas/StudentResponseDto"
                   }
                 }
               }
@@ -1900,17 +1101,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.UpdateStudentDto"
+                "$ref": "#/components/schemas/UpdateStudentDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.UpdateStudentDto"
+                "$ref": "#/components/schemas/UpdateStudentDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.UpdateStudentDto"
+                "$ref": "#/components/schemas/UpdateStudentDto"
               }
             }
           }
@@ -1921,7 +1122,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.StudentResponseDto"
+                  "$ref": "#/components/schemas/StudentResponseDto"
                 }
               }
             }
@@ -1931,45 +1132,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1979,45 +1142,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -2045,7 +1170,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.StudentResponseDto"
+                  "$ref": "#/components/schemas/StudentResponseDto"
                 }
               }
             }
@@ -2055,45 +1180,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -2124,45 +1211,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -2179,17 +1228,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.AdmitStudentToProgramDto"
+                "$ref": "#/components/schemas/AdmitStudentToProgramDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.AdmitStudentToProgramDto"
+                "$ref": "#/components/schemas/AdmitStudentToProgramDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Student.AdmitStudentToProgramDto"
+                "$ref": "#/components/schemas/AdmitStudentToProgramDto"
               }
             }
           }
@@ -2203,45 +1252,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -2273,7 +1284,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Program.ProgramResponseDto"
+                    "$ref": "#/components/schemas/ProgramResponseDto"
                   }
                 }
               }
@@ -2283,6 +1294,16 @@
       }
     },
     "/api/Subjects": {
+      "get": {
+        "tags": [
+          "Subjects"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
       "post": {
         "tags": [
           "Subjects"
@@ -2291,247 +1312,29 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.CreateSubjectDto"
+                "$ref": "#/components/schemas/CreateSubjectDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.CreateSubjectDto"
+                "$ref": "#/components/schemas/CreateSubjectDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.CreateSubjectDto"
+                "$ref": "#/components/schemas/CreateSubjectDto"
               }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.SubjectResponseDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Subjects"
-        ],
-        "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.SubjectResponseDto"
-                  }
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
     },
     "/api/Subjects/{id}": {
-      "put": {
-        "tags": [
-          "Subjects"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.UpdateSubjectDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.UpdateSubjectDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.UpdateSubjectDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.SubjectResponseDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
       "get": {
         "tags": [
           "Subjects"
@@ -2549,164 +1352,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.SubjectResponseDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Subjects"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Subjects/program/{programId}": {
-      "get": {
-        "tags": [
-          "Subjects"
-        ],
-        "parameters": [
-          {
-            "name": "programId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Subject.SubjectResponseDto"
-                  }
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -2720,17 +1366,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.CreateTeacherDto"
+                "$ref": "#/components/schemas/CreateTeacherDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.CreateTeacherDto"
+                "$ref": "#/components/schemas/CreateTeacherDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.CreateTeacherDto"
+                "$ref": "#/components/schemas/CreateTeacherDto"
               }
             }
           }
@@ -2741,7 +1387,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.TeacherResponseDto"
+                  "$ref": "#/components/schemas/TeacherResponseDto"
                 }
               }
             }
@@ -2751,45 +1397,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -2808,7 +1416,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.TeacherResponseDto"
+                    "$ref": "#/components/schemas/TeacherResponseDto"
                   }
                 }
               }
@@ -2837,17 +1445,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.UpdateTeacherDto"
+                "$ref": "#/components/schemas/UpdateTeacherDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.UpdateTeacherDto"
+                "$ref": "#/components/schemas/UpdateTeacherDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.UpdateTeacherDto"
+                "$ref": "#/components/schemas/UpdateTeacherDto"
               }
             }
           }
@@ -2858,7 +1466,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.TeacherResponseDto"
+                  "$ref": "#/components/schemas/TeacherResponseDto"
                 }
               }
             }
@@ -2868,45 +1476,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -2916,45 +1486,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -2982,7 +1514,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Teacher.TeacherResponseDto"
+                  "$ref": "#/components/schemas/TeacherResponseDto"
                 }
               }
             }
@@ -2992,45 +1524,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -3061,45 +1555,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -3116,17 +1572,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.CreateTimetableDto"
+                "$ref": "#/components/schemas/CreateTimetableDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.CreateTimetableDto"
+                "$ref": "#/components/schemas/CreateTimetableDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.CreateTimetableDto"
+                "$ref": "#/components/schemas/CreateTimetableDto"
               }
             }
           }
@@ -3137,7 +1593,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.TimetableResponseDto"
+                  "$ref": "#/components/schemas/TimetableResponseDto"
                 }
               }
             }
@@ -3147,45 +1603,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -3213,17 +1631,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.UpdateTimetableDto"
+                "$ref": "#/components/schemas/UpdateTimetableDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.UpdateTimetableDto"
+                "$ref": "#/components/schemas/UpdateTimetableDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.UpdateTimetableDto"
+                "$ref": "#/components/schemas/UpdateTimetableDto"
               }
             }
           }
@@ -3234,7 +1652,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.TimetableResponseDto"
+                  "$ref": "#/components/schemas/TimetableResponseDto"
                 }
               }
             }
@@ -3244,45 +1662,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -3292,45 +1672,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -3358,7 +1700,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.TimetableResponseDto"
+                  "$ref": "#/components/schemas/TimetableResponseDto"
                 }
               }
             }
@@ -3368,45 +1710,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -3437,45 +1741,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the problem type",
-                      "nullable": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "A short, human-readable summary of the problem type",
-                      "nullable": true
-                    },
-                    "status": {
-                      "type": "integer",
-                      "description": "The HTTP status code",
-                      "format": "int32",
-                      "nullable": true
-                    },
-                    "detail": {
-                      "type": "string",
-                      "description": "A human-readable explanation specific to this occurrence of the problem",
-                      "nullable": true
-                    },
-                    "instance": {
-                      "type": "string",
-                      "description": "A URI reference that identifies the specific occurrence of the problem",
-                      "nullable": true
-                    },
-                    "errors": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "description": "Validation errors (only present for 400 Bad Request with validation errors)"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -3514,7 +1780,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Timetable.TimetableResponseDto"
+                    "$ref": "#/components/schemas/TimetableResponseDto"
                   }
                 }
               }
@@ -3526,7 +1792,26 @@
   },
   "components": {
     "schemas": {
-      "UniversityManagement.Application.DTOs.Announcement.AnnouncementResponseDto": {
+      "AdmitStudentToProgramDto": {
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "programId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "admissionDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AnnouncementResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -3595,84 +1880,7 @@
         },
         "additionalProperties": false
       },
-      "UniversityManagement.Application.DTOs.Announcement.CreateAnnouncementDto": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "content": {
-            "type": "string",
-            "nullable": true
-          },
-          "teacherId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "targetAudience": {
-            "type": "string",
-            "nullable": true
-          },
-          "programId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "subjectId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "expiryDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UniversityManagement.Application.DTOs.Announcement.UpdateAnnouncementDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "content": {
-            "type": "string",
-            "nullable": true
-          },
-          "targetAudience": {
-            "type": "string",
-            "nullable": true
-          },
-          "programId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "subjectId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "expiryDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "isActive": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UniversityManagement.Application.DTOs.Attendance.AttendanceResponseDto": {
+      "AttendanceResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -3719,7 +1927,7 @@
         },
         "additionalProperties": false
       },
-      "UniversityManagement.Application.DTOs.Attendance.BulkAttendanceDto": {
+      "BulkAttendanceDto": {
         "type": "object",
         "properties": {
           "subjectId": {
@@ -3733,14 +1941,51 @@
           "studentAttendances": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UniversityManagement.Application.DTOs.Attendance.StudentAttendanceDto"
+              "$ref": "#/components/schemas/StudentAttendanceDto"
             },
             "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "UniversityManagement.Application.DTOs.Attendance.CreateAttendanceDto": {
+      "CreateAnnouncementDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "teacherId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "targetAudience": {
+            "type": "string",
+            "nullable": true
+          },
+          "programId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateAttendanceDto": {
         "type": "object",
         "properties": {
           "studentId": {
@@ -3766,55 +2011,7 @@
         },
         "additionalProperties": false
       },
-      "UniversityManagement.Application.DTOs.Attendance.StudentAttendanceDto": {
-        "type": "object",
-        "properties": {
-          "studentId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "status": {
-            "type": "string",
-            "nullable": true
-          },
-          "notes": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UniversityManagement.Application.DTOs.Attendance.UpdateAttendanceDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "studentId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "subjectId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "attendanceDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "status": {
-            "type": "string",
-            "nullable": true
-          },
-          "notes": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UniversityManagement.Application.DTOs.Exam.CreateExamDto": {
+      "CreateExamDto": {
         "type": "object",
         "properties": {
           "name": {
@@ -3852,7 +2049,202 @@
         },
         "additionalProperties": false
       },
-      "UniversityManagement.Application.DTOs.Exam.ExamResponseDto": {
+      "CreateProgramDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "creditsRequired": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateStudentDto": {
+        "required": [
+          "address",
+          "dateOfBirth",
+          "email",
+          "firstName",
+          "lastName",
+          "phone"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "email": {
+            "maxLength": 120,
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "phone": {
+            "minLength": 1,
+            "pattern": "^\\+?[0-9\\s\\-()]{7,20}$",
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "address": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateSubjectDto": {
+        "required": [
+          "code",
+          "name",
+          "programId",
+          "teacherId"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "code": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 2000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "credits": {
+            "maximum": 60,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "programId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teacherId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "semester": {
+            "maximum": 12,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateTeacherDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "hireDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateTimetableDto": {
+        "type": "object",
+        "properties": {
+          "programId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "dayOfWeek": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "room": {
+            "type": "string",
+            "nullable": true
+          },
+          "semester": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "academicYear": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExamResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -3907,84 +2299,34 @@
         },
         "additionalProperties": false
       },
-      "UniversityManagement.Application.DTOs.Exam.UpdateExamDto": {
+      "ProblemDetails": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
+          "type": {
             "type": "string",
             "nullable": true
           },
-          "examType": {
+          "title": {
             "type": "string",
             "nullable": true
           },
-          "subjectId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "examDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-span"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-span"
-          },
-          "location": {
-            "type": "string",
-            "nullable": true
-          },
-          "maxMarks": {
-            "type": "number",
-            "format": "double"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UniversityManagement.Application.DTOs.Program.CreateProgramDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "duration": {
+          "status": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
-          "creditsRequired": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "startDate": {
+          "detail": {
             "type": "string",
-            "format": "date-time"
+            "nullable": true
           },
-          "endDate": {
+          "instance": {
             "type": "string",
-            "format": "date-time",
             "nullable": true
           }
         },
-        "additionalProperties": false
+        "additionalProperties": { }
       },
-      "UniversityManagement.Application.DTOs.Program.ProgramResponseDto": {
+      "ProgramResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -4035,112 +2377,25 @@
         },
         "additionalProperties": false
       },
-      "UniversityManagement.Application.DTOs.Program.UpdateProgramDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "duration": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "creditsRequired": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "isActive": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UniversityManagement.Application.DTOs.Student.AdmitStudentToProgramDto": {
+      "StudentAttendanceDto": {
         "type": "object",
         "properties": {
           "studentId": {
             "type": "string",
             "format": "uuid"
           },
-          "programId": {
+          "status": {
             "type": "string",
-            "format": "uuid"
+            "nullable": true
           },
-          "admissionDate": {
+          "notes": {
             "type": "string",
-            "format": "date-time",
             "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "UniversityManagement.Application.DTOs.Student.CreateStudentDto": {
-        "required": [
-          "address",
-          "dateOfBirth",
-          "email",
-          "firstName",
-          "lastName",
-          "phone"
-        ],
-        "type": "object",
-        "properties": {
-          "firstName": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "lastName": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "email": {
-            "maxLength": 120,
-            "minLength": 1,
-            "type": "string",
-            "format": "email"
-          },
-          "phone": {
-            "minLength": 1,
-            "pattern": "^\\+?[0-9\\s\\-()]{7,20}$",
-            "type": "string"
-          },
-          "dateOfBirth": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "address": {
-            "maxLength": 200,
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UniversityManagement.Application.DTOs.Student.StudentResponseDto": {
+      "StudentResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -4191,224 +2446,7 @@
         },
         "additionalProperties": false
       },
-      "UniversityManagement.Application.DTOs.Student.UpdateStudentDto": {
-        "required": [
-          "address",
-          "dateOfBirth",
-          "email",
-          "firstName",
-          "id",
-          "lastName",
-          "phone",
-          "status"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "firstName": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "lastName": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "email": {
-            "maxLength": 120,
-            "minLength": 1,
-            "type": "string",
-            "format": "email"
-          },
-          "phone": {
-            "minLength": 1,
-            "pattern": "^\\+?[0-9\\s\\-()]{7,20}$",
-            "type": "string"
-          },
-          "dateOfBirth": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "address": {
-            "maxLength": 200,
-            "minLength": 1,
-            "type": "string"
-          },
-          "status": {
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UniversityManagement.Application.DTOs.Subject.CreateSubjectDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "credits": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "programId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "teacherId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "semester": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UniversityManagement.Application.DTOs.Subject.SubjectResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "credits": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "programId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "programName": {
-            "type": "string",
-            "nullable": true
-          },
-          "teacherId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "teacherName": {
-            "type": "string",
-            "nullable": true
-          },
-          "semester": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "isActive": {
-            "type": "boolean"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UniversityManagement.Application.DTOs.Subject.UpdateSubjectDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "credits": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "programId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "teacherId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "semester": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "isActive": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UniversityManagement.Application.DTOs.Teacher.CreateTeacherDto": {
-        "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "phone": {
-            "type": "string",
-            "nullable": true
-          },
-          "department": {
-            "type": "string",
-            "nullable": true
-          },
-          "hireDate": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UniversityManagement.Application.DTOs.Teacher.TeacherResponseDto": {
+      "TeacherResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -4455,79 +2493,7 @@
         },
         "additionalProperties": false
       },
-      "UniversityManagement.Application.DTOs.Teacher.UpdateTeacherDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "firstName": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "phone": {
-            "type": "string",
-            "nullable": true
-          },
-          "department": {
-            "type": "string",
-            "nullable": true
-          },
-          "status": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UniversityManagement.Application.DTOs.Timetable.CreateTimetableDto": {
-        "type": "object",
-        "properties": {
-          "programId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "subjectId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "dayOfWeek": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-span"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-span"
-          },
-          "room": {
-            "type": "string",
-            "nullable": true
-          },
-          "semester": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "academicYear": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UniversityManagement.Application.DTOs.Timetable.TimetableResponseDto": {
+      "TimetableResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -4590,7 +2556,249 @@
         },
         "additionalProperties": false
       },
-      "UniversityManagement.Application.DTOs.Timetable.UpdateTimetableDto": {
+      "UpdateAnnouncementDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "targetAudience": {
+            "type": "string",
+            "nullable": true
+          },
+          "programId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateAttendanceDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "studentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "attendanceDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateExamDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "examType": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "examDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "maxMarks": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateProgramDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "creditsRequired": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateStudentDto": {
+        "required": [
+          "address",
+          "dateOfBirth",
+          "email",
+          "firstName",
+          "id",
+          "lastName",
+          "phone",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "email": {
+            "maxLength": 120,
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "phone": {
+            "minLength": 1,
+            "pattern": "^\\+?[0-9\\s\\-()]{7,20}$",
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "address": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "status": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateTeacherDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateTimetableDto": {
         "type": "object",
         "properties": {
           "id": {

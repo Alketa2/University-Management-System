@@ -1,11 +1,15 @@
-using UniversityManagement.Domain.Common;    
-using UniversityManagement.Domain.Interfaces; 
-using UniversityManagement.Domain.Entities;   
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UniversityManagement.Domain.Entities;
 
-
-namespace UniversityManagement.Infrastructure.Repositories;
-
-public interface ISubjectRepository : IRepository<Subject>
+namespace UniversityManagement.Infrastructure.Repositories
 {
-    Task<List<Subject>> GetByProgramIdAsync(Guid programId);
+    public interface ISubjectRepository
+    {
+        Task<List<Subject>> GetAllAsync();
+        Task<Subject?> GetByIdAsync(Guid id);
+        Task AddAsync(Subject subject);
+        Task SaveChangesAsync();
+    }
 }
