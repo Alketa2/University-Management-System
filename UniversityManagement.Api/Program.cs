@@ -1,13 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UniversityManagement.Application.Interfaces;
 using UniversityManagement.Application.Services;
 using UniversityManagement.Domain.Entities;
 using UniversityManagement.Domain.Interfaces;
+using UniversityManagement.Infrastructure.Data;
 using UniversityManagement.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// -------------------- Controllers + Validation responses --------------------
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
@@ -19,7 +21,7 @@ builder.Services.AddControllers()
         };
     });
 
-//  configuring Swagger     
+// -------------------- Swagger --------------------
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -30,7 +32,7 @@ builder.Services.AddSwaggerGen(c =>
         Description = "API for managing university students, programs, teachers, subjects, attendance, exams, timetables, and announcements"
     });
 
-    // Swagger documentation
+    // Swagger documentation for validation errors (ProblemDetails)
     c.MapType<Microsoft.AspNetCore.Mvc.ProblemDetails>(() => new Microsoft.OpenApi.Models.OpenApiSchema
     {
         Type = "object",
@@ -54,7 +56,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
-
+    // XML docs (optional)
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     if (File.Exists(xmlPath))
@@ -62,11 +64,11 @@ builder.Services.AddSwaggerGen(c =>
         c.IncludeXmlComments(xmlPath);
     }
 
-    // - "schemaId" collisions 
+    // Fix schemaId collisions
     c.CustomSchemaIds(type => type.FullName);
 });
 
-//  CORS for React frontend
+// -------------------- CORS for React frontend --------------------
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
@@ -78,26 +80,42 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Register Repositories
-builder.Services.AddSingleton<IRepository<Student>, StudentRepository>();
-builder.Services.AddSingleton<IRepository<UniversityManagement.Domain.Entities.Program>, ProgramRepository>();
-builder.Services.AddSingleton<IRepository<Teacher>, TeacherRepository>();
-builder.Services.AddSingleton<IRepository<Subject>, SubjectRepository>();
-builder.Services.AddSingleton<IRepository<Attendance>, AttendanceRepository>();
-builder.Services.AddSingleton<IRepository<Exam>, ExamRepository>();
-builder.Services.AddSingleton<IRepository<Timetable>, TimetableRepository>();
-builder.Services.AddSingleton<IRepository<Announcement>, AnnouncementRepository>();
+// -------------------- EF Core (MySQL) --------------------
+var connectionString = builder.Configuration.GetConnectionString("MySql");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException("Missing connection string 'ConnectionStrings:MySql' in appsettings.json");
+}
 
-// Register specific repositories
-builder.Services.AddSingleton<IStudentRepository, StudentRepository>();
-builder.Services.AddSingleton<IStudentProgramRepository, StudentProgramRepository>();
-builder.Services.AddSingleton<ISubjectRepository, SubjectRepository>();
-builder.Services.AddSingleton<IAttendanceRepository, AttendanceRepository>();
-builder.Services.AddSingleton<IExamRepository, ExamRepository>();
-builder.Services.AddSingleton<ITimetableRepository, TimetableRepository>();
-builder.Services.AddSingleton<IAnnouncementRepository, AnnouncementRepository>();
+builder.Services.AddDbContext<UniversityDbContext>(options =>
+{
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+});
 
-// Register Services
+// Generic EF repository (only if your services use IRepository<T>)
+builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+
+// -------------------- Repositories (SCOPED, not singleton) --------------------
+// Generic IRepository<T> registrations (if used anywhere)
+builder.Services.AddScoped<IRepository<Student>, StudentRepository>();
+builder.Services.AddScoped<IRepository<UniversityManagement.Domain.Entities.Program>, ProgramRepository>();
+builder.Services.AddScoped<IRepository<Teacher>, TeacherRepository>();
+builder.Services.AddScoped<IRepository<Subject>, SubjectRepository>();
+builder.Services.AddScoped<IRepository<Attendance>, AttendanceRepository>();
+builder.Services.AddScoped<IRepository<Exam>, ExamRepository>();
+builder.Services.AddScoped<IRepository<Timetable>, TimetableRepository>();
+builder.Services.AddScoped<IRepository<Announcement>, AnnouncementRepository>();
+
+// Specific repositories
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IStudentProgramRepository, StudentProgramRepository>();
+builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
+builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+builder.Services.AddScoped<IExamRepository, ExamRepository>();
+builder.Services.AddScoped<ITimetableRepository, TimetableRepository>();
+builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
+
+// -------------------- Services (Scoped) --------------------
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IProgramService, ProgramService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
@@ -109,7 +127,7 @@ builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 
 var app = builder.Build();
 
-
+// -------------------- Middleware --------------------
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
