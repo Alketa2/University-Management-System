@@ -1,14 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using UniversityManagement.Domain.Common;
 
 namespace UniversityManagement.Domain.Entities
 {
-    public class Subject
+    public class Subject : BaseEntity
     {
-        [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
-
         [Required, StringLength(200)]
         public string Name { get; set; } = string.Empty;
 
@@ -31,9 +28,5 @@ namespace UniversityManagement.Domain.Entities
         public int Semester { get; set; }
 
         public bool IsActive { get; set; } = true;
-
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        public DateTime? UpdatedAt { get; set; }
     }
 }

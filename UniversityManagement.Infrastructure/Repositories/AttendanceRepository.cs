@@ -1,39 +1,52 @@
+using Microsoft.EntityFrameworkCore;
 using UniversityManagement.Domain.Entities;
-using UniversityManagement.Domain.Interfaces;
+using UniversityManagement.Infrastructure.Data;
 
 namespace UniversityManagement.Infrastructure.Repositories;
 
-public class AttendanceRepository
-    : Repository<Attendance>, IAttendanceRepository
+public class AttendanceRepository : EfRepository<Attendance>, IAttendanceRepository
 {
-    public Task<List<Attendance>> GetByStudentIdAsync(
+    public AttendanceRepository(UniversityDbContext db) : base(db) { }
+
+    public async Task<List<Attendance>> GetByStudentIdAsync(
         Guid studentId,
         Guid? subjectId,
         DateTime? startDate,
         DateTime? endDate)
     {
-        var query = _entities.Values.Where(a => a.StudentId == studentId);
+        var query = _set.AsNoTracking().Where(a => a.StudentId == studentId);
 
         if (subjectId.HasValue)
-            query = query.Where(a => a.SubjectId == subjectId.Value);
+        {
+            var sid = subjectId.Value;
+            query = query.Where(a => a.SubjectId == sid);
+        }
 
         if (startDate.HasValue)
-            query = query.Where(a => a.AttendanceDate >= startDate.Value);
+        {
+            var start = startDate.Value;
+            query = query.Where(a => a.AttendanceDate >= start);
+        }
 
         if (endDate.HasValue)
-            query = query.Where(a => a.AttendanceDate <= endDate.Value);
+        {
+            var end = endDate.Value;
+            query = query.Where(a => a.AttendanceDate <= end);
+        }
 
-        return Task.FromResult(query.ToList());
+        return await query
+            .OrderByDescending(a => a.AttendanceDate)
+            .ToListAsync();
     }
 
     public Task<List<Attendance>> GetBySubjectIdAndDateAsync(Guid subjectId, DateTime date)
     {
-        var attendances = _entities.Values
-            .Where(a =>
-                a.SubjectId == subjectId &&
-                a.AttendanceDate.Date == date.Date)
-            .ToList();
+        var dayStart = date.Date;
+        var dayEnd = dayStart.AddDays(1);
 
-        return Task.FromResult(attendances);
+        return _set.AsNoTracking()
+            .Where(a => a.SubjectId == subjectId && a.AttendanceDate >= dayStart && a.AttendanceDate < dayEnd)
+            .OrderBy(a => a.AttendanceDate)
+            .ToListAsync();
     }
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Alketa\\source\\repos\\UniversityManagementSystem\\UniversityManagementBackend\\UniversityManagement.Domain\\UniversityManagement.Domain.csproj": {}
+    "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Domain\\UniversityManagement.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Alketa\\source\\repos\\UniversityManagementSystem\\UniversityManagementBackend\\UniversityManagement.Domain\\UniversityManagement.Domain.csproj": {
+    "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Domain\\UniversityManagement.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Alketa\\source\\repos\\UniversityManagementSystem\\UniversityManagementBackend\\UniversityManagement.Domain\\UniversityManagement.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Domain\\UniversityManagement.Domain.csproj",
         "projectName": "UniversityManagement.Domain",
-        "projectPath": "C:\\Users\\Alketa\\source\\repos\\UniversityManagementSystem\\UniversityManagementBackend\\UniversityManagement.Domain\\UniversityManagement.Domain.csproj",
+        "projectPath": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Domain\\UniversityManagement.Domain.csproj",
         "packagesPath": "C:\\Users\\Alketa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Alketa\\source\\repos\\UniversityManagementSystem\\UniversityManagementBackend\\UniversityManagement.Domain\\obj\\",
+        "outputPath": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

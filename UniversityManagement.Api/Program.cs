@@ -39,6 +39,10 @@ builder.Services.AddCors(options =>
 
 // ✅ DbContext (Pomelo MySQL)
 var cs = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrWhiteSpace(cs))
+{
+    throw new InvalidOperationException("Missing ConnectionStrings:DefaultConnection in appsettings.json");
+}
 builder.Services.AddDbContext<UniversityDbContext>(options =>
 {
     options.UseMySql(cs, ServerVersion.AutoDetect(cs));
@@ -66,6 +70,13 @@ builder.Services.AddScoped<ITimetableService, TimetableService>();
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 
 var app = builder.Build();
+
+// Apply pending EF Core migrations at startup (creates DB if it doesn't exist)
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<UniversityDbContext>();
+    db.Database.Migrate();
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();

@@ -1,46 +1,43 @@
+using Microsoft.EntityFrameworkCore;
 using UniversityManagement.Domain.Entities;
-using UniversityManagement.Domain.Interfaces;
+using UniversityManagement.Infrastructure.Data;
 
 namespace UniversityManagement.Infrastructure.Repositories;
 
-public class AnnouncementRepository
-    : Repository<Announcement>, IAnnouncementRepository
+public class AnnouncementRepository : EfRepository<Announcement>, IAnnouncementRepository
 {
-    public Task<List<Announcement>> GetActiveAnnouncementsAsync(
-        Guid? programId,
-        Guid? subjectId)
+    public AnnouncementRepository(UniversityDbContext db) : base(db) { }
+
+    public async Task<List<Announcement>> GetActiveAnnouncementsAsync(Guid? programId, Guid? subjectId)
     {
-        var query = _entities.Values.Where(a =>
-            a.IsActive &&
-            (a.ExpiryDate == null || a.ExpiryDate > DateTime.UtcNow));
+        var now = DateTime.UtcNow;
+        var query = _set.AsNoTracking()
+            .Where(a => a.IsActive && (a.ExpiryDate == null || a.ExpiryDate > now));
 
         if (programId.HasValue)
         {
+            var pid = programId.Value;
             query = query.Where(a =>
                 a.TargetAudience == TargetAudience.All ||
-                (a.TargetAudience == TargetAudience.Program &&
-                 a.ProgramId == programId));
+                (a.TargetAudience == TargetAudience.Program && a.ProgramId == pid));
         }
 
         if (subjectId.HasValue)
         {
+            var sid = subjectId.Value;
             query = query.Where(a =>
                 a.TargetAudience == TargetAudience.All ||
-                (a.TargetAudience == TargetAudience.Subject &&
-                 a.SubjectId == subjectId));
+                (a.TargetAudience == TargetAudience.Subject && a.SubjectId == sid));
         }
 
-        return Task.FromResult(
-            query.OrderByDescending(a => a.PublishDate).ToList());
+        return await query
+            .OrderByDescending(a => a.PublishDate)
+            .ToListAsync();
     }
 
     public Task<List<Announcement>> GetByTeacherIdAsync(Guid teacherId)
-    {
-        var announcements = _entities.Values
+        => _set.AsNoTracking()
             .Where(a => a.TeacherId == teacherId)
             .OrderByDescending(a => a.PublishDate)
-            .ToList();
-
-        return Task.FromResult(announcements);
-    }
+            .ToListAsync();
 }

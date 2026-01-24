@@ -1,17 +1,17 @@
+using Microsoft.EntityFrameworkCore;
 using UniversityManagement.Domain.Entities;
-using UniversityManagement.Domain.Interfaces;
+using UniversityManagement.Infrastructure.Data;
 
 namespace UniversityManagement.Infrastructure.Repositories;
 
-public class ExamRepository
-    : Repository<Exam>, IExamRepository
+public class ExamRepository : EfRepository<Exam>, IExamRepository
 {
-    public Task<List<Exam>> GetBySubjectIdAsync(Guid subjectId)
-    {
-        var exams = _entities.Values
-            .Where(e => e.SubjectId == subjectId)
-            .ToList();
+    public ExamRepository(UniversityDbContext db) : base(db) { }
 
-        return Task.FromResult(exams);
-    }
+    public Task<List<Exam>> GetBySubjectIdAsync(Guid subjectId)
+        => _set.AsNoTracking()
+            .Where(e => e.SubjectId == subjectId)
+            .OrderBy(e => e.ExamDate)
+            .ThenBy(e => e.StartTime)
+            .ToListAsync();
 }

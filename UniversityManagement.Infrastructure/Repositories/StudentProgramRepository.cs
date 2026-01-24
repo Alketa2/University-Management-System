@@ -1,31 +1,24 @@
-using UniversityManagement.Domain.Common;     
-using UniversityManagement.Domain.Interfaces; 
-using UniversityManagement.Domain.Entities;   
+using Microsoft.EntityFrameworkCore;
+using UniversityManagement.Domain.Entities;
+using UniversityManagement.Infrastructure.Data;
 
 namespace UniversityManagement.Infrastructure.Repositories;
 
-public class StudentProgramRepository : Repository<StudentProgram>, IStudentProgramRepository
+public class StudentProgramRepository : EfRepository<StudentProgram>, IStudentProgramRepository
 {
+    public StudentProgramRepository(UniversityDbContext db) : base(db) { }
+
     public Task<List<StudentProgram>> GetByStudentIdAsync(Guid studentId)
-    {
-        var studentPrograms = _entities.Values
+        => _set.AsNoTracking()
             .Where(sp => sp.StudentId == studentId)
-            .ToList();
-        return Task.FromResult(studentPrograms);
-    }
+            .ToListAsync();
 
     public Task<List<StudentProgram>> GetByProgramIdAsync(Guid programId)
-    {
-        var studentPrograms = _entities.Values
+        => _set.AsNoTracking()
             .Where(sp => sp.ProgramId == programId)
-            .ToList();
-        return Task.FromResult(studentPrograms);
-    }
+            .ToListAsync();
 
     public Task<StudentProgram?> GetByStudentAndProgramAsync(Guid studentId, Guid programId)
-    {
-        var studentProgram = _entities.Values
-            .FirstOrDefault(sp => sp.StudentId == studentId && sp.ProgramId == programId);
-        return Task.FromResult(studentProgram);
-    }
+        => _set.AsNoTracking()
+            .FirstOrDefaultAsync(sp => sp.StudentId == studentId && sp.ProgramId == programId);
 }

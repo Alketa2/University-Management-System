@@ -1,21 +1,26 @@
-using UniversityManagement.Domain.Common;     
-using UniversityManagement.Domain.Interfaces; 
-using UniversityManagement.Domain.Entities;   
-
+using Microsoft.EntityFrameworkCore;
+using UniversityManagement.Domain.Entities;
+using UniversityManagement.Infrastructure.Data;
 
 namespace UniversityManagement.Infrastructure.Repositories;
 
-public class TimetableRepository : Repository<Timetable>, ITimetableRepository
+public class TimetableRepository : EfRepository<Timetable>, ITimetableRepository
 {
-    public Task<List<Timetable>> GetByProgramIdAsync(Guid programId, int? semester = null)
+    public TimetableRepository(UniversityDbContext db) : base(db) { }
+
+    public async Task<List<Timetable>> GetByProgramIdAsync(Guid programId, int? semester = null)
     {
-        var query = _entities.Values.Where(t => t.ProgramId == programId);
-        
+        var query = _set.AsNoTracking().Where(t => t.ProgramId == programId);
+
         if (semester.HasValue)
         {
-            query = query.Where(t => t.Semester == semester.Value);
+            var sem = semester.Value;
+            query = query.Where(t => t.Semester == sem);
         }
 
-        return Task.FromResult(query.ToList());
+        return await query
+            .OrderBy(t => t.DayOfWeek)
+            .ThenBy(t => t.StartTime)
+            .ToListAsync();
     }
 }

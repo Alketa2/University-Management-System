@@ -1211,11 +1211,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Alketa\\source\\repos\\UniversityManagementSystem\\UniversityManagementBackend\\UniversityManagement.Application\\UniversityManagement.Application.csproj",
+      "projectUniqueName": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Application\\UniversityManagement.Application.csproj",
       "projectName": "UniversityManagement.Application",
-      "projectPath": "C:\\Users\\Alketa\\source\\repos\\UniversityManagementSystem\\UniversityManagementBackend\\UniversityManagement.Application\\UniversityManagement.Application.csproj",
+      "projectPath": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Application\\UniversityManagement.Application.csproj",
       "packagesPath": "C:\\Users\\Alketa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Alketa\\source\\repos\\UniversityManagementSystem\\UniversityManagementBackend\\UniversityManagement.Application\\obj\\",
+      "outputPath": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1235,11 +1235,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Alketa\\source\\repos\\UniversityManagementSystem\\UniversityManagementBackend\\UniversityManagement.Domain\\UniversityManagement.Domain.csproj": {
-              "projectPath": "C:\\Users\\Alketa\\source\\repos\\UniversityManagementSystem\\UniversityManagementBackend\\UniversityManagement.Domain\\UniversityManagement.Domain.csproj"
+            "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Domain\\UniversityManagement.Domain.csproj": {
+              "projectPath": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Domain\\UniversityManagement.Domain.csproj"
             },
-            "C:\\Users\\Alketa\\source\\repos\\UniversityManagementSystem\\UniversityManagementBackend\\UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\Alketa\\source\\repos\\UniversityManagementSystem\\UniversityManagementBackend\\UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj"
+            "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj"
             }
           }
         }

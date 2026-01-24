@@ -1,10 +1,10 @@
-using UniversityManagement.Domain.Common;     
-using UniversityManagement.Domain.Interfaces; 
-using UniversityManagement.Domain.Entities;  
-
+using UniversityManagement.Domain.Entities;
+using UniversityManagement.Infrastructure.Data;
 
 namespace UniversityManagement.Infrastructure.Repositories;
 
-public class TeacherRepository : Repository<Teacher>
+// Optional typed repository wrapper (generic IRepository<Teacher> is already registered)
+public class TeacherRepository : EfRepository<Teacher>
 {
+    public TeacherRepository(UniversityDbContext db) : base(db) { }
 }
