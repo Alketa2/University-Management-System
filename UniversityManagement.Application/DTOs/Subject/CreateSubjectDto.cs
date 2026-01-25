@@ -5,13 +5,15 @@ namespace UniversityManagement.Application.DTOs.Subjects
 {
     public class CreateSubjectDto
     {
-        [Required, StringLength(200)]
+        [Required]
+        [MaxLength(100)]
         public string Name { get; set; } = string.Empty;
 
-        [Required, StringLength(50)]
+        [Required]
+        [MaxLength(30)]
         public string Code { get; set; } = string.Empty;
 
-        [StringLength(2000)]
+        [MaxLength(500)]
         public string? Description { get; set; }
 
         [Range(1, 60)]

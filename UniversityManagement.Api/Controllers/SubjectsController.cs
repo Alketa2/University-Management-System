@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using UniversityManagement.Application.DTOs.Subjects;
 using UniversityManagement.Application.Interfaces;
 
@@ -19,24 +17,51 @@ namespace UniversityManagement.Api.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
-        {
-            var items = await _service.GetAllAsync();
-            return Ok(items);
-        }
+            => Ok(await _service.GetAllAsync());
 
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var item = await _service.GetByIdAsync(id);
-            if (item == null) return NotFound();
-            return Ok(item);
+            var subject = await _service.GetByIdAsync(id);
+            if (subject == null) return NotFound("Subject not found");
+            return Ok(subject);
         }
+
+        // ✅ optional but recommended
+        [HttpGet("program/{programId:guid}")]
+        public async Task<IActionResult> GetByProgram(Guid programId)
+            => Ok(await _service.GetByProgramIdAsync(programId));
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateSubjectDto dto)
         {
-            var created = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            try
+            {
+                var created = await _service.CreateAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateSubjectDto dto)
+        {
+            var updated = await _service.UpdateAsync(id, dto);
+            if (updated == null) return NotFound("Subject not found");
+            return Ok(updated);
+        }
+
+       
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var ok = await _service.DeleteAsync(id);
+            if (!ok) return NotFound("Subject not found");
+            return NoContent();
         }
     }
 }

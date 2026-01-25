@@ -10,6 +10,11 @@ namespace UniversityManagement.Application.Interfaces
     {
         Task<List<Subject>> GetAllAsync();
         Task<Subject?> GetByIdAsync(Guid id);
+        Task<List<Subject>> GetByProgramIdAsync(Guid programId);
+
         Task<Subject> CreateAsync(CreateSubjectDto dto);
+
+        Task<Subject?> UpdateAsync(Guid id, UpdateSubjectDto dto);
+        Task<bool> DeleteAsync(Guid id);
     }
 }
