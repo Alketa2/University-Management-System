@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Collections.Generic; // ✅ add this
 using System.ComponentModel.DataAnnotations;
 using UniversityManagement.Domain.Common;
 
@@ -28,5 +29,12 @@ namespace UniversityManagement.Domain.Entities
         public int Semester { get; set; }
 
         public bool IsActive { get; set; } = true;
+
+        // ✅ Navigation properties
+        public Program Program { get; set; } = null!;
+        public Teacher Teacher { get; set; } = null!;
+
+        // ✅ Add this to fix Timetables relationship
+        public ICollection<Timetable> Timetables { get; set; } = new List<Timetable>();
     }
 }

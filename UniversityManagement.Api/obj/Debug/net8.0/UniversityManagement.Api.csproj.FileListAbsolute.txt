@@ -111,4 +111,6 @@ C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.A
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\obj\Debug\net8.0\UniversityManagement.Api.pdb
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\obj\Debug\net8.0\UniversityManagement.Api.genruntimeconfig.cache
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\obj\Debug\net8.0\ref\UniversityManagement.Api.dll
-C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll

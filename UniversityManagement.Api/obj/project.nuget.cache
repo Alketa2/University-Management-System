@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "sM6SvOq4Dj0=",
+  "dgSpecHash": "mHAlcZkSEVw=",
   "success": true,
   "projectFilePath": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Api\\UniversityManagement.Api.csproj",
   "expectedPackageFiles": [
@@ -33,6 +33,9 @@
     "C:\\Users\\Alketa\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\Alketa\\.nuget\\packages\\microsoft.extensions.options\\8.0.0\\microsoft.extensions.options.8.0.0.nupkg.sha512",
     "C:\\Users\\Alketa\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
+    "C:\\Users\\Alketa\\.nuget\\packages\\microsoft.identitymodel.abstractions\\8.15.0\\microsoft.identitymodel.abstractions.8.15.0.nupkg.sha512",
+    "C:\\Users\\Alketa\\.nuget\\packages\\microsoft.identitymodel.logging\\8.15.0\\microsoft.identitymodel.logging.8.15.0.nupkg.sha512",
+    "C:\\Users\\Alketa\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.15.0\\microsoft.identitymodel.tokens.8.15.0.nupkg.sha512",
     "C:\\Users\\Alketa\\.nuget\\packages\\microsoft.openapi\\1.6.14\\microsoft.openapi.1.6.14.nupkg.sha512",
     "C:\\Users\\Alketa\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\Alketa\\.nuget\\packages\\mysqlconnector\\2.3.5\\mysqlconnector.2.3.5.nupkg.sha512",
