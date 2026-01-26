@@ -17,6 +17,9 @@ namespace UniversityManagement.Infrastructure.Data
         public DbSet<Timetable> Timetables => Set<Timetable>();
         public DbSet<Announcement> Announcements => Set<Announcement>();
         public DbSet<StudentProgram> StudentPrograms => Set<StudentProgram>();
+        public DbSet<AppUser> Users => Set<AppUser>();
+        public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -79,6 +82,24 @@ namespace UniversityManagement.Infrastructure.Data
                 .WithMany(p => p.Announcements)
                 .HasForeignKey(a => a.ProgramId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // AppUser email unique
+            modelBuilder.Entity<AppUser>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            // AppUser -> RefreshTokens (1-to-many)
+            modelBuilder.Entity<RefreshToken>()
+                .HasOne(rt => rt.AppUser)
+                .WithMany(u => u.RefreshTokens)
+                .HasForeignKey(rt => rt.AppUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // RefreshToken token unique (optional but recommended)
+            modelBuilder.Entity<RefreshToken>()
+                .HasIndex(rt => rt.Token)
+                .IsUnique();
+
         }
     }
 }

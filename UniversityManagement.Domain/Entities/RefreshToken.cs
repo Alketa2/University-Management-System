@@ -1,22 +1,25 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using UniversityManagement.Domain.Common;
 
 namespace UniversityManagement.Domain.Entities
 {
-    public class RefreshToken
+    public class RefreshToken : BaseEntity
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        [Required]
+        public Guid AppUserId { get; set; }
 
+        [Required]
         public string Token { get; set; } = string.Empty;
 
-        public DateTime ExpiresAt { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime ExpiresAtUtc { get; set; }
 
-        public DateTime? RevokedAt { get; set; }
+        public DateTime? RevokedAtUtc { get; set; }
 
-        public bool IsExpired => DateTime.UtcNow >= ExpiresAt;
-        public bool IsActive => RevokedAt == null && !IsExpired;
+        public bool IsExpired => DateTime.UtcNow >= ExpiresAtUtc;
+        public bool IsRevoked => RevokedAtUtc != null;
 
-        public Guid AppUserId { get; set; }
+        // Navigation
         public AppUser AppUser { get; set; } = null!;
     }
 }
