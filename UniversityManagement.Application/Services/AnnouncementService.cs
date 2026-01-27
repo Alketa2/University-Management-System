@@ -1,128 +1,140 @@
-using UniversityManagement.Application.DTOs.Announcement;
+﻿using UniversityManagement.Application.DTOs.Announcement;
 using UniversityManagement.Application.Interfaces;
 using UniversityManagement.Domain.Entities;
 using UniversityManagement.Domain.Interfaces;
 using UniversityManagement.Infrastructure.Repositories;
 
-namespace UniversityManagement.Application.Services;
-
-public class AnnouncementService : IAnnouncementService
+namespace UniversityManagement.Application.Services
 {
-    private readonly IAnnouncementRepository _announcementRepository;
-    private readonly IRepository<Teacher> _teacherRepository;
-    private readonly IRepository<Program> _programRepository;
-    private readonly IRepository<Subject> _subjectRepository;
-
-    public AnnouncementService(
-        IAnnouncementRepository announcementRepository,
-        IRepository<Teacher> teacherRepository,
-        IRepository<Program> programRepository,
-        IRepository<Subject> subjectRepository)
+    public class AnnouncementService : IAnnouncementService
     {
-        _announcementRepository = announcementRepository;
-        _teacherRepository = teacherRepository;
-        _programRepository = programRepository;
-        _subjectRepository = subjectRepository;
-    }
+        private readonly IAnnouncementRepository _repo;
 
-    public async Task<AnnouncementResponseDto> CreateAnnouncementAsync(CreateAnnouncementDto createAnnouncementDto)
-    {
-        var announcement = new Announcement
+        public AnnouncementService(IAnnouncementRepository repo)
         {
-            Title = createAnnouncementDto.Title,
-            Content = createAnnouncementDto.Content,
-            TeacherId = createAnnouncementDto.TeacherId,
-            TargetAudience = ParseTargetAudience(createAnnouncementDto.TargetAudience),
-            ProgramId = createAnnouncementDto.ProgramId,
-            SubjectId = createAnnouncementDto.SubjectId,
-            PublishDate = DateTime.UtcNow,
-            ExpiryDate = createAnnouncementDto.ExpiryDate,
-            IsActive = true
-        };
-
-        var createdAnnouncement = await _announcementRepository.AddAsync(announcement);
-        return await MapToResponseDto(createdAnnouncement);
-    }
-
-    public async Task<AnnouncementResponseDto> UpdateAnnouncementAsync(UpdateAnnouncementDto updateAnnouncementDto)
-    {
-        var announcement = await _announcementRepository.GetByIdAsync(updateAnnouncementDto.Id);
-        if (announcement == null)
-            throw new KeyNotFoundException($"Announcement with ID {updateAnnouncementDto.Id} not found.");
-
-        announcement.Title = updateAnnouncementDto.Title;
-        announcement.Content = updateAnnouncementDto.Content;
-        announcement.TargetAudience = ParseTargetAudience(updateAnnouncementDto.TargetAudience);
-        announcement.ProgramId = updateAnnouncementDto.ProgramId;
-        announcement.SubjectId = updateAnnouncementDto.SubjectId;
-        announcement.ExpiryDate = updateAnnouncementDto.ExpiryDate;
-        announcement.IsActive = updateAnnouncementDto.IsActive;
-
-        var updatedAnnouncement = await _announcementRepository.UpdateAsync(announcement);
-        return await MapToResponseDto(updatedAnnouncement);
-    }
-
-    public async Task<AnnouncementResponseDto?> GetAnnouncementByIdAsync(Guid id)
-    {
-        var announcement = await _announcementRepository.GetByIdAsync(id);
-        return announcement == null ? null : await MapToResponseDto(announcement);
-    }
-
-    public async Task<List<AnnouncementResponseDto>> GetActiveAnnouncementsAsync(Guid? programId, Guid? subjectId)
-    {
-        var announcements = await _announcementRepository.GetActiveAnnouncementsAsync(programId, subjectId);
-        var result = new List<AnnouncementResponseDto>();
-        foreach (var announcement in announcements)
-        {
-            result.Add(await MapToResponseDto(announcement));
+            _repo = repo;
         }
-        return result;
-    }
 
-    public async Task<List<AnnouncementResponseDto>> GetAnnouncementsByTeacherAsync(Guid teacherId)
-    {
-        var announcements = await _announcementRepository.GetByTeacherIdAsync(teacherId);
-        var result = new List<AnnouncementResponseDto>();
-        foreach (var announcement in announcements)
+        public async Task<List<AnnouncementResponseDto>> GetAllAnnouncementsAsync()
         {
-            result.Add(await MapToResponseDto(announcement));
+            var list = await _repo.GetAllAsync();
+            return list.Select(MapToResponse).ToList();
         }
-        return result;
-    }
 
-    public async Task<bool> DeleteAnnouncementAsync(Guid id)
-    {
-        return await _announcementRepository.DeleteAsync(id);
-    }
-
-    private static TargetAudience ParseTargetAudience(string targetAudience)
-    {
-        return Enum.TryParse<TargetAudience>(targetAudience, true, out var result) ? result : TargetAudience.All;
-    }
-
-    private async Task<AnnouncementResponseDto> MapToResponseDto(Announcement announcement)
-    {
-        var teacher = await _teacherRepository.GetByIdAsync(announcement.TeacherId);
-        var program = announcement.ProgramId.HasValue ? await _programRepository.GetByIdAsync(announcement.ProgramId.Value) : null;
-        var subject = announcement.SubjectId.HasValue ? await _subjectRepository.GetByIdAsync(announcement.SubjectId.Value) : null;
-
-        return new AnnouncementResponseDto
+        public async Task<AnnouncementResponseDto> GetAnnouncementByIdAsync(Guid id)
         {
-            Id = announcement.Id,
-            Title = announcement.Title,
-            Content = announcement.Content,
-            TeacherId = announcement.TeacherId,
-            TeacherName = teacher != null ? $"{teacher.FirstName} {teacher.LastName}" : string.Empty,
-            TargetAudience = announcement.TargetAudience.ToString(),
-            ProgramId = announcement.ProgramId,
-            ProgramName = program?.Name,
-            SubjectId = announcement.SubjectId,
-            SubjectName = subject?.Name,
-            PublishDate = announcement.PublishDate,
-            ExpiryDate = announcement.ExpiryDate,
-            IsActive = announcement.IsActive,
-            CreatedAt = announcement.CreatedAt,
-            UpdatedAt = announcement.UpdatedAt
-        };
+            var a = await _repo.GetByIdAsync(id);
+
+            // interface expects non-null return
+            if (a == null)
+                throw new KeyNotFoundException("Announcement not found.");
+
+            return MapToResponse(a);
+        }
+
+        public async Task<List<AnnouncementResponseDto>> GetAnnouncementsByTeacherAsync(Guid teacherId)
+        {
+            var list = await _repo.GetByTeacherIdAsync(teacherId);
+            return list.Select(MapToResponse).ToList();
+        }
+
+        // ✅ REQUIRED BY YOUR INTERFACE
+        public async Task<List<AnnouncementResponseDto>> GetActiveAnnouncementsAsync(Guid? programId, Guid? subjectId)
+        {
+            var list = await _repo.GetActiveAnnouncementsAsync(programId, subjectId);
+            return list.Select(MapToResponse).ToList();
+        }
+
+        public async Task<AnnouncementResponseDto> CreateAnnouncementAsync(CreateAnnouncementDto dto)
+        {
+            // Protect against null strings -> avoids "possible null reference assignment"
+            var title = dto.Title ?? string.Empty;
+            var content = dto.Content ?? string.Empty;
+
+            var entity = new Announcement
+            {
+                Title = title,
+                Content = content,
+
+                TeacherId = dto.TeacherId,
+                ProgramId = dto.ProgramId,
+                SubjectId = dto.SubjectId,
+
+                TargetAudience = string.IsNullOrWhiteSpace(dto.TargetAudience) ? "All" : dto.TargetAudience,
+                ExpiryDate = dto.ExpiryDate,
+
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = null
+            };
+
+            var created = await _repo.AddAsync(entity);
+            return MapToResponse(created);
+        }
+
+        // ✅ MUST RETURN NON-NULLABLE Task<AnnouncementResponseDto>
+        public async Task<AnnouncementResponseDto> UpdateAnnouncementAsync(UpdateAnnouncementDto updateAnnouncementDto)
+        {
+            var existing = await _repo.GetByIdAsync(updateAnnouncementDto.Id);
+            if (existing == null)
+                throw new KeyNotFoundException("Announcement not found.");
+
+            // Only overwrite if incoming values are not null/empty
+            if (!string.IsNullOrWhiteSpace(updateAnnouncementDto.Title))
+                existing.Title = updateAnnouncementDto.Title;
+
+            if (!string.IsNullOrWhiteSpace(updateAnnouncementDto.Content))
+                existing.Content = updateAnnouncementDto.Content;
+
+            if (!string.IsNullOrWhiteSpace(updateAnnouncementDto.TargetAudience))
+                existing.TargetAudience = updateAnnouncementDto.TargetAudience;
+
+            // If these are nullable GUIDs in your DTO, only assign when provided
+            if (updateAnnouncementDto.ProgramId.HasValue)
+                existing.ProgramId = updateAnnouncementDto.ProgramId;
+
+            if (updateAnnouncementDto.SubjectId.HasValue)
+                existing.SubjectId = updateAnnouncementDto.SubjectId;
+
+            // ExpiryDate may be nullable -> assign directly
+            existing.ExpiryDate = updateAnnouncementDto.ExpiryDate;
+
+            existing.IsActive = updateAnnouncementDto.IsActive;
+            existing.UpdatedAt = DateTime.UtcNow;
+
+            var updated = await _repo.UpdateAsync(existing);
+            return MapToResponse(updated);
+        }
+
+        public async Task<bool> DeleteAnnouncementAsync(Guid id)
+        {
+            return await _repo.DeleteAsync(id);
+        }
+
+        private static AnnouncementResponseDto MapToResponse(Announcement a)
+        {
+            return new AnnouncementResponseDto
+            {
+                Id = a.Id,
+                Title = a.Title,
+                Content = a.Content,
+
+                // PublishDate not in entity -> use CreatedAt
+                PublishDate = a.CreatedAt,
+
+                TeacherId = a.TeacherId,
+                TeacherName = a.Teacher == null ? null : $"{a.Teacher.FirstName} {a.Teacher.LastName}",
+
+                TargetAudience = a.TargetAudience,
+                ProgramId = a.ProgramId,
+                ProgramName = a.Program?.Name,
+
+                SubjectId = a.SubjectId,
+                SubjectName = a.Subject?.Name,
+
+                ExpiryDate = a.ExpiryDate,
+                IsActive = a.IsActive
+            };
+        }
     }
 }

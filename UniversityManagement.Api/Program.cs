@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
+using UniversityManagement.Api.Services;
 using UniversityManagement.Application.Interfaces;
 using UniversityManagement.Application.Services;
-using UniversityManagement.Domain.Entities;
 using UniversityManagement.Domain.Interfaces;
 using UniversityManagement.Infrastructure.Data;
 using UniversityManagement.Infrastructure.Repositories;
@@ -21,9 +25,37 @@ builder.Services.AddControllers()
         };
     });
 
-// Swagger
+// Swagger + JWT support
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "University Management API",
+        Version = "v1"
+    });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Type: Bearer {your JWT token}"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 // CORS
 builder.Services.AddCors(options =>
@@ -40,13 +72,44 @@ builder.Services.AddCors(options =>
 // ✅ DbContext (Pomelo MySQL)
 var cs = builder.Configuration.GetConnectionString("DefaultConnection");
 if (string.IsNullOrWhiteSpace(cs))
-{
     throw new InvalidOperationException("Missing ConnectionStrings:DefaultConnection in appsettings.json");
-}
+
 builder.Services.AddDbContext<UniversityDbContext>(options =>
 {
     options.UseMySql(cs, ServerVersion.AutoDetect(cs));
 });
+
+// ✅ JwtTokenService
+builder.Services.AddScoped<JwtTokenService>();
+
+// ✅ JWT Authentication
+var jwtKey = builder.Configuration["Jwt:Key"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"];
+
+if (string.IsNullOrWhiteSpace(jwtKey) ||
+    string.IsNullOrWhiteSpace(jwtIssuer) ||
+    string.IsNullOrWhiteSpace(jwtAudience))
+{
+    throw new InvalidOperationException("Missing Jwt settings in appsettings.json (Jwt:Key, Jwt:Issuer, Jwt:Audience)");
+}
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 // Repositories
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
@@ -71,7 +134,7 @@ builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 
 var app = builder.Build();
 
-// Apply pending EF Core migrations at startup (creates DB if it doesn't exist)
+//  EF Core migrations at startup
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<UniversityDbContext>();
@@ -81,9 +144,14 @@ using (var scope = app.Services.CreateScope())
 app.UseSwagger();
 app.UseSwaggerUI();
 
+// middleware order 
 app.UseHttpsRedirection();
+
 app.UseCors("AllowReactApp");
+
+app.UseAuthentication(); 
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();

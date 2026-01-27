@@ -5,7 +5,7 @@ public class AnnouncementResponseDto
     public Guid Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
-    public Guid TeacherId { get; set; }
+    public Guid? TeacherId { get; set; }
     public string TeacherName { get; set; } = string.Empty;
     public string TargetAudience { get; set; } = string.Empty;
     public Guid? ProgramId { get; set; }

@@ -71,10 +71,10 @@ namespace UniversityManagement.Infrastructure.Data
 
             // Announcement -> Teacher (allow null if Teacher deleted)
             modelBuilder.Entity<Announcement>()
-                .HasOne(a => a.Teacher)
-                .WithMany(t => t.Announcements)
-                .HasForeignKey(a => a.TeacherId)
-                .OnDelete(DeleteBehavior.SetNull);
+               .HasOne(a => a.Teacher)
+               .WithMany(t => t.Announcements)
+               .HasForeignKey(a => a.TeacherId)
+               .OnDelete(DeleteBehavior.SetNull);
 
             // Announcement -> Program (if you have ProgramId in Announcement)
             modelBuilder.Entity<Announcement>()
