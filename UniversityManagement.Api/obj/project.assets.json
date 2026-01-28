@@ -3372,7 +3372,7 @@
       "Microsoft.IdentityModel.Tokens >= 8.15.0",
       "Pomelo.EntityFrameworkCore.MySql >= 8.0.0",
       "Swashbuckle.AspNetCore >= 6.6.2",
-      "System.IdentityModel.Tokens.Jwt >= 7.0.7",
+      "System.IdentityModel.Tokens.Jwt >= 7.1.2",
       "UniversityManagement.Application >= 1.0.0",
       "UniversityManagement.Infrastructure >= 1.0.0"
     ]
@@ -3457,7 +3457,7 @@
           },
           "System.IdentityModel.Tokens.Jwt": {
             "target": "Package",
-            "version": "[7.0.7, )"
+            "version": "[7.1.2, )"
           }
         },
         "imports": [
@@ -3482,17 +3482,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1603",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "UniversityManagement.Api depends on System.IdentityModel.Tokens.Jwt (>= 7.0.7) but System.IdentityModel.Tokens.Jwt 7.0.7 was not found. System.IdentityModel.Tokens.Jwt 7.1.2 was resolved instead.",
-      "libraryId": "System.IdentityModel.Tokens.Jwt",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    }
-  ]
+  }
 }

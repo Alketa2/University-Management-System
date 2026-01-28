@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "acYCA6xXQiA=",
+  "dgSpecHash": "iUh5zF7193Y=",
   "success": true,
   "projectFilePath": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Api\\UniversityManagement.Api.csproj",
   "expectedPackageFiles": [
@@ -65,18 +65,5 @@
     "C:\\Users\\Alketa\\.nuget\\packages\\system.text.json\\8.0.0\\system.text.json.8.0.0.nupkg.sha512",
     "C:\\Users\\Alketa\\.nuget\\packages\\system.threading.channels\\6.0.0\\system.threading.channels.6.0.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1603",
-      "level": "Warning",
-      "message": "UniversityManagement.Api depends on System.IdentityModel.Tokens.Jwt (>= 7.0.7) but System.IdentityModel.Tokens.Jwt 7.0.7 was not found. System.IdentityModel.Tokens.Jwt 7.1.2 was resolved instead.",
-      "projectPath": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Api\\UniversityManagement.Api.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Api\\UniversityManagement.Api.csproj",
-      "libraryId": "System.IdentityModel.Tokens.Jwt",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    }
-  ]
+  "logs": []
 }
