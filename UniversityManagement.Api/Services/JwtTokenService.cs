@@ -1,66 +1,74 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using UniversityManagement.Application.Interfaces;
+using UniversityManagement.Application.Options;
+using UniversityManagement.Domain.Entities;
 
-namespace UniversityManagement.Api.Services
+namespace UniversityManagement.Application.Services;
+
+public class JwtTokenService : IJwtTokenService
 {
-    public class JwtTokenService
+    private readonly JwtOptions _jwt;
+
+    public JwtTokenService(IOptions<JwtOptions> jwtOptions)
     {
-        private readonly IConfiguration _config;
+        _jwt = jwtOptions.Value;
 
-        public JwtTokenService(IConfiguration config)
+        if (string.IsNullOrWhiteSpace(_jwt.Key) || _jwt.Key.Length < 32)
+            throw new InvalidOperationException("Jwt:Key must be at least 32 characters.");
+    }
+
+    public (string token, DateTime expiresAtUtc) CreateAccessToken(AppUser user)
+    {
+        var now = DateTime.UtcNow;
+        var expires = now.AddMinutes(_jwt.AccessTokenMinutes);
+
+        var claims = new List<Claim>
         {
-            _config = config;
-        }
+            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new(JwtRegisteredClaimNames.Email, user.Email),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new(ClaimTypes.Email, user.Email),
+            new(ClaimTypes.Role, user.Role),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
 
-        public (string token, DateTime expiresAtUtc) CreateAccessToken(Guid userId, string email, string role)
-        {
-            var issuer = _config["Jwt:Issuer"] ?? throw new InvalidOperationException("Missing Jwt:Issuer");
-            var audience = _config["Jwt:Audience"] ?? throw new InvalidOperationException("Missing Jwt:Audience");
-            var key = _config["Jwt:Key"] ?? throw new InvalidOperationException("Missing Jwt:Key");
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var minutesStr = _config["Jwt:AccessTokenMinutes"] ?? "15";
-            if (!int.TryParse(minutesStr, out var minutes)) minutes = 15;
+        var jwt = new JwtSecurityToken(
+            issuer: _jwt.Issuer,
+            audience: _jwt.Audience,
+            claims: claims,
+            notBefore: now,
+            expires: expires,
+            signingCredentials: creds
+        );
 
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, email),
-                new Claim(ClaimTypes.Role, role),
-                new Claim("role", role)
-            };
+        return (new JwtSecurityTokenHandler().WriteToken(jwt), expires);
+    }
 
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            var creds = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+    public (string rawToken, string tokenHash, DateTime expiresAtUtc) CreateRefreshToken()
+    {
+        // 64 bytes random -> base64
+        var bytes = RandomNumberGenerator.GetBytes(64);
+        var raw = Convert.ToBase64String(bytes);
 
-            var expires = DateTime.UtcNow.AddMinutes(minutes);
+        var hash = HashToken(raw);
+        var expires = DateTime.UtcNow.AddDays(_jwt.RefreshTokenDays);
 
-            var jwt = new JwtSecurityToken(
-                issuer: issuer,
-                audience: audience,
-                claims: claims,
-                notBefore: DateTime.UtcNow,
-                expires: expires,
-                signingCredentials: creds
-            );
+        return (raw, hash, expires);
+    }
 
-            var token = new JwtSecurityTokenHandler().WriteToken(jwt);
-            return (token, expires);
-        }
-
-        public (string token, DateTime expiresAtUtc) CreateRefreshToken()
-        {
-            var daysStr = _config["Jwt:RefreshTokenDays"] ?? "30";
-            if (!int.TryParse(daysStr, out var days)) days = 30;
-
-            var bytes = RandomNumberGenerator.GetBytes(64);
-            var token = Convert.ToBase64String(bytes);
-
-            return (token, DateTime.UtcNow.AddDays(days));
-        }
+    public string HashToken(string rawToken)
+    {
+        using var sha = SHA256.Create();
+        var bytes = Encoding.UTF8.GetBytes(rawToken);
+        var hash = sha.ComputeHash(bytes);
+        return Convert.ToBase64String(hash);
     }
 }

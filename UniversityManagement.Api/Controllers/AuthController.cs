@@ -1,142 +1,177 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using UniversityManagement.Api.Services;
 using UniversityManagement.Application.DTOs.Auth;
+using UniversityManagement.Application.Interfaces;
 using UniversityManagement.Domain.Entities;
 using UniversityManagement.Infrastructure.Data;
 
-namespace UniversityManagement.Api.Controllers
+namespace UniversityManagement.Api.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AuthController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    private readonly UniversityDbContext _db;
+    private readonly IJwtTokenService _jwt;
+    private readonly IPasswordHasher<AppUser> _hasher;
+
+    public AuthController(
+        UniversityDbContext db,
+        IJwtTokenService jwt,
+        IPasswordHasher<AppUser> hasher)
     {
-        private readonly UniversityDbContext _db;
-        private readonly JwtTokenService _jwt;
+        _db = db;
+        _jwt = jwt;
+        _hasher = hasher;
+    }
 
-        public AuthController(UniversityDbContext db, JwtTokenService jwt)
+    [HttpPost("register")]
+    [AllowAnonymous]
+    public async Task<ActionResult<AuthResponseDto>> Register(RegisterDto dto)
+    {
+        var email = dto.Email.Trim().ToLowerInvariant();
+
+        var exists = await _db.Users.AnyAsync(u => u.Email.ToLower() == email);
+        if (exists) return BadRequest("Email already registered.");
+
+        var user = new AppUser
         {
-            _db = db;
-            _jwt = jwt;
-        }
+            Id = Guid.NewGuid(),
+            Email = email,
+            Role = string.IsNullOrWhiteSpace(dto.Role) ? "Student" : dto.Role.Trim(),
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = null
+        };
 
-        [HttpPost("register")]
-        public async Task<ActionResult<AuthResponseDto>> Register([FromBody] RegisterDto dto)
+        user.PasswordHash = _hasher.HashPassword(user, dto.Password);
+
+        _db.Users.Add(user);
+
+        // create refresh token
+        var (rawRefresh, refreshHash, refreshExpires) = _jwt.CreateRefreshToken();
+        _db.RefreshTokens.Add(new RefreshToken
         {
-            var email = dto.Email.Trim().ToLowerInvariant();
+            Id = Guid.NewGuid(),
+            UserId = user.Id,
+            TokenHash = refreshHash,
+            CreatedAtUtc = DateTime.UtcNow,
+            ExpiresAtUtc = refreshExpires
+        });
 
-            if (await _db.Users.AnyAsync(u => u.Email == email))
-                return BadRequest("Email already exists.");
+        await _db.SaveChangesAsync();
 
-            var user = new AppUser
-            {
-                FirstName = dto.FirstName.Trim(),
-                LastName = dto.LastName.Trim(),
-                Email = email,
-                PasswordHash = HashPassword(dto.Password),
-                Role = string.IsNullOrWhiteSpace(dto.Role) ? "User" : dto.Role.Trim()
-            };
+        var (access, accessExpires) = _jwt.CreateAccessToken(user);
 
-            _db.Users.Add(user);
-            await _db.SaveChangesAsync();
-
-            return Ok(await IssueTokensAsync(user));
-        }
-
-        [HttpPost("login")]
-        public async Task<ActionResult<AuthResponseDto>> Login([FromBody] LoginDto dto)
+        return Created("", new AuthResponseDto
         {
-            var email = dto.Email.Trim().ToLowerInvariant();
+            Email = user.Email,
+            Role = user.Role,
+            AccessToken = access,
+            AccessTokenExpiresAtUtc = accessExpires,
+            RefreshToken = rawRefresh,
+            RefreshTokenExpiresAtUtc = refreshExpires
+        });
+    }
 
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null) return Unauthorized("Invalid credentials.");
-            if (!user.IsActive) return Unauthorized("User is inactive.");
+    [HttpPost("login")]
+    [AllowAnonymous]
+    public async Task<ActionResult<AuthResponseDto>> Login(LoginDto dto)
+    {
+        var email = dto.Email.Trim().ToLowerInvariant();
 
-            if (!VerifyPassword(dto.Password, user.PasswordHash))
-                return Unauthorized("Invalid credentials.");
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
+        if (user == null || !user.IsActive) return Unauthorized("Invalid email or password.");
 
-            return Ok(await IssueTokensAsync(user));
-        }
+        var verify = _hasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
+        if (verify == PasswordVerificationResult.Failed)
+            return Unauthorized("Invalid email or password.");
 
-        [HttpPost("refresh")]
-        public async Task<ActionResult<AuthResponseDto>> Refresh([FromBody] RefreshRequestDto dto)
+        // rotate refresh token every login
+        var (rawRefresh, refreshHash, refreshExpires) = _jwt.CreateRefreshToken();
+        _db.RefreshTokens.Add(new RefreshToken
         {
-            var rt = await _db.RefreshTokens
-                .Include(x => x.AppUser)
-                .FirstOrDefaultAsync(x => x.Token == dto.RefreshToken);
+            Id = Guid.NewGuid(),
+            UserId = user.Id,
+            TokenHash = refreshHash,
+            CreatedAtUtc = DateTime.UtcNow,
+            ExpiresAtUtc = refreshExpires
+        });
+        await _db.SaveChangesAsync();
 
-            if (rt == null) return Unauthorized("Invalid refresh token.");
-            if (rt.IsExpired) return Unauthorized("Refresh token expired.");
-            if (rt.IsRevoked) return Unauthorized("Refresh token revoked.");
+        var (access, accessExpires) = _jwt.CreateAccessToken(user);
 
-            // rotate refresh token
-            rt.RevokedAtUtc = DateTime.UtcNow;
-            await _db.SaveChangesAsync();
-
-            return Ok(await IssueTokensAsync(rt.AppUser));
-        }
-
-        [HttpPost("logout")]
-        public async Task<IActionResult> Logout([FromBody] RefreshRequestDto dto)
+        return Ok(new AuthResponseDto
         {
-            var rt = await _db.RefreshTokens.FirstOrDefaultAsync(x => x.Token == dto.RefreshToken);
-            if (rt == null) return Ok();
+            Email = user.Email,
+            Role = user.Role,
+            AccessToken = access,
+            AccessTokenExpiresAtUtc = accessExpires,
+            RefreshToken = rawRefresh,
+            RefreshTokenExpiresAtUtc = refreshExpires
+        });
+    }
 
-            rt.RevokedAtUtc = DateTime.UtcNow;
-            await _db.SaveChangesAsync();
+    [HttpPost("refresh")]
+    [AllowAnonymous]
+    public async Task<ActionResult<AuthResponseDto>> Refresh(RefreshRequestDto dto)
+    {
+        var incomingHash = _jwt.HashToken(dto.RefreshToken);
 
-            return Ok();
-        }
+        var token = await _db.RefreshTokens
+            .Include(rt => rt.User)
+            .FirstOrDefaultAsync(rt => rt.TokenHash == incomingHash);
 
-        // ---------------- helpers ----------------
+        if (token == null || token.User == null)
+            return Unauthorized("Invalid refresh token.");
 
-        private async Task<AuthResponseDto> IssueTokensAsync(AppUser user)
+        if (!token.IsActive || !token.User.IsActive)
+            return Unauthorized("Refresh token expired or revoked.");
+
+        // rotate refresh token
+        var (newRaw, newHash, newExpires) = _jwt.CreateRefreshToken();
+
+        token.RevokedAtUtc = DateTime.UtcNow;
+        token.ReplacedByTokenHash = newHash;
+
+        _db.RefreshTokens.Add(new RefreshToken
         {
-            var (access, accessExp) = _jwt.CreateAccessToken(user.Id, user.Email, user.Role);
-            var (refresh, refreshExp) = _jwt.CreateRefreshToken();
+            Id = Guid.NewGuid(),
+            UserId = token.UserId,
+            TokenHash = newHash,
+            CreatedAtUtc = DateTime.UtcNow,
+            ExpiresAtUtc = newExpires
+        });
 
-            _db.RefreshTokens.Add(new RefreshToken
-            {
-                AppUserId = user.Id,
-                Token = refresh,
-                ExpiresAtUtc = refreshExp
-            });
+        await _db.SaveChangesAsync();
 
-            await _db.SaveChangesAsync();
+        var (access, accessExpires) = _jwt.CreateAccessToken(token.User);
 
-            return new AuthResponseDto
-            {
-                UserId = user.Id,
-                Email = user.Email,
-                Role = user.Role,
-                AccessToken = access,
-                AccessTokenExpiresAtUtc = accessExp,
-                RefreshToken = refresh,
-                RefreshTokenExpiresAtUtc = refreshExp
-            };
-        }
-
-        private static string HashPassword(string password)
+        return Ok(new AuthResponseDto
         {
-            using var derive = new Rfc2898DeriveBytes(password, 16, 100_000, HashAlgorithmName.SHA256);
-            var salt = derive.Salt;
-            var key = derive.GetBytes(32);
-            return Convert.ToBase64String(salt) + "." + Convert.ToBase64String(key);
-        }
+            Email = token.User.Email,
+            Role = token.User.Role,
+            AccessToken = access,
+            AccessTokenExpiresAtUtc = accessExpires,
+            RefreshToken = newRaw,
+            RefreshTokenExpiresAtUtc = newExpires
+        });
+    }
 
-        private static bool VerifyPassword(string password, string hash)
-        {
-            var parts = hash.Split('.');
-            if (parts.Length != 2) return false;
+    [HttpPost("logout")]
+    [Authorize]
+    public async Task<IActionResult> Logout(RefreshRequestDto dto)
+    {
+        // revoke only the provided refresh token
+        var incomingHash = _jwt.HashToken(dto.RefreshToken);
 
-            var salt = Convert.FromBase64String(parts[0]);
-            var storedKey = Convert.FromBase64String(parts[1]);
+        var token = await _db.RefreshTokens.FirstOrDefaultAsync(rt => rt.TokenHash == incomingHash);
+        if (token == null) return Ok(); // nothing to revoke
 
-            using var derive = new Rfc2898DeriveBytes(password, salt, 100_000, HashAlgorithmName.SHA256);
-            var key = derive.GetBytes(32);
+        token.RevokedAtUtc = DateTime.UtcNow;
+        await _db.SaveChangesAsync();
 
-            return CryptographicOperations.FixedTimeEquals(key, storedKey);
-        }
+        return Ok("Logged out.");
     }
 }
