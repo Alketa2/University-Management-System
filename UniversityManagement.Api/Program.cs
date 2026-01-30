@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 using UniversityManagement.Application.Interfaces;
 using UniversityManagement.Application.Options;
 using UniversityManagement.Application.Services;
-using UniversityManagement.Api.Services;
 using UniversityManagement.Domain.Entities;
 using UniversityManagement.Domain.Interfaces;
 using UniversityManagement.Infrastructure.Data;
@@ -27,14 +27,17 @@ builder.Services.AddControllers()
         };
     });
 
-// ✅ Bind JWT options
+//  Bind JWT options
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtKey = jwtSection["Key"] ?? "";
 var jwtIssuer = jwtSection["Issuer"] ?? "";
 var jwtAudience = jwtSection["Audience"] ?? "";
+if (string.IsNullOrWhiteSpace(jwtKey) || jwtKey.Length < 32)
+    throw new InvalidOperationException("Jwt:Key must be at least 32 characters.");
 
-// ✅ DbContext (Pomelo MySQL)
+
+//  DbContext (Pomelo MySQL)
 var cs = builder.Configuration.GetConnectionString("DefaultConnection");
 if (string.IsNullOrWhiteSpace(cs))
     throw new InvalidOperationException("Missing ConnectionStrings:DefaultConnection in appsettings.json");
@@ -44,25 +47,33 @@ builder.Services.AddDbContext<UniversityDbContext>(options =>
     options.UseMySql(cs, ServerVersion.AutoDetect(cs));
 });
 
-// ✅ Password hasher for AppUser
+//  Password hasher for AppUser
 builder.Services.AddScoped<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
 
-// ✅ JWT token service
+//  JWT token service
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
-// ✅ AuthN/AuthZ
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//  AuthN/AuthZ
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+
     .AddJwtBearer(options =>
     {
-        options.RequireHttpsMetadata = true;
+        options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
         options.SaveToken = true;
+        options.MapInboundClaims = false;
+
+
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
+            ValidateIssuer = !string.IsNullOrWhiteSpace(jwtIssuer),
             ValidIssuer = jwtIssuer,
 
-            ValidateAudience = true,
+            ValidateAudience = !string.IsNullOrWhiteSpace(jwtAudience),
             ValidAudience = jwtAudience,
 
             ValidateIssuerSigningKey = true,
@@ -145,7 +156,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<UniversityDbContext>();
     db.Database.Migrate();
-    await DatabaseSeeder.SeedAsync(scope.ServiceProvider);
+   
 
 }
 

@@ -21,15 +21,11 @@ namespace UniversityManagement.Application.Services
             return list.Select(MapToResponse).ToList();
         }
 
-        public async Task<AnnouncementResponseDto> GetAnnouncementByIdAsync(Guid id)
+        public async Task<AnnouncementResponseDto?> GetAnnouncementByIdAsync(Guid id)
         {
             var a = await _repo.GetByIdAsync(id);
 
-            // interface expects non-null return
-            if (a == null)
-                throw new KeyNotFoundException("Announcement not found.");
-
-            return MapToResponse(a);
+            return a == null ? null : MapToResponse(a);
         }
 
         public async Task<List<AnnouncementResponseDto>> GetAnnouncementsByTeacherAsync(Guid teacherId)
@@ -72,7 +68,7 @@ namespace UniversityManagement.Application.Services
             return MapToResponse(created);
         }
 
-        // ✅ MUST RETURN NON-NULLABLE Task<AnnouncementResponseDto>
+        
         public async Task<AnnouncementResponseDto> UpdateAnnouncementAsync(UpdateAnnouncementDto updateAnnouncementDto)
         {
             var existing = await _repo.GetByIdAsync(updateAnnouncementDto.Id);

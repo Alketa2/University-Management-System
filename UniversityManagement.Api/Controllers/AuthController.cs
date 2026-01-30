@@ -60,6 +60,7 @@ public class AuthController : ControllerBase
             Token = refreshHash,
             CreatedAt = DateTime.UtcNow,
             ExpiresAtUtc = refreshExpires
+
         });
 
         await _db.SaveChangesAsync();

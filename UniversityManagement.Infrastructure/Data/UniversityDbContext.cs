@@ -16,8 +16,8 @@ namespace UniversityManagement.Infrastructure.Data
         public DbSet<Attendance> Attendances => Set<Attendance>();
         public DbSet<Timetable> Timetables => Set<Timetable>();
         public DbSet<Announcement> Announcements => Set<Announcement>();
-
-        // ✅ Auth tables
+        public DbSet<StudentProgram> StudentPrograms => Set<StudentProgram>();
+        //  Auth tables
         public DbSet<AppUser> Users => Set<AppUser>();
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
@@ -35,13 +35,13 @@ namespace UniversityManagement.Infrastructure.Data
                 .HasKey(rt => rt.Id);
 
             modelBuilder.Entity<RefreshToken>()
-                .HasIndex(rt => rt.TokenHash)
+                .HasIndex(rt => rt.Token)
                 .IsUnique();
 
             modelBuilder.Entity<RefreshToken>()
-                .HasOne(rt => rt.User)
+                .HasOne(rt => rt.AppUser)
                 .WithMany(u => u.RefreshTokens)
-                .HasForeignKey(rt => rt.UserId)
+                .HasForeignKey(rt => rt.AppUserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
           
