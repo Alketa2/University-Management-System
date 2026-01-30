@@ -6,20 +6,20 @@ public class RefreshToken
 {
     public Guid Id { get; set; }
 
-    public Guid UserId { get; set; }
-    public AppUser? User { get; set; }
+    public Guid AppUserId { get; set; }
+    public AppUser? AppUser { get; set; }
 
     // Store HASH, not raw token
-    [Required, MaxLength(200)]
-    public string TokenHash { get; set; } = string.Empty;
+    [Required, MaxLength(255)]
+    public string Token { get; set; } = string.Empty;
 
-    public DateTime CreatedAtUtc { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
     public DateTime ExpiresAtUtc { get; set; }
 
     public DateTime? RevokedAtUtc { get; set; }
 
-    [MaxLength(200)]
-    public string? ReplacedByTokenHash { get; set; }
+   
 
     public bool IsActive => RevokedAtUtc == null && DateTime.UtcNow < ExpiresAtUtc;
 }

@@ -7,6 +7,7 @@ using System.Text;
 using UniversityManagement.Application.Interfaces;
 using UniversityManagement.Application.Options;
 using UniversityManagement.Application.Services;
+using UniversityManagement.Api.Services;
 using UniversityManagement.Domain.Entities;
 using UniversityManagement.Domain.Interfaces;
 using UniversityManagement.Infrastructure.Data;
@@ -144,6 +145,8 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<UniversityDbContext>();
     db.Database.Migrate();
+    await DatabaseSeeder.SeedAsync(scope.ServiceProvider);
+
 }
 
 app.UseSwagger();

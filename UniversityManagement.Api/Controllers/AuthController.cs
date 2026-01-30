@@ -39,6 +39,8 @@ public class AuthController : ControllerBase
         var user = new AppUser
         {
             Id = Guid.NewGuid(),
+            FirstName = dto.FirstName.Trim(),
+            LastName = dto.LastName.Trim(),
             Email = email,
             Role = string.IsNullOrWhiteSpace(dto.Role) ? "Student" : dto.Role.Trim(),
             CreatedAt = DateTime.UtcNow,
@@ -54,9 +56,9 @@ public class AuthController : ControllerBase
         _db.RefreshTokens.Add(new RefreshToken
         {
             Id = Guid.NewGuid(),
-            UserId = user.Id,
-            TokenHash = refreshHash,
-            CreatedAtUtc = DateTime.UtcNow,
+            AppUserId = user.Id,
+            Token = refreshHash,
+            CreatedAt = DateTime.UtcNow,
             ExpiresAtUtc = refreshExpires
         });
 
@@ -93,9 +95,9 @@ public class AuthController : ControllerBase
         _db.RefreshTokens.Add(new RefreshToken
         {
             Id = Guid.NewGuid(),
-            UserId = user.Id,
-            TokenHash = refreshHash,
-            CreatedAtUtc = DateTime.UtcNow,
+            AppUserId = user.Id,
+            Token = refreshHash,
+            CreatedAt = DateTime.UtcNow,
             ExpiresAtUtc = refreshExpires
         });
         await _db.SaveChangesAsync();
@@ -120,38 +122,40 @@ public class AuthController : ControllerBase
         var incomingHash = _jwt.HashToken(dto.RefreshToken);
 
         var token = await _db.RefreshTokens
-            .Include(rt => rt.User)
-            .FirstOrDefaultAsync(rt => rt.TokenHash == incomingHash);
+         .Include(rt => rt.AppUser)
+         .FirstOrDefaultAsync(rt => rt.Token == incomingHash);
 
-        if (token == null || token.User == null)
+
+
+        if (token == null || token.AppUser == null)
             return Unauthorized("Invalid refresh token.");
 
-        if (!token.IsActive || !token.User.IsActive)
+        if (!token.IsActive || !token.AppUser.IsActive)
             return Unauthorized("Refresh token expired or revoked.");
 
         // rotate refresh token
         var (newRaw, newHash, newExpires) = _jwt.CreateRefreshToken();
 
         token.RevokedAtUtc = DateTime.UtcNow;
-        token.ReplacedByTokenHash = newHash;
+        token.UpdatedAt = DateTime.UtcNow;
 
         _db.RefreshTokens.Add(new RefreshToken
         {
             Id = Guid.NewGuid(),
-            UserId = token.UserId,
-            TokenHash = newHash,
-            CreatedAtUtc = DateTime.UtcNow,
+            AppUserId = token.AppUserId,
+            Token = newHash,
+            CreatedAt = DateTime.UtcNow,
             ExpiresAtUtc = newExpires
         });
 
         await _db.SaveChangesAsync();
 
-        var (access, accessExpires) = _jwt.CreateAccessToken(token.User);
+        var (access, accessExpires) = _jwt.CreateAccessToken(token.AppUser);
 
         return Ok(new AuthResponseDto
         {
-            Email = token.User.Email,
-            Role = token.User.Role,
+            Email = token.AppUser.Email,
+            Role = token.AppUser.Role,
             AccessToken = access,
             AccessTokenExpiresAtUtc = accessExpires,
             RefreshToken = newRaw,
@@ -166,10 +170,11 @@ public class AuthController : ControllerBase
         // revoke only the provided refresh token
         var incomingHash = _jwt.HashToken(dto.RefreshToken);
 
-        var token = await _db.RefreshTokens.FirstOrDefaultAsync(rt => rt.TokenHash == incomingHash);
+        var token = await _db.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == incomingHash);
         if (token == null) return Ok(); // nothing to revoke
 
         token.RevokedAtUtc = DateTime.UtcNow;
+        token.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();
 
         return Ok("Logged out.");
