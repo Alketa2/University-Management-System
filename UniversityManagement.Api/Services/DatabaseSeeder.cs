@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UniversityManagement.Domain.Entities;
+using DomainProgram = UniversityManagement.Domain.Entities.Program;
 using UniversityManagement.Infrastructure.Data;
 
 namespace UniversityManagement.Api.Services;
@@ -31,7 +32,7 @@ public static class DatabaseSeeder
 
         var programs = new[]
         {
-            new Program
+            new DomainProgram
             {
                 Id = programCsId,
                 Name = "Computer Science",
@@ -43,7 +44,7 @@ public static class DatabaseSeeder
                 IsActive = true,
                 CreatedAt = now.AddYears(-2)
             },
-            new Program
+            new DomainProgram
             {
                 Id = programBizId,
                 Name = "Business Administration",
