@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversityManagement.Application.DTOs.Attendance;
 using UniversityManagement.Application.Interfaces;
@@ -7,6 +8,7 @@ namespace UniversityManagement.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
+[Authorize]
 public class AttendanceController : ControllerBase
 {
     private readonly IAttendanceService _attendanceService;
@@ -17,6 +19,8 @@ public class AttendanceController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin,Teacher")]
+
     [ProducesResponseType(typeof(AttendanceResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<AttendanceResponseDto>> CreateAttendance([FromBody] CreateAttendanceDto createAttendanceDto)
@@ -26,6 +30,9 @@ public class AttendanceController : ControllerBase
     }
 
     [HttpPost("bulk")]
+
+    [Authorize(Roles = "Admin,Teacher")]
+
     [ProducesResponseType(typeof(List<AttendanceResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<List<AttendanceResponseDto>>> CreateBulkAttendance([FromBody] BulkAttendanceDto bulkAttendanceDto)
@@ -55,6 +62,9 @@ public class AttendanceController : ControllerBase
     }
 
     [HttpGet("{id}")]
+
+    [Authorize(Roles = "Admin,Teacher")]
+
     [ProducesResponseType(typeof(AttendanceResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<AttendanceResponseDto>> GetAttendanceById(Guid id)

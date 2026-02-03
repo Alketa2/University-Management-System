@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversityManagement.Application.DTOs.Exam;
 using UniversityManagement.Application.Interfaces;
@@ -7,6 +8,7 @@ namespace UniversityManagement.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
+[Authorize]
 public class ExamsController : ControllerBase
 {
     private readonly IExamService _examService;
@@ -17,6 +19,7 @@ public class ExamsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin,Teacher")]
     [ProducesResponseType(typeof(ExamResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ExamResponseDto>> CreateExam([FromBody] CreateExamDto createExamDto)
@@ -26,6 +29,7 @@ public class ExamsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Teacher")]
     [ProducesResponseType(typeof(ExamResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -74,6 +78,7 @@ public class ExamsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin,Teacher")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteExam(Guid id)

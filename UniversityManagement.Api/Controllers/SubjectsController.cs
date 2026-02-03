@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UniversityManagement.Application.DTOs.Subjects;
 using UniversityManagement.Application.Interfaces;
 
@@ -6,6 +7,7 @@ namespace UniversityManagement.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class SubjectsController : ControllerBase
     {
         private readonly ISubjectService _service;
@@ -27,12 +29,12 @@ namespace UniversityManagement.Api.Controllers
             return Ok(subject);
         }
 
-        // ✅ optional but recommended
         [HttpGet("program/{programId:guid}")]
         public async Task<IActionResult> GetByProgram(Guid programId)
             => Ok(await _service.GetByProgramIdAsync(programId));
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Teacher")]
         public async Task<IActionResult> Create([FromBody] CreateSubjectDto dto)
         {
             try
@@ -48,6 +50,7 @@ namespace UniversityManagement.Api.Controllers
 
         
         [HttpPut("{id:guid}")]
+        [Authorize(Roles = "Admin,Teacher")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateSubjectDto dto)
         {
             var updated = await _service.UpdateAsync(id, dto);
@@ -57,6 +60,7 @@ namespace UniversityManagement.Api.Controllers
 
        
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Admin,Teacher")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var ok = await _service.DeleteAsync(id);

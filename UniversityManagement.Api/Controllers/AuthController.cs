@@ -127,12 +127,27 @@ public class AuthController : ControllerBase
          .FirstOrDefaultAsync(rt => rt.Token == incomingHash);
 
 
-
         if (token == null || token.AppUser == null)
             return Unauthorized("Invalid refresh token.");
 
-        if (!token.IsActive || !token.AppUser.IsActive)
+        if (!token.AppUser.IsActive)
+            return Unauthorized("User is inactive.");
+
+        if (!token.IsActive)
+        {
+            var userTokens = await _db.RefreshTokens
+                .Where(rt => rt.AppUserId == token.AppUserId && rt.RevokedAtUtc == null)
+                .ToListAsync();
+
+            foreach (var refreshToken in userTokens)
+            {
+                refreshToken.RevokedAtUtc = DateTime.UtcNow;
+                refreshToken.UpdatedAt = DateTime.UtcNow;
+            }
+
+            await _db.SaveChangesAsync();
             return Unauthorized("Refresh token expired or revoked.");
+        }
 
         // rotate refresh token
         var (newRaw, newHash, newExpires) = _jwt.CreateRefreshToken();

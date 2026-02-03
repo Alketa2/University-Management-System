@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using UniversityManagement.Application.DTOs.Program;
 using UniversityManagement.Application.DTOs.Student;
 using UniversityManagement.Application.Interfaces;
@@ -8,6 +10,7 @@ namespace UniversityManagement.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
+[Authorize]
 public class StudentsController : ControllerBase
 {
     private readonly IStudentService _studentService;
@@ -18,6 +21,7 @@ public class StudentsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(StudentResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<StudentResponseDto>> CreateStudent([FromBody] CreateStudentDto createStudentDto)
@@ -27,6 +31,7 @@ public class StudentsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(StudentResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -54,11 +59,15 @@ public class StudentsController : ControllerBase
         var student = await _studentService.GetStudentByIdAsync(id);
         if (student == null)
             return NotFound();
+        if (User.IsInRole("Student") && !IsStudentSelf(student))
+            return Forbid();
+
 
         return Ok(student);
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin,Teacher")]
     [ProducesResponseType(typeof(List<StudentResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<StudentResponseDto>>> GetAllStudents()
     {
@@ -67,6 +76,7 @@ public class StudentsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin,Teacher")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteStudent(Guid id)
@@ -79,6 +89,7 @@ public class StudentsController : ControllerBase
     }
 
     [HttpPost("admit-to-program")]
+    [Authorize(Roles = "Admin,Teacher")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> AdmitStudentToProgram([FromBody] AdmitStudentToProgramDto admitDto)
@@ -94,7 +105,26 @@ public class StudentsController : ControllerBase
     [ProducesResponseType(typeof(List<ProgramResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<ProgramResponseDto>>> GetStudentPrograms(Guid id)
     {
+        var student = await _studentService.GetStudentByIdAsync(id);
+        if (student == null)
+            return NotFound();
+
+        if (User.IsInRole("Student") && !IsStudentSelf(student))
+            return Forbid();
+
         var programs = await _studentService.GetStudentProgramsAsync(id);
         return Ok(programs);
     }
+    private bool IsStudentSelf(StudentResponseDto student)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (Guid.TryParse(userId, out var userGuid) && userGuid == student.Id)
+            return true;
+
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        return !string.IsNullOrWhiteSpace(email)
+               && string.Equals(email, student.Email, StringComparison.OrdinalIgnoreCase);
+    }
 }
+
+

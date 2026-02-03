@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversityManagement.Application.DTOs.Timetable;
 using UniversityManagement.Application.Interfaces;
@@ -7,6 +8,7 @@ namespace UniversityManagement.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
+[Authorize]
 public class TimetablesController : ControllerBase
 {
     private readonly ITimetableService _timetableService;
@@ -17,6 +19,7 @@ public class TimetablesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin,Teacher")]
     [ProducesResponseType(typeof(TimetableResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<TimetableResponseDto>> CreateTimetable([FromBody] CreateTimetableDto createTimetableDto)
@@ -26,6 +29,7 @@ public class TimetablesController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Teacher")]
     [ProducesResponseType(typeof(TimetableResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -68,6 +72,7 @@ public class TimetablesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin,Teacher")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteTimetable(Guid id)

@@ -34,7 +34,7 @@ namespace UniversityManagement.Application.Services
             return list.Select(MapToResponse).ToList();
         }
 
-        // ✅ REQUIRED BY YOUR INTERFACE
+        \
         public async Task<List<AnnouncementResponseDto>> GetActiveAnnouncementsAsync(Guid? programId, Guid? subjectId)
         {
             var list = await _repo.GetActiveAnnouncementsAsync(programId, subjectId);
