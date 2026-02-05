@@ -19,7 +19,7 @@ public class TimetablesController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireTeacherOrAdmin")]
     [ProducesResponseType(typeof(TimetableResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<TimetableResponseDto>> CreateTimetable([FromBody] CreateTimetableDto createTimetableDto)
@@ -29,7 +29,7 @@ public class TimetablesController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireTeacherOrAdmin")]
     [ProducesResponseType(typeof(TimetableResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -72,7 +72,7 @@ public class TimetablesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireTeacherOrAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteTimetable(Guid id)

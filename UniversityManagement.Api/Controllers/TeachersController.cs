@@ -19,7 +19,7 @@ public class TeachersController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdmin")]
     [ProducesResponseType(typeof(TeacherResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<TeacherResponseDto>> CreateTeacher([FromBody] CreateTeacherDto createTeacherDto)
@@ -30,7 +30,7 @@ public class TeachersController : ControllerBase
 
     [HttpPut("{id}")]
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdmin")]
     [ProducesResponseType(typeof(TeacherResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -72,7 +72,7 @@ public class TeachersController : ControllerBase
 
     [HttpDelete("{id}")]
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteTeacher(Guid id)

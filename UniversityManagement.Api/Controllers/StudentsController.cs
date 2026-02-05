@@ -21,7 +21,7 @@ public class StudentsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdmin")]
     [ProducesResponseType(typeof(StudentResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<StudentResponseDto>> CreateStudent([FromBody] CreateStudentDto createStudentDto)
@@ -31,7 +31,7 @@ public class StudentsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdmin")]
     [ProducesResponseType(typeof(StudentResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -67,7 +67,7 @@ public class StudentsController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireAdmin")]
     [ProducesResponseType(typeof(List<StudentResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<StudentResponseDto>>> GetAllStudents()
     {
@@ -76,7 +76,7 @@ public class StudentsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteStudent(Guid id)
@@ -89,7 +89,7 @@ public class StudentsController : ControllerBase
     }
 
     [HttpPost("admit-to-program")]
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireAdmin")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> AdmitStudentToProgram([FromBody] AdmitStudentToProgramDto admitDto)

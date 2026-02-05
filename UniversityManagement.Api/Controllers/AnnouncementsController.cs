@@ -19,7 +19,7 @@ public class AnnouncementsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireTeacherOrAdmin")]
     [ProducesResponseType(typeof(AnnouncementResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<AnnouncementResponseDto>> CreateAnnouncement(
@@ -34,7 +34,7 @@ public class AnnouncementsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireTeacherOrAdmin")]
     [ProducesResponseType(typeof(AnnouncementResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -84,7 +84,7 @@ public class AnnouncementsController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireTeacherOrAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteAnnouncement(Guid id)

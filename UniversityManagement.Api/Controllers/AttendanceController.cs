@@ -19,7 +19,7 @@ public class AttendanceController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireTeacherOrAdmin")]
 
     [ProducesResponseType(typeof(AttendanceResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -31,7 +31,7 @@ public class AttendanceController : ControllerBase
 
     [HttpPost("bulk")]
 
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireTeacherOrAdmin")]
 
     [ProducesResponseType(typeof(List<AttendanceResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -63,7 +63,7 @@ public class AttendanceController : ControllerBase
 
     [HttpGet("{id}")]
 
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireTeacherOrAdmin")]
 
     [ProducesResponseType(typeof(AttendanceResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

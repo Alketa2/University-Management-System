@@ -117,7 +117,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("refresh")]
-    [AllowAnonymous]
+    [Authorize]
     public async Task<ActionResult<AuthResponseDto>> Refresh(RefreshRequestDto dto)
     {
         var incomingHash = _jwt.HashToken(dto.RefreshToken);

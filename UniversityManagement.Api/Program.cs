@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics.Metrics;
 using System.Security.Claims;
 using System.Text;
 using UniversityManagement.Application.Interfaces;
@@ -87,7 +88,13 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("RequireTeacher", policy => policy.RequireRole("Teacher"));
+    options.AddPolicy("RequireTeacherOrAdmin", policy => policy.RequireRole("Teacher", "Admin"));
+});
+
 
 // Swagger + Bearer
 builder.Services.AddEndpointsApiExplorer();
@@ -158,9 +165,54 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<UniversityDbContext>();
-    db.Database.Migrate();
-   
+    await db.Database.MigrateAsync();
 
+    // ✅ Seed Admin user (only if not exists)
+    var seedSection = app.Configuration.GetSection("SeedAdmin");
+    var enabled = seedSection.GetValue<bool>("Enabled");
+
+    if (enabled)
+    {
+        var email = seedSection["Email"];
+        var password = seedSection["Password"];
+        var firstName = seedSection["FirstName"] ?? "System";
+        var lastName = seedSection["LastName"] ?? "Admin";
+        var role = seedSection["Role"] ?? "Admin";
+
+        if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(password))
+        {
+            var existing = await db.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (existing is null)
+            {
+                var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<AppUser>>();
+
+                var admin = new AppUser
+                {
+                    Id = Guid.NewGuid(),
+                    Email = email,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Role = role,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                admin.PasswordHash = hasher.HashPassword(admin, password);
+
+                db.Users.Add(admin);
+                await db.SaveChangesAsync();
+
+                app.Logger.LogInformation("✅ Seeded Admin user: {Email}", email);
+            }
+            else
+            {
+                app.Logger.LogInformation("ℹ️ Admin user already exists: {Email}", email);
+            }
+        }
+        else
+        {
+            app.Logger.LogWarning("SeedAdmin enabled but Email/Password missing. Skipping admin seed.");
+        }
+    }
 }
 
 app.UseSwagger();
@@ -169,9 +221,10 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseCors("AllowReactApp");
 
-//  ORDER
+// ORDER
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
+

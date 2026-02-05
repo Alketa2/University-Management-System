@@ -34,7 +34,7 @@ namespace UniversityManagement.Application.Services
             return list.Select(MapToResponse).ToList();
         }
 
-        \
+        
         public async Task<List<AnnouncementResponseDto>> GetActiveAnnouncementsAsync(Guid? programId, Guid? subjectId)
         {
             var list = await _repo.GetActiveAnnouncementsAsync(programId, subjectId);
@@ -75,7 +75,6 @@ namespace UniversityManagement.Application.Services
             if (existing == null)
                 throw new KeyNotFoundException("Announcement not found.");
 
-            // Only overwrite if incoming values are not null/empty
             if (!string.IsNullOrWhiteSpace(updateAnnouncementDto.Title))
                 existing.Title = updateAnnouncementDto.Title;
 
@@ -85,14 +84,14 @@ namespace UniversityManagement.Application.Services
             if (!string.IsNullOrWhiteSpace(updateAnnouncementDto.TargetAudience))
                 existing.TargetAudience = updateAnnouncementDto.TargetAudience;
 
-            // If these are nullable GUIDs in your DTO, only assign when provided
+           
             if (updateAnnouncementDto.ProgramId.HasValue)
                 existing.ProgramId = updateAnnouncementDto.ProgramId;
 
             if (updateAnnouncementDto.SubjectId.HasValue)
                 existing.SubjectId = updateAnnouncementDto.SubjectId;
 
-            // ExpiryDate may be nullable -> assign directly
+            // ExpiryDate may be nullable 
             existing.ExpiryDate = updateAnnouncementDto.ExpiryDate;
 
             existing.IsActive = updateAnnouncementDto.IsActive;

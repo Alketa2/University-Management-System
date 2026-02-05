@@ -19,7 +19,7 @@ public class ExamsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireTeacherOrAdmin")]
     [ProducesResponseType(typeof(ExamResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ExamResponseDto>> CreateExam([FromBody] CreateExamDto createExamDto)
@@ -29,7 +29,7 @@ public class ExamsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireTeacherOrAdmin")]
     [ProducesResponseType(typeof(ExamResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -78,7 +78,7 @@ public class ExamsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Policy = "RequireTeacherOrAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteExam(Guid id)
