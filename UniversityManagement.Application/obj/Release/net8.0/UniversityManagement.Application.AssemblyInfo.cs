@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UniversityManagement.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f61f450b7eea8ad9626ec7a5544acc3427bc3d2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+81233de71610d6c2eef2917a5b599f600e7b296d")]
 [assembly: System.Reflection.AssemblyProductAttribute("UniversityManagement.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UniversityManagement.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
