@@ -66,6 +66,24 @@ builder.Services.AddAuthentication(options =>
         options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
         options.SaveToken = true;
         options.MapInboundClaims = false;
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var authorization = context.Request.Headers.Authorization.ToString();
+                if (!string.IsNullOrWhiteSpace(authorization) &&
+                    authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                {
+                    var parts = authorization.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length >= 2)
+                    {
+                        context.Token = parts[^1];
+                    }
+                }
+
+                return Task.CompletedTask;
+            }
+        };
 
 
 
