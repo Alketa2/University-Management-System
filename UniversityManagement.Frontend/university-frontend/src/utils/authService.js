@@ -1,77 +1,141 @@
-import authService from './authService';
+import { API_ENDPOINTS } from '../config/api';
 
-class ApiClient {
-    async request(url, options = {}) {
-        const token = authService.getAccessToken();
+class AuthService {
+    constructor() {
+        this.TOKEN_KEY = 'access_token';
+        this.REFRESH_TOKEN_KEY = 'refresh_token';
+        this.USER_KEY = 'user_data';
+    }
 
-        const headers = {
-            'Content-Type': 'application/json',
-            ...options.headers,
-        };
+    // Get access token
+    getAccessToken() {
+        return localStorage.getItem(this.TOKEN_KEY);
+    }
 
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
+    // Get refresh token
+    getRefreshToken() {
+        return localStorage.getItem(this.REFRESH_TOKEN_KEY);
+    }
 
-        let response = await fetch(url, {
-            ...options,
-            headers,
+    // Get user data
+    getUser() {
+        const user = localStorage.getItem(this.USER_KEY);
+        return user ? JSON.parse(user) : null;
+    }
+
+    // Save authentication data
+    saveAuthData(authResponse) {
+        localStorage.setItem(this.TOKEN_KEY, authResponse.accessToken);
+        localStorage.setItem(this.REFRESH_TOKEN_KEY, authResponse.refreshToken);
+        localStorage.setItem(this.USER_KEY, JSON.stringify({
+            email: authResponse.email,
+            role: authResponse.role,
+        }));
+    }
+
+    // Clear authentication data
+    clearAuthData() {
+        localStorage.removeItem(this.TOKEN_KEY);
+        localStorage.removeItem(this.REFRESH_TOKEN_KEY);
+        localStorage.removeItem(this.USER_KEY);
+    }
+
+    // Check if user is authenticated
+    isAuthenticated() {
+        return !!this.getAccessToken();
+    }
+
+    // Get user role
+    getUserRole() {
+        const user = this.getUser();
+        return user?.role || null;
+    }
+
+    // Login
+    async login(email, password) {
+        const response = await fetch(API_ENDPOINTS.AUTH.LOGIN, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
         });
-
-        // Handle 401 Unauthorized - try to refresh token
-        if (response.status === 401 && token) {
-            try {
-                await authService.refreshToken();
-                const newToken = authService.getAccessToken();
-                headers['Authorization'] = `Bearer ${newToken}`;
-
-                // Retry the original request with new token
-                response = await fetch(url, {
-                    ...options,
-                    headers,
-                });
-            } catch (error) {
-                // Refresh failed, redirect to login
-                authService.clearAuthData();
-                window.location.href = '/login';
-                throw new Error('Session expired. Please login again.');
-            }
-        }
 
         if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText || `Request failed with status ${response.status}`);
+            const error = await response.text();
+            throw new Error(error || 'Login failed');
         }
 
-        // Handle 204 No Content
-        if (response.status === 204) {
-            return null;
-        }
-
-        return await response.json();
+        const data = await response.json();
+        this.saveAuthData(data);
+        return data;
     }
 
-    async get(url) {
-        return this.request(url, { method: 'GET' });
-    }
-
-    async post(url, data) {
-        return this.request(url, {
+    // Register
+    async register(firstName, lastName, email, password, role = 'Student') {
+        const response = await fetch(API_ENDPOINTS.AUTH.REGISTER, {
             method: 'POST',
-            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ firstName, lastName, email, password, role }),
         });
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(error || 'Registration failed');
+        }
+
+        const data = await response.json();
+        this.saveAuthData(data);
+        return data;
     }
 
-    async put(url, data) {
-        return this.request(url, {
-            method: 'PUT',
-            body: JSON.stringify(data),
+    // Refresh token
+    async refreshToken() {
+        const refreshToken = this.getRefreshToken();
+        if (!refreshToken) {
+            throw new Error('No refresh token available');
+        }
+
+        const response = await fetch(API_ENDPOINTS.AUTH.REFRESH, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ refreshToken }),
         });
+
+        if (!response.ok) {
+            this.clearAuthData();
+            throw new Error('Token refresh failed');
+        }
+
+        const data = await response.json();
+        this.saveAuthData(data);
+        return data;
     }
 
-    async delete(url) {
-        return this.request(url, { method: 'DELETE' });
+    // Logout
+    async logout() {
+        const refreshToken = this.getRefreshToken();
+        if (refreshToken) {
+            try {
+                await fetch(API_ENDPOINTS.AUTH.LOGOUT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.getAccessToken()}`,
+                    },
+                    body: JSON.stringify({ refreshToken }),
+                });
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+        this.clearAuthData();
     }
 }
 
-export default new ApiClient();
+const authService = new AuthService();
+export default authService;

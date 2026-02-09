@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1e293b;
+            color: #fff;
+        }
+
+        .test-section {
+            background: #334155;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        .result {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .success {
+            color: #22c55e;
+        }
+
+        .error {
+            color: #ef4444;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 API Connection Test</h1>
+
+    <div class="test-section">
+        <h2>Test 1: Check Swagger</h2>
+        <button onclick="testSwagger()">Open Swagger</button>
+        <div id="swagger-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Test Login Endpoint</h2>
+        <p>This will test the /api/Auth/login endpoint with a dummy request</p>
+        <button onclick="testLogin()">Test Login</button>
+        <div id="login-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Test Register Endpoint</h2>
+        <button onclick="testRegister()">Test Register</button>
+        <div id="register-result" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5196/api';
+
+        function testSwagger() {
+            const result = document.getElementById('swagger-result');
+            result.textContent = 'Opening Swagger UI...';
+            window.open('http://localhost:5196/swagger', '_blank');
+            result.innerHTML = '<span class="success">✓ Swagger should open in a new tab</span>';
+        }
+
+        async function testLogin() {
+            const result = document.getElementById('login-result');
+            result.textContent = 'Testing login endpoint...';
+
+            try {
+                const response = await fetch(`${API_BASE}/Auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'test@example.com',
+                        password: 'test123'
+                    })
+                });
+
+                const text = await response.text();
+
+                result.innerHTML = `
+<span class="${response.ok ? 'success' : 'error'}">
+Status: ${response.status} ${response.statusText}
+CORS: ${response.ok || response.status === 400 || response.status === 401 ? '✓ Working' : '✗ Failed'}
+</span>
+
+Response:
+${text}
+
+Note: A 400 or 401 error is GOOD - it means the API is reachable!
+A network error or CORS error would be BAD.
+                `;
+            } catch (error) {
+                result.innerHTML = `<span class="error">✗ Error: ${error.message}</span>
+
+This usually means:
+- Backend is not running
+- CORS is blocking the request
+- Wrong port or URL`;
+            }
+        }
+
+        async function testRegister() {
+            const result = document.getElementById('register-result');
+            result.textContent = 'Testing register endpoint...';
+
+            try {
+                const response = await fetch(`${API_BASE}/Auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        firstName: 'Test',
+                        lastName: 'User',
+                        email: `test${Date.now()}@example.com`,
+                        password: 'Test123!',
+                        role: 'Student'
+                    })
+                });
+
+                const text = await response.text();
+
+                result.innerHTML = `
+<span class="${response.ok ? 'success' : 'error'}">
+Status: ${response.status} ${response.statusText}
+CORS: ${response.ok || response.status === 400 ? '✓ Working' : '✗ Failed'}
+</span>
+
+Response:
+${text}
+                `;
+            } catch (error) {
+                result.innerHTML = `<span class="error">✗ Error: ${error.message}</span>`;
+            }
+        }
+
+        // Auto-run tests on page load
+        window.addEventListener('load', () => {
+            console.log('API Base URL:', API_BASE);
+            console.log('Testing connection to:', API_BASE);
+        });
+    </script>
+</body>
+
+</html>
