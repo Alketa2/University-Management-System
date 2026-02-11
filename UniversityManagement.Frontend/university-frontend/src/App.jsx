@@ -4,16 +4,14 @@ import DashboardLayout from './components/layout/DashboardLayout';
 import DashboardHome from './components/pages/DashboardHome';
 import StudentsPage from './components/pages/StudentsPage';
 import TeachersPage from './components/pages/TeachersPage';
+import ProgramsPage from './components/pages/ProgramsPage';
+import SubjectsPage from './components/pages/SubjectsPage';
+import ExamsPage from './components/pages/ExamsPage';
+import AttendancePage from './components/pages/AttendancePage';
+import TimetablePage from './components/pages/TimetablePage';
+import AnnouncementsPage from './components/pages/AnnouncementsPage';
 import authService from './utils/authService';
 import './index.css';
-
-// Placeholder components for other pages
-const ProgramsPage = () => <div className="text-white">Programs Management - Coming Soon</div>;
-const SubjectsPage = () => <div className="text-white">Subjects Management - Coming Soon</div>;
-const ExamsPage = () => <div className="text-white">Exams Management - Coming Soon</div>;
-const AttendancePage = () => <div className="text-white">Attendance Management - Coming Soon</div>;
-const TimetablePage = () => <div className="text-white">Timetable Management - Coming Soon</div>;
-const AnnouncementsPage = () => <div className="text-white">Announcements - Coming Soon</div>;
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

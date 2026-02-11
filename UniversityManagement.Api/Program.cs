@@ -161,12 +161,17 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// CORS
+// CORS - Allow frontend origins
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:5173")
+        policy.WithOrigins(
+                "http://localhost:3000",     // React dev server
+                "http://localhost:5173",     // Vite default port
+                "http://localhost:5174",     // Vite fallback port
+                "http://localhost:4173"      // Vite preview
+              )
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -253,7 +258,12 @@ using (var scope = app.Services.CreateScope())
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+// Only redirect to HTTPS in production
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseCors("AllowReactApp");
 
 // ORDER
