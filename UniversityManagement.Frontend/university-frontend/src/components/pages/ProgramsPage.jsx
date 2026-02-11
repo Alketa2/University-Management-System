@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Card, Input, Modal, Badge, Alert, Spinner, Select } from '../ui/UIComponents';
+import { Button, Card, Input, Modal, Badge, Alert, Spinner } from '../ui/UIComponents';
 import apiClient from '../../utils/apiClient';
 import { API_ENDPOINTS } from '../../config/api';
 
@@ -28,25 +28,31 @@ const ProgramsPage = () => {
     };
 
     const handleDelete = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this program?')) return;
+        if (!window.confirm('Are you sure you want to delete this program? Note: Programs with linked subjects cannot be deleted.')) return;
 
         try {
             await apiClient.delete(API_ENDPOINTS.PROGRAMS.BY_ID(id));
             setPrograms(programs.filter(p => p.id !== id));
         } catch (err) {
-            setError(err.message || 'Failed to delete program');
+            // Show user-friendly error message for foreign key constraint
+            if (err.message?.includes('foreign key constraint') || err.message?.includes('Cannot delete')) {
+                setError('Cannot delete this program because it has subjects or other records linked to it. Please remove or reassign those records first.');
+            } else {
+                setError(err.message || 'Failed to delete program');
+            }
         }
     };
 
     const filteredPrograms = programs.filter(program =>
         program.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         program.code?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        program.department?.toLowerCase().includes(searchTerm.toLowerCase())
+        program.description?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const activePrograms = programs.filter(p => p.isActive !== false);
-    const bachelorPrograms = programs.filter(p => p.degreeType === 'Bachelor' || p.degreeType === 'Undergraduate');
-    const masterPrograms = programs.filter(p => p.degreeType === 'Master' || p.degreeType === 'Graduate');
+    const avgDuration = programs.length > 0
+        ? (programs.reduce((sum, p) => sum + (p.duration || 0), 0) / programs.length).toFixed(1)
+        : 0;
 
     if (loading) {
         return (
@@ -110,9 +116,9 @@ const ProgramsPage = () => {
                 <Card>
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-slate-400">Bachelor's</p>
+                            <p className="text-sm text-slate-400">Avg Duration</p>
                             <p className="text-3xl font-bold text-accent-400 mt-1">
-                                {bachelorPrograms.length}
+                                {avgDuration}<span className="text-sm text-slate-400 ml-1">sem</span>
                             </p>
                         </div>
                         <div className="w-12 h-12 bg-accent-600/20 rounded-xl flex items-center justify-center text-2xl">
@@ -123,9 +129,9 @@ const ProgramsPage = () => {
                 <Card>
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-slate-400">Master's</p>
+                            <p className="text-sm text-slate-400">Total Credits</p>
                             <p className="text-3xl font-bold text-warning-400 mt-1">
-                                {masterPrograms.length}
+                                {programs.reduce((sum, p) => sum + (p.creditsRequired || 0), 0)}
                             </p>
                         </div>
                         <div className="w-12 h-12 bg-warning-600/20 rounded-xl flex items-center justify-center text-2xl">
@@ -168,28 +174,22 @@ const ProgramsPage = () => {
                             </div>
 
                             <div className="space-y-2 mb-4 text-sm">
-                                {program.degreeType && (
-                                    <div className="flex items-center gap-2 text-slate-300">
-                                        <span className="text-accent-400">🎯</span>
-                                        <span className="font-medium">{program.degreeType}</span>
-                                    </div>
-                                )}
-                                {program.department && (
-                                    <div className="flex items-center gap-2 text-slate-300">
-                                        <span className="text-primary-400">🏛️</span>
-                                        <span>{program.department}</span>
-                                    </div>
-                                )}
-                                {program.durationYears && (
+                                {program.duration && (
                                     <div className="flex items-center gap-2 text-slate-300">
                                         <span className="text-success-400">⏱️</span>
-                                        <span>{program.durationYears} {program.durationYears === 1 ? 'year' : 'years'}</span>
+                                        <span>{program.duration} {program.duration === 1 ? 'semester' : 'semesters'}</span>
+                                    </div>
+                                )}
+                                {program.creditsRequired && (
+                                    <div className="flex items-center gap-2 text-slate-300">
+                                        <span className="text-accent-400">🎯</span>
+                                        <span>{program.creditsRequired} credits required</span>
                                     </div>
                                 )}
                                 {program.startDate && (
                                     <div className="flex items-center gap-2 text-slate-300">
                                         <span className="text-warning-400">📅</span>
-                                        <span>Started {new Date(program.startDate).getFullYear()}</span>
+                                        <span>Started {new Date(program.startDate).toLocaleDateString()}</span>
                                     </div>
                                 )}
                             </div>
@@ -233,22 +233,13 @@ const ProgramModal = ({ isOpen, onClose, program, onSuccess }) => {
         name: '',
         code: '',
         description: '',
-        department: '',
-        degreeType: '',
-        durationYears: '',
+        duration: '',
+        creditsRequired: '',
         startDate: '',
+        isActive: true,
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-
-    const degreeTypes = [
-        'Bachelor',
-        'Master',
-        'Doctorate',
-        'Associate',
-        'Certificate',
-        'Diploma'
-    ];
 
     useEffect(() => {
         if (program) {
@@ -256,20 +247,20 @@ const ProgramModal = ({ isOpen, onClose, program, onSuccess }) => {
                 name: program.name || '',
                 code: program.code || '',
                 description: program.description || '',
-                department: program.department || '',
-                degreeType: program.degreeType || '',
-                durationYears: program.durationYears || '',
+                duration: program.duration || '',
+                creditsRequired: program.creditsRequired || '',
                 startDate: program.startDate ? new Date(program.startDate).toISOString().split('T')[0] : '',
+                isActive: program.isActive !== false,
             });
         } else {
             setFormData({
                 name: '',
                 code: '',
                 description: '',
-                department: '',
-                degreeType: '',
-                durationYears: '',
+                duration: '',
+                creditsRequired: '',
                 startDate: '',
+                isActive: true,
             });
         }
     }, [program]);
@@ -282,8 +273,10 @@ const ProgramModal = ({ isOpen, onClose, program, onSuccess }) => {
         try {
             const payload = {
                 ...formData,
-                durationYears: parseInt(formData.durationYears) || 0,
-                startDate: formData.startDate || null,
+                duration: parseInt(formData.duration) || 0,
+                creditsRequired: parseInt(formData.creditsRequired) || 0,
+                startDate: formData.startDate || new Date().toISOString(),
+                isActive: formData.isActive,
             };
 
             if (program) {
@@ -321,12 +314,12 @@ const ProgramModal = ({ isOpen, onClose, program, onSuccess }) => {
                         required
                     />
                     <Input
-                        label="Duration (Years)"
+                        label="Duration (Semesters)"
                         type="number"
-                        value={formData.durationYears}
-                        onChange={(e) => setFormData({ ...formData, durationYears: e.target.value })}
+                        value={formData.duration}
+                        onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
                         min="1"
-                        max="10"
+                        max="40"
                         required
                     />
                 </div>
@@ -353,29 +346,36 @@ const ProgramModal = ({ isOpen, onClose, program, onSuccess }) => {
 
                 <div className="grid grid-cols-2 gap-4">
                     <Input
-                        label="Department"
-                        value={formData.department}
-                        onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                        placeholder="e.g., Computer Science"
+                        label="Credits Required"
+                        type="number"
+                        value={formData.creditsRequired}
+                        onChange={(e) => setFormData({ ...formData, creditsRequired: e.target.value })}
+                        min="0"
+                        max="500"
+                        placeholder="e.g., 120"
                     />
-                    <Select
-                        label="Degree Type"
-                        value={formData.degreeType}
-                        onChange={(e) => setFormData({ ...formData, degreeType: e.target.value })}
-                        options={[
-                            { value: '', label: 'Select Degree Type' },
-                            ...degreeTypes.map(type => ({ value: type, label: type }))
-                        ]}
+                    <Input
+                        label="Start Date"
+                        type="date"
+                        value={formData.startDate}
+                        onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
                         required
                     />
                 </div>
 
-                <Input
-                    label="Start Date (Optional)"
-                    type="date"
-                    value={formData.startDate}
-                    onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                />
+                <div className="flex items-center gap-3 p-4 bg-slate-900/50 rounded-xl border border-slate-700">
+                    <input
+                        type="checkbox"
+                        id="isActive"
+                        checked={formData.isActive}
+                        onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                        className="w-5 h-5 rounded border-slate-600 bg-slate-800 text-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-0 cursor-pointer"
+                    />
+                    <label htmlFor="isActive" className="text-sm font-medium text-slate-300 cursor-pointer flex-1">
+                        Active Program
+                        <span className="block text-xs text-slate-500 mt-0.5">Inactive programs won't appear in subject creation</span>
+                    </label>
+                </div>
 
                 <div className="flex gap-3 pt-4">
                     <Button type="submit" disabled={loading} className="flex-1">

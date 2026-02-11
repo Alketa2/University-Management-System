@@ -170,7 +170,7 @@ const StudentsPage = () => {
                                             </div>
                                         </td>
                                         <td className="py-4 px-4 text-slate-300">{student.email}</td>
-                                        <td className="py-4 px-4 text-slate-300">{student.phoneNumber || 'N/A'}</td>
+                                        <td className="py-4 px-4 text-slate-300">{student.phone || 'N/A'}</td>
                                         <td className="py-4 px-4">
                                             <Badge variant={student.isActive !== false ? 'success' : 'default'}>
                                                 {student.isActive !== false ? 'Active' : 'Inactive'}
@@ -222,7 +222,7 @@ const StudentModal = ({ isOpen, onClose, student, onSuccess }) => {
         firstName: '',
         lastName: '',
         email: '',
-        phoneNumber: '',
+        phone: '',
         dateOfBirth: '',
         address: '',
     });
@@ -235,7 +235,7 @@ const StudentModal = ({ isOpen, onClose, student, onSuccess }) => {
                 firstName: student.firstName || '',
                 lastName: student.lastName || '',
                 email: student.email || '',
-                phoneNumber: student.phoneNumber || '',
+                phone: student.phone || '',
                 dateOfBirth: student.dateOfBirth ? student.dateOfBirth.split('T')[0] : '',
                 address: student.address || '',
             });
@@ -244,7 +244,7 @@ const StudentModal = ({ isOpen, onClose, student, onSuccess }) => {
                 firstName: '',
                 lastName: '',
                 email: '',
-                phoneNumber: '',
+                phone: '',
                 dateOfBirth: '',
                 address: '',
             });
@@ -308,8 +308,9 @@ const StudentModal = ({ isOpen, onClose, student, onSuccess }) => {
 
                 <Input
                     label="Phone Number"
-                    value={formData.phoneNumber}
-                    onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    required
                 />
 
                 <Input

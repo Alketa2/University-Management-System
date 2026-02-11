@@ -167,7 +167,7 @@ const TeachersPage = () => {
                                                 </div>
                                                 <div>
                                                     <p className="font-medium text-white">{teacher.firstName} {teacher.lastName}</p>
-                                                    <p className="text-xs text-slate-400">{teacher.qualification || 'N/A'}</p>
+                                                    <p className="text-xs text-slate-400">{teacher.department || 'Faculty'}</p>
                                                 </div>
                                             </div>
                                         </td>
@@ -175,7 +175,7 @@ const TeachersPage = () => {
                                         <td className="py-4 px-4">
                                             <Badge variant="primary">{teacher.department || 'N/A'}</Badge>
                                         </td>
-                                        <td className="py-4 px-4 text-slate-300">{teacher.phoneNumber || 'N/A'}</td>
+                                        <td className="py-4 px-4 text-slate-300">{teacher.phone || 'N/A'}</td>
                                         <td className="py-4 px-4">
                                             <Badge variant={teacher.isActive !== false ? 'success' : 'default'}>
                                                 {teacher.isActive !== false ? 'Active' : 'Inactive'}
@@ -224,9 +224,8 @@ const TeacherModal = ({ isOpen, onClose, teacher, onSuccess }) => {
         firstName: '',
         lastName: '',
         email: '',
-        phoneNumber: '',
+        phone: '',
         department: '',
-        qualification: '',
         hireDate: '',
     });
     const [loading, setLoading] = useState(false);
@@ -238,9 +237,8 @@ const TeacherModal = ({ isOpen, onClose, teacher, onSuccess }) => {
                 firstName: teacher.firstName || '',
                 lastName: teacher.lastName || '',
                 email: teacher.email || '',
-                phoneNumber: teacher.phoneNumber || '',
+                phone: teacher.phone || '',
                 department: teacher.department || '',
-                qualification: teacher.qualification || '',
                 hireDate: teacher.hireDate ? teacher.hireDate.split('T')[0] : '',
             });
         } else {
@@ -248,9 +246,8 @@ const TeacherModal = ({ isOpen, onClose, teacher, onSuccess }) => {
                 firstName: '',
                 lastName: '',
                 email: '',
-                phoneNumber: '',
+                phone: '',
                 department: '',
-                qualification: '',
                 hireDate: '',
             });
         }
@@ -314,23 +311,18 @@ const TeacherModal = ({ isOpen, onClose, teacher, onSuccess }) => {
                 <div className="grid grid-cols-2 gap-4">
                     <Input
                         label="Phone Number"
-                        value={formData.phoneNumber}
-                        onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        required
                     />
                     <Input
                         label="Department"
                         value={formData.department}
                         onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                         placeholder="e.g., Computer Science"
+                        required
                     />
                 </div>
-
-                <Input
-                    label="Qualification"
-                    value={formData.qualification}
-                    onChange={(e) => setFormData({ ...formData, qualification: e.target.value })}
-                    placeholder="e.g., PhD in Computer Science"
-                />
 
                 <Input
                     label="Hire Date"

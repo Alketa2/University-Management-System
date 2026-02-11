@@ -49,7 +49,7 @@ const ExamsPage = () => {
     };
 
     const filteredExams = exams.filter(exam =>
-        exam.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        exam.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         getSubjectName(exam.subjectId)?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -62,6 +62,11 @@ const ExamsPage = () => {
         const examDate = new Date(exam.examDate);
         return examDate <= new Date();
     });
+
+    const getExamTypeLabel = (examType) => {
+        const types = { 1: 'Midterm', 2: 'Final', 3: 'Quiz', 4: 'Assignment' };
+        return types[examType] || 'Unknown';
+    };
 
     if (loading) {
         return (
@@ -160,10 +165,11 @@ const ExamsPage = () => {
                     <table className="w-full">
                         <thead>
                             <tr className="border-b border-slate-800">
-                                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Title</th>
+                                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Name</th>
+                                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Type</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Subject</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Date</th>
-                                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Duration</th>
+                                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Time</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Status</th>
                                 <th className="text-right py-4 px-4 text-sm font-semibold text-slate-300">Actions</th>
                             </tr>
@@ -171,7 +177,7 @@ const ExamsPage = () => {
                         <tbody>
                             {filteredExams.length === 0 ? (
                                 <tr>
-                                    <td colSpan="6" className="text-center py-12 text-slate-400">
+                                    <td colSpan="7" className="text-center py-12 text-slate-400">
                                         No exams found
                                     </td>
                                 </tr>
@@ -183,17 +189,21 @@ const ExamsPage = () => {
                                     return (
                                         <tr key={exam.id} className="border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors">
                                             <td className="py-4 px-4">
-                                                <p className="font-medium text-white">{exam.title}</p>
+                                                <p className="font-medium text-white">{exam.name}</p>
                                                 {exam.location && (
                                                     <p className="text-sm text-slate-400 mt-1">📍 {exam.location}</p>
                                                 )}
                                             </td>
+                                            <td className="py-4 px-4">
+                                                <Badge variant="default">{getExamTypeLabel(exam.examType)}</Badge>
+                                            </td>
                                             <td className="py-4 px-4 text-slate-300">{getSubjectName(exam.subjectId)}</td>
                                             <td className="py-4 px-4">
                                                 <p className="text-white">{examDate.toLocaleDateString()}</p>
-                                                <p className="text-sm text-slate-400">{examDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                                             </td>
-                                            <td className="py-4 px-4 text-slate-300">{exam.durationMinutes || 'N/A'} min</td>
+                                            <td className="py-4 px-4 text-slate-300">
+                                                {exam.startTime && exam.endTime ? `${exam.startTime.slice(0, 5)} - ${exam.endTime.slice(0, 5)}` : 'N/A'}
+                                            </td>
                                             <td className="py-4 px-4">
                                                 <Badge variant={isUpcoming ? 'warning' : 'success'}>
                                                     {isUpcoming ? 'Upcoming' : 'Completed'}
@@ -241,10 +251,12 @@ const ExamsPage = () => {
 
 const ExamModal = ({ isOpen, onClose, exam, subjects, onSuccess }) => {
     const [formData, setFormData] = useState({
-        title: '',
+        name: '',
+        examType: '1',
         subjectId: '',
         examDate: '',
-        durationMinutes: '',
+        startTime: '',
+        endTime: '',
         location: '',
         maxMarks: '',
     });
@@ -253,25 +265,33 @@ const ExamModal = ({ isOpen, onClose, exam, subjects, onSuccess }) => {
 
     useEffect(() => {
         if (exam) {
+            // Parse existing exam data
+            const examDateObj = exam.examDate ? new Date(exam.examDate) : new Date();
+            const dateStr = examDateObj.toISOString().split('T')[0];
+
             setFormData({
-                title: exam.title || '',
+                name: exam.name || '',
+                examType: exam.examType?.toString() || '1',
                 subjectId: exam.subjectId || '',
-                examDate: exam.examDate ? new Date(exam.examDate).toISOString().slice(0, 16) : '',
-                durationMinutes: exam.durationMinutes || '',
+                examDate: dateStr,
+                startTime: exam.startTime || '',
+                endTime: exam.endTime || '',
                 location: exam.location || '',
                 maxMarks: exam.maxMarks || '',
             });
         } else {
             setFormData({
-                title: '',
+                name: '',
+                examType: '1',
                 subjectId: '',
                 examDate: '',
-                durationMinutes: '',
+                startTime: '',
+                endTime: '',
                 location: '',
                 maxMarks: '',
             });
         }
-    }, [exam]);
+    }, [exam, isOpen]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -280,8 +300,13 @@ const ExamModal = ({ isOpen, onClose, exam, subjects, onSuccess }) => {
 
         try {
             const payload = {
-                ...formData,
-                durationMinutes: parseInt(formData.durationMinutes) || 0,
+                name: formData.name,
+                examType: parseInt(formData.examType),
+                subjectId: formData.subjectId,
+                examDate: formData.examDate,
+                startTime: formData.startTime,
+                endTime: formData.endTime,
+                location: formData.location || null,
                 maxMarks: parseFloat(formData.maxMarks) || 100,
             };
 
@@ -312,39 +337,59 @@ const ExamModal = ({ isOpen, onClose, exam, subjects, onSuccess }) => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 <Input
-                    label="Exam Title"
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    label="Exam Name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="e.g., Midterm Exam"
                     required
                 />
 
-                <Select
-                    label="Subject"
-                    value={formData.subjectId}
-                    onChange={(e) => setFormData({ ...formData, subjectId: e.target.value })}
-                    options={[
-                        { value: '', label: 'Select Subject' },
-                        ...subjects.map(s => ({ value: s.id, label: `${s.code} - ${s.name}` }))
-                    ]}
+                <div className="grid grid-cols-2 gap-4">
+                    <Select
+                        label="Subject"
+                        value={formData.subjectId}
+                        onChange={(e) => setFormData({ ...formData, subjectId: e.target.value })}
+                        options={[
+                            { value: '', label: 'Select Subject' },
+                            ...subjects.map(s => ({ value: s.id, label: `${s.code} - ${s.name}` }))
+                        ]}
+                        required
+                    />
+                    <Select
+                        label="Exam Type"
+                        value={formData.examType}
+                        onChange={(e) => setFormData({ ...formData, examType: e.target.value })}
+                        options={[
+                            { value: '1', label: 'Midterm' },
+                            { value: '2', label: 'Final' },
+                            { value: '3', label: 'Quiz' },
+                            { value: '4', label: 'Assignment' }
+                        ]}
+                        required
+                    />
+                </div>
+
+                <Input
+                    label="Exam Date"
+                    type="date"
+                    value={formData.examDate}
+                    onChange={(e) => setFormData({ ...formData, examDate: e.target.value })}
                     required
                 />
 
                 <div className="grid grid-cols-2 gap-4">
                     <Input
-                        label="Exam Date & Time"
-                        type="datetime-local"
-                        value={formData.examDate}
-                        onChange={(e) => setFormData({ ...formData, examDate: e.target.value })}
+                        label="Start Time"
+                        type="time"
+                        value={formData.startTime}
+                        onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
                         required
                     />
                     <Input
-                        label="Duration (minutes)"
-                        type="number"
-                        value={formData.durationMinutes}
-                        onChange={(e) => setFormData({ ...formData, durationMinutes: e.target.value })}
-                        min="15"
-                        max="300"
+                        label="End Time"
+                        type="time"
+                        value={formData.endTime}
+                        onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
                         required
                     />
                 </div>

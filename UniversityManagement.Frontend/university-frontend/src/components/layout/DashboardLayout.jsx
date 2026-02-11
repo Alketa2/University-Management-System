@@ -52,8 +52,8 @@ const Sidebar = ({ activeTab, setActiveTab, userRole }) => {
                         key={item.id}
                         onClick={() => setActiveTab(item.id)}
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === item.id
-                                ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/30'
-                                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                            ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/30'
+                            : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                             }`}
                     >
                         <span className="text-xl">{item.icon}</span>
@@ -126,7 +126,7 @@ const DashboardLayout = ({ children, title, onLogout }) => {
             <div className="flex-1 flex flex-col overflow-hidden">
                 <Header title={title} onLogout={onLogout} />
                 <main className="flex-1 overflow-y-auto p-8">
-                    {children({ activeTab, userRole })}
+                    {children({ activeTab, userRole, setActiveTab })}
                 </main>
             </div>
         </div>

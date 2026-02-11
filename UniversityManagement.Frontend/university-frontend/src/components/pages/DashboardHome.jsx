@@ -4,7 +4,7 @@ import apiClient from '../../utils/apiClient';
 import { API_ENDPOINTS } from '../../config/api';
 import authService from '../../utils/authService';
 
-const DashboardHome = () => {
+const DashboardHome = ({ setActiveTab }) => {
     const [stats, setStats] = useState(null);
     const [announcements, setAnnouncements] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -151,13 +151,38 @@ const DashboardHome = () => {
                 <Card>
                     <h3 className="text-xl font-bold text-white mb-6">Quick Actions</h3>
                     <div className="space-y-3">
-                        <QuickActionButton icon="👨‍🎓" label="Add Student" color="primary" />
+                        <QuickActionButton
+                            icon="👨‍🎓"
+                            label="Add Student"
+                            color="primary"
+                            onClick={() => setActiveTab('students')}
+                        />
                         {userRole === 'Admin' && (
-                            <QuickActionButton icon="👨‍🏫" label="Add Teacher" color="accent" />
+                            <QuickActionButton
+                                icon="👨‍🏫"
+                                label="Add Teacher"
+                                color="accent"
+                                onClick={() => setActiveTab('teachers')}
+                            />
                         )}
-                        <QuickActionButton icon="📚" label="Create Program" color="success" />
-                        <QuickActionButton icon="📝" label="Schedule Exam" color="warning" />
-                        <QuickActionButton icon="📢" label="Post Announcement" color="danger" />
+                        <QuickActionButton
+                            icon="📚"
+                            label="Create Program"
+                            color="success"
+                            onClick={() => setActiveTab('programs')}
+                        />
+                        <QuickActionButton
+                            icon="📝"
+                            label="Schedule Exam"
+                            color="warning"
+                            onClick={() => setActiveTab('exams')}
+                        />
+                        <QuickActionButton
+                            icon="📢"
+                            label="Post Announcement"
+                            color="danger"
+                            onClick={() => setActiveTab('announcements')}
+                        />
                     </div>
                 </Card>
             </div>
@@ -253,7 +278,7 @@ const StatCard = ({ title, value, icon, color, trend }) => {
     );
 };
 
-const QuickActionButton = ({ icon, label, color }) => {
+const QuickActionButton = ({ icon, label, color, onClick }) => {
     const colors = {
         primary: 'hover:bg-primary-600/10 hover:border-primary-600/30',
         accent: 'hover:bg-accent-600/10 hover:border-accent-600/30',
@@ -263,7 +288,10 @@ const QuickActionButton = ({ icon, label, color }) => {
     };
 
     return (
-        <button className={`w-full flex items-center gap-3 p-4 rounded-xl border border-slate-800 ${colors[color]} transition-all text-left`}>
+        <button
+            onClick={onClick}
+            className={`w-full flex items-center gap-3 p-4 rounded-xl border border-slate-800 ${colors[color]} transition-all text-left`}
+        >
             <span className="text-2xl">{icon}</span>
             <span className="font-medium text-white">{label}</span>
         </button>

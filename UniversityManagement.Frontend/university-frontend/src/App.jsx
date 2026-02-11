@@ -54,10 +54,10 @@ function App() {
       title="University Management System"
       onLogout={handleLogout}
     >
-      {({ activeTab, userRole }) => {
+      {({ activeTab, userRole, setActiveTab }) => {
         switch (activeTab) {
           case 'dashboard':
-            return <DashboardHome />;
+            return <DashboardHome setActiveTab={setActiveTab} />;
           case 'students':
             return <StudentsPage />;
           case 'teachers':
@@ -75,7 +75,7 @@ function App() {
           case 'announcements':
             return <AnnouncementsPage />;
           default:
-            return <DashboardHome />;
+            return <DashboardHome setActiveTab={setActiveTab} />;
         }
       }}
     </DashboardLayout>

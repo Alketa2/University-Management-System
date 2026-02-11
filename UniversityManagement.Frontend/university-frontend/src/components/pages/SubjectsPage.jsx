@@ -6,6 +6,7 @@ import { API_ENDPOINTS } from '../../config/api';
 const SubjectsPage = () => {
     const [subjects, setSubjects] = useState([]);
     const [programs, setPrograms] = useState([]);
+    const [teachers, setTeachers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,12 +20,14 @@ const SubjectsPage = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const [subjectsData, programsData] = await Promise.all([
+            const [subjectsData, programsData, teachersData] = await Promise.all([
                 apiClient.get(API_ENDPOINTS.SUBJECTS.BASE),
-                apiClient.get(API_ENDPOINTS.PROGRAMS.BASE)
+                apiClient.get(API_ENDPOINTS.PROGRAMS.BASE),
+                apiClient.get(API_ENDPOINTS.TEACHERS.BASE)
             ]);
             setSubjects(subjectsData);
             setPrograms(programsData);
+            setTeachers(teachersData);
         } catch (err) {
             setError(err.message || 'Failed to fetch data');
         } finally {
@@ -209,13 +212,14 @@ const SubjectsPage = () => {
                 onClose={() => setIsModalOpen(false)}
                 subject={selectedSubject}
                 programs={programs}
+                teachers={teachers}
                 onSuccess={fetchData}
             />
         </div>
     );
 };
 
-const SubjectModal = ({ isOpen, onClose, subject, programs, onSuccess }) => {
+const SubjectModal = ({ isOpen, onClose, subject, programs, teachers, onSuccess }) => {
     const [formData, setFormData] = useState({
         name: '',
         code: '',
@@ -223,6 +227,7 @@ const SubjectModal = ({ isOpen, onClose, subject, programs, onSuccess }) => {
         credits: '',
         semester: '',
         programId: '',
+        teacherId: '',
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -236,6 +241,7 @@ const SubjectModal = ({ isOpen, onClose, subject, programs, onSuccess }) => {
                 credits: subject.credits || '',
                 semester: subject.semester || '',
                 programId: subject.programId || '',
+                teacherId: subject.teacherId || '',
             });
         } else {
             setFormData({
@@ -245,6 +251,7 @@ const SubjectModal = ({ isOpen, onClose, subject, programs, onSuccess }) => {
                 credits: '',
                 semester: '',
                 programId: '',
+                teacherId: '',
             });
         }
     }, [subject]);
@@ -259,8 +266,19 @@ const SubjectModal = ({ isOpen, onClose, subject, programs, onSuccess }) => {
                 ...formData,
                 credits: parseInt(formData.credits) || 0,
                 semester: parseInt(formData.semester) || 1,
-                programId: formData.programId || null,
             };
+
+            // Validate required fields
+            if (!payload.programId) {
+                setError('Program is required');
+                setLoading(false);
+                return;
+            }
+            if (!payload.teacherId) {
+                setError('Teacher is required');
+                setLoading(false);
+                return;
+            }
 
             if (subject) {
                 await apiClient.put(API_ENDPOINTS.SUBJECTS.BY_ID(subject.id), {
@@ -329,18 +347,30 @@ const SubjectModal = ({ isOpen, onClose, subject, programs, onSuccess }) => {
                         value={formData.semester}
                         onChange={(e) => setFormData({ ...formData, semester: e.target.value })}
                         min="1"
-                        max="8"
+                        max="12"
                     />
                     <Select
                         label="Program"
                         value={formData.programId}
                         onChange={(e) => setFormData({ ...formData, programId: e.target.value })}
                         options={[
-                            { value: '', label: 'Select Program (Optional)' },
-                            ...programs.map(p => ({ value: p.id, label: p.name }))
+                            { value: '', label: 'Select Program' },
+                            ...programs.filter(p => p.isActive !== false).map(p => ({ value: p.id, label: p.name }))
                         ]}
+                        required
                     />
                 </div>
+
+                <Select
+                    label="Teacher"
+                    value={formData.teacherId}
+                    onChange={(e) => setFormData({ ...formData, teacherId: e.target.value })}
+                    options={[
+                        { value: '', label: 'Select Teacher' },
+                        ...teachers.filter(t => t.status === 'Active' || t.status === 1 || t.status === undefined).map(t => ({ value: t.id, label: `${t.firstName} ${t.lastName} (${t.department})` }))
+                    ]}
+                    required
+                />
 
                 <div className="flex gap-3 pt-4">
                     <Button type="submit" disabled={loading} className="flex-1">
