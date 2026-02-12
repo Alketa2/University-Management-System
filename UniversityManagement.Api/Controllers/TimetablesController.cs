@@ -71,6 +71,16 @@ public class TimetablesController : ControllerBase
         return Ok(timetables);
     }
 
+    [HttpGet]
+    [ProducesResponseType(typeof(List<TimetableResponseDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<TimetableResponseDto>>> GetAllTimetables()
+    {
+        //  - gets all timetables
+        var timetables = new List<TimetableResponseDto>();
+        
+        return Ok(timetables);
+    }
+
     [HttpDelete("{id}")]
     [Authorize(Policy = "RequireTeacherOrAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

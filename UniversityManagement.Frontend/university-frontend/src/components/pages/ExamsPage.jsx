@@ -299,13 +299,23 @@ const ExamModal = ({ isOpen, onClose, exam, subjects, onSuccess }) => {
         setError('');
 
         try {
+            // Convert examType number to string name as DTO expects
+            const examTypeNames = { '1': 'Midterm', '2': 'Final', '3': 'Quiz', '4': 'Assignment' };
+
+            // Parse HH:mm to TimeSpan format that C# understands
+            const parseTime = (timeStr) => {
+                if (!timeStr) return '00:00:00';
+                const [hours, minutes] = timeStr.split(':');
+                return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:00`;
+            };
+
             const payload = {
                 name: formData.name,
-                examType: parseInt(formData.examType),
+                examType: examTypeNames[formData.examType] || 'Midterm',
                 subjectId: formData.subjectId,
                 examDate: formData.examDate,
-                startTime: formData.startTime,
-                endTime: formData.endTime,
+                startTime: parseTime(formData.startTime),
+                endTime: parseTime(formData.endTime),
                 location: formData.location || null,
                 maxMarks: parseFloat(formData.maxMarks) || 100,
             };

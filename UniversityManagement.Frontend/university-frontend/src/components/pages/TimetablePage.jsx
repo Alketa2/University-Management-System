@@ -256,6 +256,8 @@ const TimetableModal = ({ isOpen, onClose, timetable, programs, subjects, onSucc
         startTime: '',
         endTime: '',
         roomNumber: '',
+        semester: '',
+        academicYear: '',
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -270,9 +272,12 @@ const TimetableModal = ({ isOpen, onClose, timetable, programs, subjects, onSucc
                 dayOfWeek: timetable.dayOfWeek || '',
                 startTime: timetable.startTime || '',
                 endTime: timetable.endTime || '',
-                roomNumber: timetable.roomNumber || '',
+                roomNumber: timetable.roomNumber || timetable.room || '',
+                semester: timetable.semester || '',
+                academicYear: timetable.academicYear || '',
             });
         } else {
+            const currentYear = new Date().getFullYear();
             setFormData({
                 programId: '',
                 subjectId: '',
@@ -280,6 +285,8 @@ const TimetableModal = ({ isOpen, onClose, timetable, programs, subjects, onSucc
                 startTime: '',
                 endTime: '',
                 roomNumber: '',
+                semester: '1',
+                academicYear: `${currentYear}-${currentYear + 1}`,
             });
         }
     }, [timetable]);
@@ -290,13 +297,37 @@ const TimetableModal = ({ isOpen, onClose, timetable, programs, subjects, onSucc
         setError('');
 
         try {
+            // Convert day name to integer (Monday=1, Tuesday=2, etc.)
+            const dayMap = {
+                'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4,
+                'Friday': 5, 'Saturday': 6, 'Sunday': 0
+            };
+
+            // Parse HH:mm to TimeSpan format
+            const parseTime = (timeStr) => {
+                if (!timeStr) return '00:00:00';
+                const [hours, minutes] = timeStr.split(':');
+                return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:00`;
+            };
+
+            const payload = {
+                programId: formData.programId,
+                subjectId: formData.subjectId,
+                dayOfWeek: dayMap[formData.dayOfWeek] ?? 1,
+                startTime: parseTime(formData.startTime),
+                endTime: parseTime(formData.endTime),
+                room: formData.roomNumber || null,
+                semester: parseInt(formData.semester) || 1,
+                academicYear: formData.academicYear,
+            };
+
             if (timetable) {
                 await apiClient.put(API_ENDPOINTS.TIMETABLES.BY_ID(timetable.id), {
                     id: timetable.id,
-                    ...formData,
+                    ...payload,
                 });
             } else {
-                await apiClient.post(API_ENDPOINTS.TIMETABLES.BASE, formData);
+                await apiClient.post(API_ENDPOINTS.TIMETABLES.BASE, payload);
             }
             onSuccess();
             onClose();
@@ -367,11 +398,31 @@ const TimetableModal = ({ isOpen, onClose, timetable, programs, subjects, onSucc
                     />
                 </div>
 
+                <div className="grid grid-cols-2 gap-4">
+                    <Input
+                        label="Room Number"
+                        value={formData.roomNumber}
+                        onChange={(e) => setFormData({ ...formData, roomNumber: e.target.value })}
+                        placeholder="e.g., Room 101"
+                    />
+                    <Input
+                        label="Semester"
+                        type="number"
+                        value={formData.semester}
+                        onChange={(e) => setFormData({ ...formData, semester: e.target.value })}
+                        min="1"
+                        max="40"
+                        placeholder="e.g., 1"
+                        required
+                    />
+                </div>
+
                 <Input
-                    label="Room Number"
-                    value={formData.roomNumber}
-                    onChange={(e) => setFormData({ ...formData, roomNumber: e.target.value })}
-                    placeholder="e.g., Room 101"
+                    label="Academic Year"
+                    value={formData.academicYear}
+                    onChange={(e) => setFormData({ ...formData, academicYear: e.target.value })}
+                    placeholder="e.g., 2024-2025"
+                    required
                 />
 
                 <div className="flex gap-3 pt-4">

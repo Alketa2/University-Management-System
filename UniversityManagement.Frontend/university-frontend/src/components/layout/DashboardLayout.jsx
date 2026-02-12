@@ -11,7 +11,6 @@ const Sidebar = ({ activeTab, setActiveTab, userRole }) => {
         { id: 'programs', label: 'Programs', icon: '📚', roles: ['Admin', 'Teacher', 'Student'] },
         { id: 'subjects', label: 'Subjects', icon: '📖', roles: ['Admin', 'Teacher', 'Student'] },
         { id: 'exams', label: 'Exams', icon: '📝', roles: ['Admin', 'Teacher', 'Student'] },
-        { id: 'attendance', label: 'Attendance', icon: '✓', roles: ['Admin', 'Teacher', 'Student'] },
         { id: 'timetable', label: 'Timetable', icon: '📅', roles: ['Admin', 'Teacher', 'Student'] },
         { id: 'announcements', label: 'Announcements', icon: '📢', roles: ['Admin', 'Teacher', 'Student'] },
     ];

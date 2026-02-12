@@ -97,4 +97,14 @@ public class AttendanceController : ControllerBase
         var attendances = await _attendanceService.GetAttendanceBySubjectAsync(subjectId, date);
         return Ok(attendances);
     }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(List<AttendanceResponseDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<AttendanceResponseDto>>> GetAllAttendance()
+    {
+        // all students' attendance
+        var attendances = new List<AttendanceResponseDto>();
+      
+        return Ok(attendances);
+    }
 }
