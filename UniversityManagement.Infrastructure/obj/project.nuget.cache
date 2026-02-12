@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zYHhMFJryOA=",
+  "dgSpecHash": "bSJ5EyYniTE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj",
+  "projectFilePath": "c:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Alketa\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Alketa\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",

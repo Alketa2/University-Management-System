@@ -2589,11 +2589,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj",
+      "projectUniqueName": "c:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj",
       "projectName": "UniversityManagement.Infrastructure",
-      "projectPath": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj",
+      "projectPath": "c:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\Alketa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Infrastructure\\obj\\",
+      "outputPath": "c:\\Users\\Alketa\\source\\repos\\University-Management-System\\UniversityManagement.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

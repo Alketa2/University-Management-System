@@ -9,7 +9,7 @@ export const API_ENDPOINTS = {
     REFRESH: `${API_BASE_URL}/Auth/refresh`,
     LOGOUT: `${API_BASE_URL}/Auth/logout`,
   },
-  
+
   // Students endpoints
   STUDENTS: {
     BASE: `${API_BASE_URL}/Students`,
@@ -17,33 +17,33 @@ export const API_ENDPOINTS = {
     PROGRAMS: (id) => `${API_BASE_URL}/Students/${id}/programs`,
     ADMIT_TO_PROGRAM: `${API_BASE_URL}/Students/admit-to-program`,
   },
-  
+
   // Teachers endpoints
   TEACHERS: {
     BASE: `${API_BASE_URL}/Teachers`,
     BY_ID: (id) => `${API_BASE_URL}/Teachers/${id}`,
   },
-  
+
   // Programs endpoints
   PROGRAMS: {
     BASE: `${API_BASE_URL}/Programs`,
     BY_ID: (id) => `${API_BASE_URL}/Programs/${id}`,
   },
-  
+
   // Subjects endpoints
   SUBJECTS: {
     BASE: `${API_BASE_URL}/Subjects`,
     BY_ID: (id) => `${API_BASE_URL}/Subjects/${id}`,
     BY_PROGRAM: (programId) => `${API_BASE_URL}/Subjects/program/${programId}`,
   },
-  
+
   // Exams endpoints
   EXAMS: {
     BASE: `${API_BASE_URL}/Exams`,
     BY_ID: (id) => `${API_BASE_URL}/Exams/${id}`,
     BY_SUBJECT: (subjectId) => `${API_BASE_URL}/Exams/subject/${subjectId}`,
   },
-  
+
   // Announcements endpoints
   ANNOUNCEMENTS: {
     BASE: `${API_BASE_URL}/Announcements`,
@@ -51,15 +51,17 @@ export const API_ENDPOINTS = {
     ACTIVE: `${API_BASE_URL}/Announcements/active`,
     BY_TEACHER: (teacherId) => `${API_BASE_URL}/Announcements/teacher/${teacherId}`,
   },
-  
-  // Attendance endpoints
-  ATTENDANCE: {
-    BASE: `${API_BASE_URL}/Attendance`,
-    BY_ID: (id) => `${API_BASE_URL}/Attendance/${id}`,
-    BY_STUDENT: (studentId) => `${API_BASE_URL}/Attendance/student/${studentId}`,
-    BY_SUBJECT: (subjectId) => `${API_BASE_URL}/Attendance/subject/${subjectId}`,
+
+  // Grades endpoints
+  GRADES: {
+    BASE: `${API_BASE_URL}/Grades`,
+    BY_ID: (id) => `${API_BASE_URL}/Grades/${id}`,
+    BY_STUDENT: (studentId) => `${API_BASE_URL}/Grades/student/${studentId}`,
+    BY_SUBJECT: (subjectId) => `${API_BASE_URL}/Grades/subject/${subjectId}`,
+    BY_EXAM: (examId) => `${API_BASE_URL}/Grades/exam/${examId}`,
+    GPA: (studentId) => `${API_BASE_URL}/Grades/gpa/student/${studentId}`,
   },
-  
+
   // Timetables endpoints
   TIMETABLES: {
     BASE: `${API_BASE_URL}/Timetables`,

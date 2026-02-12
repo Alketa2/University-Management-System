@@ -24,7 +24,7 @@ public class Student : BaseEntity
 
     // Navigation properties
     public ICollection<StudentProgram> StudentPrograms { get; set; } = new List<StudentProgram>();
-    public ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
+   
 }
 
 public enum StudentStatus

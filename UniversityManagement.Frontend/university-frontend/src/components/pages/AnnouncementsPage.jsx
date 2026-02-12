@@ -13,7 +13,7 @@ const AnnouncementsPage = () => {
     const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
 
-    const currentUser = authService.getCurrentUser();
+    const currentUser = authService.getUser();
     const isAdmin = currentUser?.role === 'Admin';
 
     useEffect(() => {

@@ -45,7 +45,8 @@ if (string.IsNullOrWhiteSpace(cs))
 
 builder.Services.AddDbContext<UniversityDbContext>(options =>
 {
-    options.UseMySql(cs, ServerVersion.AutoDetect(cs));
+    options.UseMySql(cs, ServerVersion.AutoDetect(cs), 
+        mySqlOptions => mySqlOptions.MigrationsAssembly("UniversityManagement.Infrastructure"));
 });
 
 //  Password hasher for AppUser
@@ -184,7 +185,6 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentProgramRepository, StudentProgramRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
-builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 builder.Services.AddScoped<IExamRepository, ExamRepository>();
 builder.Services.AddScoped<ITimetableRepository, TimetableRepository>();
 builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
@@ -194,10 +194,10 @@ builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IProgramService, ProgramService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
-builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddScoped<IExamService, ExamService>();
 builder.Services.AddScoped<ITimetableService, TimetableService>();
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
+builder.Services.AddScoped<IGradeService, GradeService>();
 
 var app = builder.Build();
 

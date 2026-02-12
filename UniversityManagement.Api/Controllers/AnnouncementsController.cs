@@ -65,6 +65,14 @@ public class AnnouncementsController : ControllerBase
         return announcement is null ? NotFound() : Ok(announcement);
     }
 
+    [HttpGet]
+    [ProducesResponseType(typeof(List<AnnouncementResponseDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<AnnouncementResponseDto>>> GetAllAnnouncements()
+    {
+        var announcements = await _announcementService.GetActiveAnnouncementsAsync(null, null);
+        return Ok(announcements);
+    }
+
     [HttpGet("active")]
     [ProducesResponseType(typeof(List<AnnouncementResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<AnnouncementResponseDto>>> GetActiveAnnouncements(

@@ -7,6 +7,7 @@ import TeachersPage from './components/pages/TeachersPage';
 import ProgramsPage from './components/pages/ProgramsPage';
 import SubjectsPage from './components/pages/SubjectsPage';
 import ExamsPage from './components/pages/ExamsPage';
+import GradesPage from './components/pages/GradesPage';
 import TimetablePage from './components/pages/TimetablePage';
 import AnnouncementsPage from './components/pages/AnnouncementsPage';
 import authService from './utils/authService';
@@ -67,6 +68,8 @@ function App() {
             return <SubjectsPage />;
           case 'exams':
             return <ExamsPage />;
+          case 'grades':
+            return <GradesPage />;
           case 'timetable':
             return <TimetablePage />;
           case 'announcements':

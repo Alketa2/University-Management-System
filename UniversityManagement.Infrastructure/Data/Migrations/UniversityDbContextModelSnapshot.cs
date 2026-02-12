@@ -19,7 +19,7 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("UniversityManagement.Domain.Entities.Announcement", b =>
+            modelBuilder.Entity("Announcement", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -27,8 +27,7 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("varchar(5000)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
@@ -42,16 +41,14 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
                     b.Property<Guid?>("ProgramId")
                         .HasColumnType("char(36)");
 
-                    b.Property<DateTime>("PublishDate")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<Guid?>("SubjectId")
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("TargetAudience")
-                        .HasColumnType("int");
+                    b.Property<string>("TargetAudience")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.Property<Guid>("TeacherId")
+                    b.Property<Guid?>("TeacherId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Title")
@@ -102,12 +99,13 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
@@ -118,43 +116,6 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("UniversityManagement.Domain.Entities.Attendance", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("AttendanceDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(1000)
-                        .HasColumnType("varchar(1000)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("SubjectId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.ToTable("Attendances");
                 });
 
             modelBuilder.Entity("UniversityManagement.Domain.Entities.Exam", b =>
@@ -201,6 +162,72 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
                     b.HasIndex("SubjectId");
 
                     b.ToTable("Exams");
+                });
+
+            modelBuilder.Entity("UniversityManagement.Domain.Entities.Grade", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("AcademicYear")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Comments")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("ExamId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<decimal>("GradePoint")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<Guid?>("GradedByTeacherId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("LetterGrade")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("varchar(2)");
+
+                    b.Property<decimal>("MaxScore")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("Percentage")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("Score")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("Semester")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExamId");
+
+                    b.HasIndex("GradedByTeacherId");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("Grades");
                 });
 
             modelBuilder.Entity("UniversityManagement.Domain.Entities.Program", b =>
@@ -269,6 +296,7 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
 
                     b.Property<string>("Token")
                         .IsRequired()
+                        .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -335,10 +363,8 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("UniversityManagement.Domain.Entities.StudentProgram", b =>
                 {
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("ProgramId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("AdmissionDate")
@@ -347,15 +373,20 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ProgramId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("StudentId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("StudentId", "ProgramId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ProgramId");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("StudentPrograms");
                 });
@@ -505,12 +536,11 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
                     b.ToTable("Timetables");
                 });
 
-            modelBuilder.Entity("UniversityManagement.Domain.Entities.Announcement", b =>
+            modelBuilder.Entity("Announcement", b =>
                 {
                     b.HasOne("UniversityManagement.Domain.Entities.Program", "Program")
                         .WithMany("Announcements")
-                        .HasForeignKey("ProgramId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProgramId");
 
                     b.HasOne("UniversityManagement.Domain.Entities.Subject", "Subject")
                         .WithMany()
@@ -518,9 +548,7 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
 
                     b.HasOne("UniversityManagement.Domain.Entities.Teacher", "Teacher")
                         .WithMany("Announcements")
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .HasForeignKey("TeacherId");
 
                     b.Navigation("Program");
 
@@ -529,10 +557,29 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("UniversityManagement.Domain.Entities.Attendance", b =>
+            modelBuilder.Entity("UniversityManagement.Domain.Entities.Exam", b =>
                 {
+                    b.HasOne("UniversityManagement.Domain.Entities.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("UniversityManagement.Domain.Entities.Grade", b =>
+                {
+                    b.HasOne("UniversityManagement.Domain.Entities.Exam", "Exam")
+                        .WithMany()
+                        .HasForeignKey("ExamId");
+
+                    b.HasOne("UniversityManagement.Domain.Entities.Teacher", "GradedByTeacher")
+                        .WithMany()
+                        .HasForeignKey("GradedByTeacherId");
+
                     b.HasOne("UniversityManagement.Domain.Entities.Student", "Student")
-                        .WithMany("Attendances")
+                        .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -543,18 +590,11 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Exam");
+
+                    b.Navigation("GradedByTeacher");
+
                     b.Navigation("Student");
-
-                    b.Navigation("Subject");
-                });
-
-            modelBuilder.Entity("UniversityManagement.Domain.Entities.Exam", b =>
-                {
-                    b.HasOne("UniversityManagement.Domain.Entities.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Subject");
                 });
@@ -594,13 +634,13 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
                     b.HasOne("UniversityManagement.Domain.Entities.Program", "Program")
                         .WithMany("Subjects")
                         .HasForeignKey("ProgramId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("UniversityManagement.Domain.Entities.Teacher", "Teacher")
                         .WithMany("Subjects")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Program");
@@ -645,8 +685,6 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("UniversityManagement.Domain.Entities.Student", b =>
                 {
-                    b.Navigation("Attendances");
-
                     b.Navigation("StudentPrograms");
                 });
 

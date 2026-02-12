@@ -13,9 +13,9 @@ namespace UniversityManagement.Infrastructure.Data
         public DbSet<Subject> Subjects => Set<Subject>();
         public DbSet<Program> Programs => Set<Program>();
         public DbSet<Exam> Exams => Set<Exam>();
-        public DbSet<Attendance> Attendances => Set<Attendance>();
         public DbSet<Timetable> Timetables => Set<Timetable>();
         public DbSet<Announcement> Announcements => Set<Announcement>();
+        public DbSet<Grade> Grades => Set<Grade>();
         public DbSet<StudentProgram> StudentPrograms => Set<StudentProgram>();
         //  Auth tables
         public DbSet<AppUser> Users => Set<AppUser>();
