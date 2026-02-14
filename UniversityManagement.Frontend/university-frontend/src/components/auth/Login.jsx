@@ -97,7 +97,7 @@ const Login = ({ onLoginSuccess }) => {
 
                 {/* Footer info */}
                 <div className="mt-6 text-center text-sm text-slate-500">
-                    <p>University Management System v1.0</p>
+                    <p>University Management System </p>
                 </div>
             </div>
         </div>
@@ -111,7 +111,6 @@ const Register = ({ onBack, onRegisterSuccess }) => {
         email: '',
         password: '',
         confirmPassword: '',
-        role: 'Student',
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -140,8 +139,8 @@ const Register = ({ onBack, onRegisterSuccess }) => {
                 formData.firstName,
                 formData.lastName,
                 formData.email,
-                formData.password,
-                formData.role
+                formData.password
+                
             );
             onRegisterSuccess();
         } catch (err) {
@@ -196,22 +195,6 @@ const Register = ({ onBack, onRegisterSuccess }) => {
                             onChange={handleChange}
                             required
                         />
-
-                        <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-2">
-                                Role
-                            </label>
-                            <select
-                                name="role"
-                                value={formData.role}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                            >
-                                <option value="Student">Student</option>
-                                <option value="Teacher">Teacher</option>
-                                <option value="Admin">Admin</option>
-                            </select>
-                        </div>
 
                         <Input
                             label="Password"
