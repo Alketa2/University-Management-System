@@ -7,6 +7,7 @@ C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.A
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\UniversityManagement.Api.dll
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\UniversityManagement.Api.pdb
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Humanizer.dll
+C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.dll
@@ -17,6 +18,12 @@ C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.A
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.OpenApi.dll
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Mono.TextTemplating.dll
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\MySqlConnector.dll
@@ -30,6 +37,7 @@ C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.A
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\System.Composition.Hosting.dll
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\System.Composition.Runtime.dll
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\System.Composition.TypedParts.dll
+C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.resources.dll
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.resources.dll
@@ -111,11 +119,3 @@ C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.A
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\obj\Debug\net8.0\UniversityManagement.Api.pdb
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\obj\Debug\net8.0\UniversityManagement.Api.genruntimeconfig.cache
 C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\obj\Debug\net8.0\ref\UniversityManagement.Api.dll
-C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
-C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
-C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
-C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
-C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
-C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
-C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
-C:\Users\Alketa\source\repos\University-Management-System\UniversityManagement.Api\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll

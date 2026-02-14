@@ -11,7 +11,7 @@ using UniversityManagement.Infrastructure.Data;
 namespace UniversityManagement.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(UniversityDbContext))]
-    [Migration("20260212210309_AddGradesTable")]
+    [Migration("20260214184933_AddGradesTable")]
     partial class AddGradesTable
     {
         /// <inheritdoc />

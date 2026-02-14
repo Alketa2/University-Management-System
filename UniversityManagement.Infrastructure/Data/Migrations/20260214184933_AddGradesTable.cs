@@ -11,32 +11,152 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Announcements_Programs_ProgramId",
-                table: "Announcements");
+            // Conditionally drop foreign keys if they exist
+            migrationBuilder.Sql(@"
+                SET @constraintExists = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
+                    WHERE CONSTRAINT_SCHEMA = DATABASE() 
+                    AND TABLE_NAME = 'Announcements' 
+                    AND CONSTRAINT_NAME = 'FK_Announcements_Programs_ProgramId'
+                    AND CONSTRAINT_TYPE = 'FOREIGN KEY');
+                
+                SET @sqlStatement = IF(@constraintExists > 0, 
+                    'ALTER TABLE `Announcements` DROP FOREIGN KEY `FK_Announcements_Programs_ProgramId`', 
+                    'SELECT ''Constraint does not exist'' AS msg');
+                
+                PREPARE stmt FROM @sqlStatement;
+                EXECUTE stmt;
+                DEALLOCATE PREPARE stmt;
+            ");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_Announcements_Teachers_TeacherId",
-                table: "Announcements");
+            migrationBuilder.Sql(@"
+                SET @constraintExists = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
+                    WHERE CONSTRAINT_SCHEMA = DATABASE() 
+                    AND TABLE_NAME = 'Announcements' 
+                    AND CONSTRAINT_NAME = 'FK_Announcements_Teachers_TeacherId'
+                    AND CONSTRAINT_TYPE = 'FOREIGN KEY');
+                
+                SET @sqlStatement = IF(@constraintExists > 0, 
+                    'ALTER TABLE `Announcements` DROP FOREIGN KEY `FK_Announcements_Teachers_TeacherId`', 
+                    'SELECT ''Constraint does not exist'' AS msg');
+                
+                PREPARE stmt FROM @sqlStatement;
+                EXECUTE stmt;
+                DEALLOCATE PREPARE stmt;
+            ");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_Subjects_Programs_ProgramId",
-                table: "Subjects");
+            migrationBuilder.Sql(@"
+                SET @constraintExists = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
+                    WHERE CONSTRAINT_SCHEMA = DATABASE() 
+                    AND TABLE_NAME = 'Subjects' 
+                    AND CONSTRAINT_NAME = 'FK_Subjects_Programs_ProgramId'
+                    AND CONSTRAINT_TYPE = 'FOREIGN KEY');
+                
+                SET @sqlStatement = IF(@constraintExists > 0, 
+                    'ALTER TABLE `Subjects` DROP FOREIGN KEY `FK_Subjects_Programs_ProgramId`', 
+                    'SELECT ''Constraint does not exist'' AS msg');
+                
+                PREPARE stmt FROM @sqlStatement;
+                EXECUTE stmt;
+                DEALLOCATE PREPARE stmt;
+            ");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_Subjects_Teachers_TeacherId",
-                table: "Subjects");
+            migrationBuilder.Sql(@"
+                SET @constraintExists = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
+                    WHERE CONSTRAINT_SCHEMA = DATABASE() 
+                    AND TABLE_NAME = 'Subjects' 
+                    AND CONSTRAINT_NAME = 'FK_Subjects_Teachers_TeacherId'
+                    AND CONSTRAINT_TYPE = 'FOREIGN KEY');
+                
+                SET @sqlStatement = IF(@constraintExists > 0, 
+                    'ALTER TABLE `Subjects` DROP FOREIGN KEY `FK_Subjects_Teachers_TeacherId`', 
+                    'SELECT ''Constraint does not exist'' AS msg');
+                
+                PREPARE stmt FROM @sqlStatement;
+                EXECUTE stmt;
+                DEALLOCATE PREPARE stmt;
+            ");
 
-            migrationBuilder.DropTable(
-                name: "Attendances");
+            // Conditionally drop Attendances table if it exists
+            migrationBuilder.Sql(@"
+                SET @tableExists = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES 
+                    WHERE TABLE_SCHEMA = DATABASE() 
+                    AND TABLE_NAME = 'Attendances');
+                
+                SET @sqlStatement = IF(@tableExists > 0, 
+                    'DROP TABLE `Attendances`', 
+                    'SELECT ''Table does not exist'' AS msg');
+                
+                PREPARE stmt FROM @sqlStatement;
+                EXECUTE stmt;
+                DEALLOCATE PREPARE stmt;
+            ");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_StudentPrograms",
-                table: "StudentPrograms");
+            // Drop StudentPrograms FK constraints before changing PK
+            migrationBuilder.Sql(@"
+                SET @constraintExists = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
+                    WHERE CONSTRAINT_SCHEMA = DATABASE() 
+                    AND TABLE_NAME = 'StudentPrograms' 
+                    AND CONSTRAINT_NAME = 'FK_StudentPrograms_Programs_ProgramId'
+                    AND CONSTRAINT_TYPE = 'FOREIGN KEY');
+                
+                SET @sqlStatement = IF(@constraintExists > 0, 
+                    'ALTER TABLE `StudentPrograms` DROP FOREIGN KEY `FK_StudentPrograms_Programs_ProgramId`', 
+                    'SELECT ''Constraint does not exist'' AS msg');
+                
+                PREPARE stmt FROM @sqlStatement;
+                EXECUTE stmt;
+                DEALLOCATE PREPARE stmt;
+            ");
 
-            migrationBuilder.DropColumn(
-                name: "PublishDate",
-                table: "Announcements");
+            migrationBuilder.Sql(@"
+                SET @constraintExists = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
+                    WHERE CONSTRAINT_SCHEMA = DATABASE() 
+                    AND TABLE_NAME = 'StudentPrograms' 
+                    AND CONSTRAINT_NAME = 'FK_StudentPrograms_Students_StudentId'
+                    AND CONSTRAINT_TYPE = 'FOREIGN KEY');
+                
+                SET @sqlStatement = IF(@constraintExists > 0, 
+                    'ALTER TABLE `StudentPrograms` DROP FOREIGN KEY `FK_StudentPrograms_Students_StudentId`', 
+                    'SELECT ''Constraint does not exist'' AS msg');
+                
+                PREPARE stmt FROM @sqlStatement;
+                EXECUTE stmt;
+                DEALLOCATE PREPARE stmt;
+            ");
+
+            // Drop and recreate PK on StudentPrograms
+            migrationBuilder.Sql(@"
+                -- Drop old composite PK if it exists
+                SET @pkExists = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
+                    WHERE CONSTRAINT_SCHEMA = DATABASE() 
+                    AND TABLE_NAME = 'StudentPrograms' 
+                    AND CONSTRAINT_TYPE = 'PRIMARY KEY');
+                
+                SET @sqlStatement = IF(@pkExists > 0, 
+                    'ALTER TABLE `StudentPrograms` DROP PRIMARY KEY', 
+                    'SELECT ''PK does not exist'' AS msg');
+                
+                PREPARE stmt FROM @sqlStatement;
+                EXECUTE stmt;
+                DEALLOCATE PREPARE stmt;
+            ");
+
+            // Conditionally drop PublishDate column if it exists
+            migrationBuilder.Sql(@"
+                SET @columnExists = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+                    WHERE TABLE_SCHEMA = DATABASE() 
+                    AND TABLE_NAME = 'Announcements' 
+                    AND COLUMN_NAME = 'PublishDate');
+                
+                SET @sqlStatement = IF(@columnExists > 0, 
+                    'ALTER TABLE `Announcements` DROP COLUMN `PublishDate`', 
+                    'SELECT ''Column does not exist'' AS msg');
+                
+                PREPARE stmt FROM @sqlStatement;
+                EXECUTE stmt;
+                DEALLOCATE PREPARE stmt;
+            ");
+
 
             migrationBuilder.AlterColumn<string>(
                 name: "Role",
@@ -91,10 +211,54 @@ namespace UniversityManagement.Infrastructure.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4")
                 .OldAnnotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_StudentPrograms",
-                table: "StudentPrograms",
-                column: "Id");
+            // Add new single-column PK on StudentPrograms (if not already exists)
+            migrationBuilder.Sql(@"
+                SET @pkExists = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
+                    WHERE CONSTRAINT_SCHEMA = DATABASE() 
+                    AND TABLE_NAME = 'StudentPrograms' 
+                    AND CONSTRAINT_TYPE = 'PRIMARY KEY');
+                
+                SET @sqlStatement = IF(@pkExists = 0, 
+                    'ALTER TABLE `StudentPrograms` ADD PRIMARY KEY (`Id`)', 
+                    'SELECT ''PK already exists'' AS msg');
+                
+                PREPARE stmt FROM @sqlStatement;
+                EXECUTE stmt;
+                DEALLOCATE PREPARE stmt;
+            ");
+            
+            // Recreate FK constraints for StudentPrograms
+            migrationBuilder.Sql(@"
+                SET @constraintExists = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
+                    WHERE CONSTRAINT_SCHEMA = DATABASE() 
+                    AND TABLE_NAME = 'StudentPrograms' 
+                    AND CONSTRAINT_NAME = 'FK_StudentPrograms_Students_StudentId'
+                    AND CONSTRAINT_TYPE = 'FOREIGN KEY');
+                
+                SET @sqlStatement = IF(@constraintExists = 0, 
+                    'ALTER TABLE `StudentPrograms` ADD CONSTRAINT `FK_StudentPrograms_Students_StudentId` FOREIGN KEY (`StudentId`) REFERENCES `Students` (`Id`) ON DELETE CASCADE', 
+                    'SELECT ''FK already exists'' AS msg');
+                
+                PREPARE stmt FROM @sqlStatement;
+                EXECUTE stmt;
+                DEALLOCATE PREPARE stmt;
+            ");
+
+            migrationBuilder.Sql(@"
+                SET @constraintExists = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
+                    WHERE CONSTRAINT_SCHEMA = DATABASE() 
+                    AND TABLE_NAME = 'StudentPrograms' 
+                    AND CONSTRAINT_NAME = 'FK_StudentPrograms_Programs_ProgramId'
+                    AND CONSTRAINT_TYPE = 'FOREIGN KEY');
+                
+                SET @sqlStatement = IF(@constraintExists = 0, 
+                    'ALTER TABLE `StudentPrograms` ADD CONSTRAINT `FK_StudentPrograms_Programs_ProgramId` FOREIGN KEY (`ProgramId`) REFERENCES `Programs` (`Id`) ON DELETE CASCADE', 
+                    'SELECT ''FK already exists'' AS msg');
+                
+                PREPARE stmt FROM @sqlStatement;
+                EXECUTE stmt;
+                DEALLOCATE PREPARE stmt;
+            ");
 
             migrationBuilder.CreateTable(
                 name: "Grades",
