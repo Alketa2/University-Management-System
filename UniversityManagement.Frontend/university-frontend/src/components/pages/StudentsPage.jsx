@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Card, Input, Modal, Badge, Alert, Spinner } from '../ui/UIComponents';
+import { Button, Card, Input, Modal, Badge, Alert, Spinner, Select } from '../ui/UIComponents';
 import apiClient from '../../utils/apiClient';
 import { API_ENDPOINTS } from '../../config/api';
 
@@ -225,9 +225,24 @@ const StudentModal = ({ isOpen, onClose, student, onSuccess }) => {
         phone: '',
         dateOfBirth: '',
         address: '',
+        primaryProgramId: '',
     });
+    const [programs, setPrograms] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+
+    useEffect(() => {
+        fetchPrograms();
+    }, []);
+
+    const fetchPrograms = async () => {
+        try {
+            const data = await apiClient.get(API_ENDPOINTS.PROGRAMS.BASE);
+            setPrograms(data);
+        } catch (err) {
+            console.error('Failed to fetch programs:', err);
+        }
+    };
 
     useEffect(() => {
         if (student) {
@@ -238,6 +253,7 @@ const StudentModal = ({ isOpen, onClose, student, onSuccess }) => {
                 phone: student.phone || '',
                 dateOfBirth: student.dateOfBirth ? student.dateOfBirth.split('T')[0] : '',
                 address: student.address || '',
+                primaryProgramId: student.primaryProgramId || '',
             });
         } else {
             setFormData({
@@ -247,6 +263,7 @@ const StudentModal = ({ isOpen, onClose, student, onSuccess }) => {
                 phone: '',
                 dateOfBirth: '',
                 address: '',
+                primaryProgramId: '',
             });
         }
     }, [student]);
@@ -324,6 +341,16 @@ const StudentModal = ({ isOpen, onClose, student, onSuccess }) => {
                     label="Address"
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                />
+
+                <Select
+                    label="Primary Program"
+                    value={formData.primaryProgramId}
+                    onChange={(e) => setFormData({ ...formData, primaryProgramId: e.target.value })}
+                    options={[
+                        { value: '', label: 'Select Primary Program (Optional)' },
+                        ...programs.filter(p => p.isActive !== false).map(p => ({ value: p.id, label: p.name }))
+                    ]}
                 />
 
                 <div className="flex gap-3 pt-4">

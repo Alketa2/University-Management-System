@@ -60,15 +60,35 @@ const TimetablePage = () => {
         return subject ? subject.name : 'Unknown Subject';
     };
 
-    const filteredTimetables = timetables.filter(timetable =>
-        getProgramName(timetable.programId)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        getSubjectName(timetable.subjectId)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        timetable.dayOfWeek?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredTimetables = timetables.filter(timetable => {
+        const matchesSearch = getProgramName(timetable.programId)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            getSubjectName(timetable.subjectId)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            timetable.dayOfWeek?.toLowerCase().includes(searchTerm.toLowerCase());
+
+        // Filter by program for students
+        if (isStudent) {
+            const currentUser = authService.getUser();
+            const studentProgramId = currentUser?.primaryProgramId;
+            return matchesSearch && (!studentProgramId || timetable.programId === studentProgramId);
+        }
+
+        return matchesSearch;
+    });
 
     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const todayName = daysOfWeek[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
-    const todayClasses = timetables.filter(t => t.dayOfWeek === todayName);
+
+    const todayClasses = timetables.filter(t => {
+        const isToday = t.dayOfWeek === todayName;
+
+        if (isStudent) {
+            const currentUser = authService.getUser();
+            const studentProgramId = currentUser?.primaryProgramId;
+            return isToday && (!studentProgramId || t.programId === studentProgramId);
+        }
+
+        return isToday;
+    });
 
     if (loading) {
         return (

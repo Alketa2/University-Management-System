@@ -11,6 +11,8 @@ public class StudentResponseDto
     public string? Address { get; set; }
     public DateTime EnrollmentDate { get; set; }
     public string Status { get; set; } = string.Empty;
+    public Guid? PrimaryProgramId { get; set; }
+    public string? PrimaryProgramName { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 }

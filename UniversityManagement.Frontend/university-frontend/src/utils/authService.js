@@ -31,6 +31,9 @@ class AuthService {
             id: authResponse.userId || null,
             email: authResponse.email,
             role: authResponse.role,
+            primaryProgramId: authResponse.primaryProgramId || null,
+            studentId: authResponse.studentId || null,
+            teacherId: authResponse.teacherId || null,
         }));
     }
 

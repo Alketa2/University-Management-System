@@ -17,6 +17,8 @@ const GradesPage = () => {
     const [filterStudent, setFilterStudent] = useState('');
 
     const currentUser = authService.getUser();
+    const userRole = authService.getUserRole();
+    const isStudent = userRole === 'Student';
     const isAdmin = currentUser?.role === 'Admin';
     const isTeacher = currentUser?.role === 'Teacher';
 
@@ -27,19 +29,42 @@ const GradesPage = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const [studentsData, subjectsData, examsData] = await Promise.all([
-                apiClient.get(API_ENDPOINTS.STUDENTS.BASE),
+            const fetchPromises = [
                 apiClient.get(API_ENDPOINTS.SUBJECTS.BASE),
                 apiClient.get(API_ENDPOINTS.EXAMS.BASE),
-            ]);
-            setStudents(studentsData);
+            ];
+
+            if (!isStudent) {
+                fetchPromises.push(apiClient.get(API_ENDPOINTS.STUDENTS.BASE));
+            }
+
+            const results = await Promise.all(fetchPromises);
+            const subjectsData = results[0];
+            const examsData = results[1];
+            const studentsData = isStudent ? [] : results[2];
+
             setSubjects(subjectsData);
             setExams(examsData);
 
             // Load grades if a subject is selected
-            if (filterSubject) {
-                const gradesData = await apiClient.get(API_ENDPOINTS.GRADES.BY_SUBJECT(filterSubject));
-                setGrades(gradesData);
+            if (isStudent) {
+                const studentId = currentUser?.studentId;
+                if (studentId) {
+                    const gradesData = await apiClient.get(API_ENDPOINTS.GRADES.BY_STUDENT(studentId));
+                    setGrades(gradesData);
+                } else {
+                    setGrades([]);
+                }
+                setStudents([]);
+            } else {
+                setStudents(studentsData);
+
+                if (filterSubject) {
+                    const gradesData = await apiClient.get(API_ENDPOINTS.GRADES.BY_SUBJECT(filterSubject));
+                    setGrades(gradesData);
+                } else {
+                    setGrades([]);
+                }
             }
         } catch (err) {
             setError(err.message || 'Failed to fetch data');
@@ -50,6 +75,10 @@ const GradesPage = () => {
 
     const handleSubjectChange = async (subjectId) => {
         setFilterSubject(subjectId);
+        if (isStudent) {
+            return;
+        }
+
         if (subjectId) {
             try {
                 const gradesData = await apiClient.get(API_ENDPOINTS.GRADES.BY_SUBJECT(subjectId));
@@ -115,8 +144,9 @@ const GradesPage = () => {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold text-white">Grade Management</h2>
-                    <p className="text-slate-400 mt-1">Enter and manage student grades</p>
+                    <h2 className="text-3xl font-bold text-white">{isStudent ? 'My Grades' : 'Grade Management'}</h2>
+                    <p className="text-slate-400 mt-1">{isStudent ? 'View your academic grades' : 'Enter and manage student grades'}</p>
+
                 </div>
                 {(isAdmin || isTeacher) && (
                     <Button onClick={() => { setSelectedGrade(null); setIsModalOpen(true); }}>
@@ -139,15 +169,17 @@ const GradesPage = () => {
                             ...subjects.map(s => ({ value: s.id, label: `${s.code} - ${s.name}` }))
                         ]}
                     />
-                    <Select
-                        label="Filter by Student"
-                        value={filterStudent}
-                        onChange={(e) => setFilterStudent(e.target.value)}
-                        options={[
-                            { value: '', label: 'All Students' },
-                            ...students.map(s => ({ value: s.id, label: `${s.firstName} ${s.lastName}` }))
-                        ]}
-                    />
+                    {!isStudent && (
+                        <Select
+                            label="Filter by Student"
+                            value={filterStudent}
+                            onChange={(e) => setFilterStudent(e.target.value)}
+                            options={[
+                                { value: '', label: 'All Students' },
+                                ...students.map(s => ({ value: s.id, label: `${s.firstName} ${s.lastName}` }))
+                            ]}
+                        />
+                    )}
                 </div>
             </Card>
 
@@ -197,7 +229,7 @@ const GradesPage = () => {
             <Card>
                 {filteredGrades.length === 0 ? (
                     <div className="text-center py-12 text-slate-400">
-                        {filterSubject ? 'No grades found for this subject' : 'Select a subject to view grades'}
+                        {isStudent ? 'No grades found' : (filterSubject ? 'No grades found for this subject' : 'Select a subject to view grades')}
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
@@ -336,7 +368,7 @@ const GradeModal = ({ isOpen, onClose, grade, students, subjects, exams, onSucce
                 score: parseFloat(formData.score),
                 maxScore: parseFloat(formData.maxScore),
                 comments: formData.comments || null,
-                gradedByTeacherId: currentUser?.id || '00000000-0000-0000-0000-000000000000',
+                gradedByTeacherId: currentUser?.teacherId || null,
                 academicYear: formData.academicYear,
                 semester: parseInt(formData.semester),
             };

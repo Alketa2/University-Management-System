@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button, Card, Input, Modal, Badge, Alert, Spinner, Select } from '../ui/UIComponents';
 import apiClient from '../../utils/apiClient';
 import { API_ENDPOINTS } from '../../config/api';
+import authService from '../../utils/authService';
 
 const ExamsPage = () => {
     const [exams, setExams] = useState([]);
@@ -11,6 +12,10 @@ const ExamsPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedExam, setSelectedExam] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+
+    const userRole = authService.getUserRole();
+    const isStudent = userRole === 'Student';
+
 
     useEffect(() => {
         fetchData();
@@ -81,12 +86,14 @@ const ExamsPage = () => {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold text-white">Exams Management</h2>
-                    <p className="text-slate-400 mt-1">Schedule and manage examinations</p>
+                     <h2 className="text-3xl font-bold text-white">{isStudent ? 'Examinations' : 'Exams Management'}</h2>
+                    <p className="text-slate-400 mt-1">{isStudent ? 'View scheduled examinations' : 'Schedule and manage examinations'}</p>
                 </div>
-                <Button onClick={() => { setSelectedExam(null); setIsModalOpen(true); }}>
-                    + Schedule Exam
-                </Button>
+                 {!isStudent && (
+                    <Button onClick={() => { setSelectedExam(null); setIsModalOpen(true); }}>
+                        + Schedule Exam
+                    </Button>
+                )}
             </div>
 
             {error && <Alert type="error" message={error} onClose={() => setError('')} />}
@@ -171,13 +178,15 @@ const ExamsPage = () => {
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Date</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Time</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Status</th>
-                                <th className="text-right py-4 px-4 text-sm font-semibold text-slate-300">Actions</th>
+                                {!isStudent && (
+                                    <th className="text-right py-4 px-4 text-sm font-semibold text-slate-300">Actions</th>
+                                )}
                             </tr>
                         </thead>
                         <tbody>
                             {filteredExams.length === 0 ? (
                                 <tr>
-                                    <td colSpan="7" className="text-center py-12 text-slate-400">
+                                  <td colSpan={isStudent ? 6 : 7} className="text-center py-12 text-slate-400">
                                         No exams found
                                     </td>
                                 </tr>
@@ -209,25 +218,28 @@ const ExamsPage = () => {
                                                     {isUpcoming ? 'Upcoming' : 'Completed'}
                                                 </Badge>
                                             </td>
-                                            <td className="py-4 px-4">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() => { setSelectedExam(exam); setIsModalOpen(true); }}
-                                                    >
-                                                        Edit
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() => handleDelete(exam.id)}
-                                                        className="text-danger-400 hover:text-danger-300"
-                                                    >
-                                                        Delete
-                                                    </Button>
-                                                </div>
-                                            </td>
+                                              {!isStudent && (
+                                                <td className="py-4 px-4">
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            onClick={() => { setSelectedExam(exam); setIsModalOpen(true); }}
+                                                        >
+                                                            Edit
+                                                        </Button>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            onClick={() => handleDelete(exam.id)}
+                                                            className="text-danger-400 hover:text-danger-300"
+                                                        >
+                                                            Delete
+                                                        </Button>
+                                                    </div>
+                                                </td>
+                                            )}
+
                                         </tr>
                                     );
                                 })
@@ -238,13 +250,15 @@ const ExamsPage = () => {
             </Card>
 
             {/* Exam Modal */}
-            <ExamModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                exam={selectedExam}
-                subjects={subjects}
-                onSuccess={fetchData}
-            />
+           {!isStudent && (
+                <ExamModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    exam={selectedExam}
+                    subjects={subjects}
+                    onSuccess={fetchData}
+                />
+            )}
         </div>
     );
 };

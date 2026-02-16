@@ -9,6 +9,9 @@ public class AuthResponseDto
     public DateTime RefreshTokenExpiresAtUtc { get; set; }
 
     public Guid UserId { get; set; }
+    public Guid? StudentId { get; set; }
+    public Guid? TeacherId { get; set; }
     public string Role { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
+    public Guid? PrimaryProgramId { get; set; }
 }

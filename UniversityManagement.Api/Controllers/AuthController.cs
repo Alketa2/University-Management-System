@@ -67,15 +67,20 @@ public class AuthController : ControllerBase
 
         var (access, accessExpires) = _jwt.CreateAccessToken(user);
 
+        var (studentId, teacherId, primaryProgramId) = await GetProfileInfoAsync(user.Id, user.Role);
+
         return Created("", new AuthResponseDto
         {
             UserId = user.Id,
+            StudentId = studentId,
+            TeacherId = teacherId,
             Email = user.Email,
             Role = user.Role,
             AccessToken = access,
             AccessTokenExpiresAtUtc = accessExpires,
             RefreshToken = rawRefresh,
-            RefreshTokenExpiresAtUtc = refreshExpires
+            RefreshTokenExpiresAtUtc = refreshExpires,
+            PrimaryProgramId = primaryProgramId
         });
     }
 
@@ -106,15 +111,20 @@ public class AuthController : ControllerBase
 
         var (access, accessExpires) = _jwt.CreateAccessToken(user);
 
+        var (studentId, teacherId, primaryProgramId) = await GetProfileInfoAsync(user.Id, user.Role);
+
         return Ok(new AuthResponseDto
         {
             UserId = user.Id,
+            StudentId = studentId,
+            TeacherId = teacherId,
             Email = user.Email,
             Role = user.Role,
             AccessToken = access,
             AccessTokenExpiresAtUtc = accessExpires,
             RefreshToken = rawRefresh,
-            RefreshTokenExpiresAtUtc = refreshExpires
+            RefreshTokenExpiresAtUtc = refreshExpires,
+            PrimaryProgramId = primaryProgramId
         });
     }
 
@@ -170,15 +180,20 @@ public class AuthController : ControllerBase
 
         var (access, accessExpires) = _jwt.CreateAccessToken(token.AppUser);
 
+        var (studentId, teacherId, primaryProgramId) = await GetProfileInfoAsync(token.AppUser.Id, token.AppUser.Role);
+
         return Ok(new AuthResponseDto
         {
             UserId = token.AppUser.Id,
+            StudentId = studentId,
+            TeacherId = teacherId,
             Email = token.AppUser.Email,
             Role = token.AppUser.Role,
             AccessToken = access,
             AccessTokenExpiresAtUtc = accessExpires,
             RefreshToken = newRaw,
-            RefreshTokenExpiresAtUtc = newExpires
+            RefreshTokenExpiresAtUtc = newExpires,
+            PrimaryProgramId = primaryProgramId
         });
     }
 
@@ -197,5 +212,29 @@ public class AuthController : ControllerBase
         await _db.SaveChangesAsync();
 
         return Ok("Logged out.");
+    }
+
+    private async Task<(Guid? StudentId, Guid? TeacherId, Guid? PrimaryProgramId)> GetProfileInfoAsync(Guid userId, string role)
+    {
+        var email = await _db.Users
+            .Where(u => u.Id == userId)
+            .Select(u => u.Email)
+            .FirstOrDefaultAsync();
+
+        if (string.IsNullOrEmpty(email)) return (null, null, null);
+
+        if (role == "Student")
+        {
+            var student = await _db.Students.FirstOrDefaultAsync(s => s.Email == email);
+            return (student?.Id, null, student?.PrimaryProgramId);
+        }
+
+        if (role == "Teacher")
+        {
+            var teacher = await _db.Teachers.FirstOrDefaultAsync(t => t.Email == email);
+            return (null, teacher?.Id, null);
+        }
+
+        return (null, null, null);
     }
 }

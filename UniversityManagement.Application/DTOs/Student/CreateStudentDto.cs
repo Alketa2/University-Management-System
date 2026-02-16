@@ -32,5 +32,7 @@ namespace UniversityManagement.Application.DTOs.Student
         [Required]
         [MaxLength(200)]
         public string Address { get; set; } = string.Empty;
+
+        public Guid? PrimaryProgramId { get; set; }
     }
 }

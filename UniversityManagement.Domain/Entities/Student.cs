@@ -22,6 +22,10 @@ public class Student : BaseEntity
     public DateTime EnrollmentDate { get; set; } = DateTime.UtcNow;
     public StudentStatus Status { get; set; } = StudentStatus.Enrolled;
 
+    // Primary program for filtering content
+    public Guid? PrimaryProgramId { get; set; }
+    public Program? PrimaryProgram { get; set; }
+
     // Navigation properties
     public ICollection<StudentProgram> StudentPrograms { get; set; } = new List<StudentProgram>();
    

@@ -34,11 +34,12 @@ public class StudentService : IStudentService
             DateOfBirth = createStudentDto.DateOfBirth,
             Address = createStudentDto.Address,
             EnrollmentDate = DateTime.UtcNow,
-            Status = StudentStatus.Enrolled
+            Status = StudentStatus.Enrolled,
+            PrimaryProgramId = createStudentDto.PrimaryProgramId
         };
 
         var createdStudent = await _studentRepository.AddAsync(student);
-        return MapToResponseDto(createdStudent);
+        return await MapToResponseDtoAsync(createdStudent);
     }
 
     public async Task<StudentResponseDto> UpdateStudentAsync(UpdateStudentDto updateStudentDto)
@@ -53,6 +54,7 @@ public class StudentService : IStudentService
         student.Phone = updateStudentDto.Phone;
         student.DateOfBirth = updateStudentDto.DateOfBirth;
         student.Address = updateStudentDto.Address;
+        student.PrimaryProgramId = updateStudentDto.PrimaryProgramId;
         
         if (Enum.TryParse<StudentStatus>(updateStudentDto.Status, true, out var status))
         {
@@ -60,19 +62,24 @@ public class StudentService : IStudentService
         }
 
         var updatedStudent = await _studentRepository.UpdateAsync(student);
-        return MapToResponseDto(updatedStudent);
+        return await MapToResponseDtoAsync(updatedStudent);
     }
 
     public async Task<StudentResponseDto?> GetStudentByIdAsync(Guid id)
     {
         var student = await _studentRepository.GetByIdAsync(id);
-        return student == null ? null : MapToResponseDto(student);
+        return student == null ? null : await MapToResponseDtoAsync(student);
     }
 
     public async Task<List<StudentResponseDto>> GetAllStudentsAsync()
     {
         var students = await _studentRepository.GetAllAsync();
-        return students.Select(MapToResponseDto).ToList();
+        var result = new List<StudentResponseDto>();
+        foreach (var student in students)
+        {
+            result.Add(await MapToResponseDtoAsync(student));
+        }
+        return result;
     }
 
     public async Task<bool> DeleteStudentAsync(Guid id)
@@ -114,8 +121,15 @@ public class StudentService : IStudentService
         return studentProgramsList.Select(MapToProgramResponseDto).ToList();
     }
 
-    private static StudentResponseDto MapToResponseDto(Student student)
+    private async Task<StudentResponseDto> MapToResponseDtoAsync(Student student)
     {
+        string? primaryProgramName = null;
+        if (student.PrimaryProgramId.HasValue)
+        {
+            var program = await _programRepository.GetByIdAsync(student.PrimaryProgramId.Value);
+            primaryProgramName = program?.Name;
+        }
+
         return new StudentResponseDto
         {
             Id = student.Id,
@@ -127,6 +141,8 @@ public class StudentService : IStudentService
             Address = student.Address,
             EnrollmentDate = student.EnrollmentDate,
             Status = student.Status.ToString(),
+            PrimaryProgramId = student.PrimaryProgramId,
+            PrimaryProgramName = primaryProgramName,
             CreatedAt = student.CreatedAt,
             UpdatedAt = student.UpdatedAt
         };

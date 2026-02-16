@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button, Card, Input, Modal, Badge, Alert, Spinner, Select } from '../ui/UIComponents';
 import apiClient from '../../utils/apiClient';
 import { API_ENDPOINTS } from '../../config/api';
+import authService from '../../utils/authService';
 
 const SubjectsPage = () => {
     const [subjects, setSubjects] = useState([]);
@@ -13,6 +14,9 @@ const SubjectsPage = () => {
     const [selectedSubject, setSelectedSubject] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
 
+    const userRole = authService.getUserRole();
+    const isStudent = userRole === 'Student';
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -20,11 +24,19 @@ const SubjectsPage = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const [subjectsData, programsData, teachersData] = await Promise.all([
+            const fetchPromises = [
                 apiClient.get(API_ENDPOINTS.SUBJECTS.BASE),
                 apiClient.get(API_ENDPOINTS.PROGRAMS.BASE),
-                apiClient.get(API_ENDPOINTS.TEACHERS.BASE)
-            ]);
+            ];
+
+            if (!isStudent) {
+                fetchPromises.push(apiClient.get(API_ENDPOINTS.TEACHERS.BASE));
+            }
+
+            const results = await Promise.all(fetchPromises);
+            const subjectsData = results[0];
+            const programsData = results[1];
+            const teachersData = isStudent ? [] : results[2];
             setSubjects(subjectsData);
             setPrograms(programsData);
             setTeachers(teachersData);
@@ -46,10 +58,19 @@ const SubjectsPage = () => {
         }
     };
 
-    const filteredSubjects = subjects.filter(subject =>
-        subject.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        subject.code?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredSubjects = subjects.filter(subject => {
+        const matchesSearch = subject.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            subject.code?.toLowerCase().includes(searchTerm.toLowerCase());
+
+        // Filter by program for students
+        if (isStudent) {
+            const currentUser = authService.getUser();
+            const studentProgramId = currentUser?.primaryProgramId;
+            return matchesSearch && (!studentProgramId || subject.programId === studentProgramId);
+        }
+
+        return matchesSearch;
+    });
 
     if (loading) {
         return (
@@ -64,12 +85,14 @@ const SubjectsPage = () => {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold text-white">Subjects Management</h2>
-                    <p className="text-slate-400 mt-1">Manage academic subjects and courses</p>
+                    <h2 className="text-3xl font-bold text-white">{isStudent ? 'Academic Subjects' : 'Subjects Management'}</h2>
+                    <p className="text-slate-400 mt-1">{isStudent ? 'View academic subjects and courses' : 'Manage academic subjects and courses'}</p>
                 </div>
-                <Button onClick={() => { setSelectedSubject(null); setIsModalOpen(true); }}>
-                    + Add Subject
-                </Button>
+                {!isStudent && (
+                    <Button onClick={() => { setSelectedSubject(null); setIsModalOpen(true); }}>
+                        + Add Subject
+                    </Button>
+                )}
             </div>
 
             {error && <Alert type="error" message={error} onClose={() => setError('')} />}
@@ -150,14 +173,17 @@ const SubjectsPage = () => {
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Credits</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Semester</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Status</th>
-                                <th className="text-right py-4 px-4 text-sm font-semibold text-slate-300">Actions</th>
+                                {!isStudent && (
+                                    <th className="text-right py-4 px-4 text-sm font-semibold text-slate-300">Actions</th>
+                                )}
                             </tr>
                         </thead>
                         <tbody>
                             {filteredSubjects.length === 0 ? (
                                 <tr>
-                                    <td colSpan="6" className="text-center py-12 text-slate-400">
+                                    <td colSpan={isStudent ? 5 : 6} className="text-center py-12 text-slate-400">
                                         No subjects found
+
                                     </td>
                                 </tr>
                             ) : (
@@ -179,25 +205,28 @@ const SubjectsPage = () => {
                                                 {subject.isActive !== false ? 'Active' : 'Inactive'}
                                             </Badge>
                                         </td>
-                                        <td className="py-4 px-4">
-                                            <div className="flex items-center justify-end gap-2">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => { setSelectedSubject(subject); setIsModalOpen(true); }}
-                                                >
-                                                    Edit
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => handleDelete(subject.id)}
-                                                    className="text-danger-400 hover:text-danger-300"
-                                                >
-                                                    Delete
-                                                </Button>
-                                            </div>
-                                        </td>
+                                        {!isStudent && (
+                                            <td className="py-4 px-4">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => { setSelectedSubject(subject); setIsModalOpen(true); }}
+                                                    >
+                                                        Edit
+                                                    </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => handleDelete(subject.id)}
+                                                        className="text-danger-400 hover:text-danger-300"
+                                                    >
+                                                        Delete
+                                                    </Button>
+                                                </div>
+                                            </td>
+                                        )}
+
                                     </tr>
                                 ))
                             )}
@@ -207,14 +236,17 @@ const SubjectsPage = () => {
             </Card>
 
             {/* Subject Modal */}
-            <SubjectModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                subject={selectedSubject}
-                programs={programs}
-                teachers={teachers}
-                onSuccess={fetchData}
-            />
+            {!isStudent && (
+                <SubjectModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    subject={selectedSubject}
+                    programs={programs}
+                    teachers={teachers}
+                    onSuccess={fetchData}
+                />
+            )}
+
         </div>
     );
 };

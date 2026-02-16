@@ -37,5 +37,7 @@ namespace UniversityManagement.Application.DTOs.Student
 
         [Required]
         public string Status { get; set; } = "Enrolled";
+
+        public Guid? PrimaryProgramId { get; set; }
     }
 }

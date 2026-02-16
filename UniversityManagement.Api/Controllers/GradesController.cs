@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using UniversityManagement.Application.DTOs.Grade;
 using UniversityManagement.Application.Interfaces;
+using UniversityManagement.Infrastructure.Data;
 
 namespace UniversityManagement.Api.Controllers;
 
@@ -12,10 +15,12 @@ namespace UniversityManagement.Api.Controllers;
 public class GradesController : ControllerBase
 {
     private readonly IGradeService _gradeService;
+    private readonly UniversityDbContext _context;
 
-    public GradesController(IGradeService gradeService)
+    public GradesController(IGradeService gradeService, UniversityDbContext context)
     {
         _gradeService = gradeService;
+        _context = context;
     }
 
     [HttpPost]
@@ -24,6 +29,20 @@ public class GradesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<GradeResponseDto>> CreateGrade([FromBody] CreateGradeDto createGradeDto)
     {
+        // Reset to null - will be set if valid teacher profile found
+        createGradeDto.GradedByTeacherId = null;
+
+        // Try to get teacher ID from logged-in user
+        var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+        if (!string.IsNullOrEmpty(userEmail))
+        {
+            var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.Email == userEmail);
+            if (teacher != null)
+            {
+                createGradeDto.GradedByTeacherId = teacher.Id;
+            }
+        }
+
         var grade = await _gradeService.CreateGradeAsync(createGradeDto);
         return CreatedAtAction(nameof(GetGradeById), new { id = grade.Id }, grade);
     }
@@ -37,6 +56,17 @@ public class GradesController : ControllerBase
     {
         if (id != updateGradeDto.Id)
             return BadRequest("ID mismatch");
+
+        // Get teacher ID from logged-in user
+        var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+        if (!string.IsNullOrEmpty(userEmail))
+        {
+            var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.Email == userEmail);
+            if (teacher != null)
+            {
+                updateGradeDto.GradedByTeacherId = teacher.Id;
+            }
+        }
 
         try
         {
@@ -62,6 +92,17 @@ public class GradesController : ControllerBase
     [ProducesResponseType(typeof(List<GradeResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<GradeResponseDto>>> GetGradesByStudent(Guid studentId)
     {
+        // Students can only view their own grades
+        var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+        if (userRole == "Student")
+        {
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            var student = await _context.Students.FirstOrDefaultAsync(s => s.Email == userEmail);
+            
+            if (student == null || student.Id != studentId)
+                return Forbid(); // Students can only access their own grades
+        }
+
         var grades = await _gradeService.GetGradesByStudentAsync(studentId);
         return Ok(grades);
     }
