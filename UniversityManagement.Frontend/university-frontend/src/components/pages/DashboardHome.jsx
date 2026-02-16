@@ -10,6 +10,7 @@ const DashboardHome = ({ setActiveTab }) => {
     const [loading, setLoading] = useState(true);
     const userRole = authService.getUserRole();
     const userName = authService.getUser()?.email?.split('@')[0] || 'User';
+    const isStudent = userRole === 'Student';
 
     useEffect(() => {
         fetchDashboardData();
@@ -18,25 +19,31 @@ const DashboardHome = ({ setActiveTab }) => {
     const fetchDashboardData = async () => {
         setLoading(true);
         try {
-            // Fetch all data in parallel
-            const [students, teachers, programs, subjects, exams, activeAnnouncements] = await Promise.all([
-                apiClient.get(API_ENDPOINTS.STUDENTS.BASE).catch(() => []),
-                apiClient.get(API_ENDPOINTS.TEACHERS.BASE).catch(() => []),
-                apiClient.get(API_ENDPOINTS.PROGRAMS.BASE).catch(() => []),
-                apiClient.get(API_ENDPOINTS.SUBJECTS.BASE).catch(() => []),
-                apiClient.get(API_ENDPOINTS.EXAMS.BASE).catch(() => []),
-                apiClient.get(API_ENDPOINTS.ANNOUNCEMENTS.ACTIVE).catch(() => []),
-            ]);
+            // Students only need announcements
+            if (isStudent) {
+                const activeAnnouncements = await apiClient.get(API_ENDPOINTS.ANNOUNCEMENTS.ACTIVE).catch(() => []);
+                setAnnouncements(activeAnnouncements.slice(0, 5));
+            } else {
+                // Fetch all data in parallel for admins and teachers
+                const [students, teachers, programs, subjects, exams, activeAnnouncements] = await Promise.all([
+                    apiClient.get(API_ENDPOINTS.STUDENTS.BASE).catch(() => []),
+                    apiClient.get(API_ENDPOINTS.TEACHERS.BASE).catch(() => []),
+                    apiClient.get(API_ENDPOINTS.PROGRAMS.BASE).catch(() => []),
+                    apiClient.get(API_ENDPOINTS.SUBJECTS.BASE).catch(() => []),
+                    apiClient.get(API_ENDPOINTS.EXAMS.BASE).catch(() => []),
+                    apiClient.get(API_ENDPOINTS.ANNOUNCEMENTS.ACTIVE).catch(() => []),
+                ]);
 
-            setStats({
-                students: students.length || 0,
-                teachers: teachers.length || 0,
-                programs: programs.length || 0,
-                subjects: subjects.length || 0,
-                exams: exams.length || 0,
-            });
+                setStats({
+                    students: students.length || 0,
+                    teachers: teachers.length || 0,
+                    programs: programs.length || 0,
+                    subjects: subjects.length || 0,
+                    exams: exams.length || 0,
+                });
 
-            setAnnouncements(activeAnnouncements.slice(0, 5));
+                setAnnouncements(activeAnnouncements.slice(0, 5));
+            }
         } catch (error) {
             console.error('Error fetching dashboard data:', error);
         } finally {
@@ -68,44 +75,46 @@ const DashboardHome = ({ setActiveTab }) => {
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent-500/10 rounded-full blur-3xl" />
             </div>
 
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-                <StatCard
-                    title="Students"
-                    value={stats?.students || 0}
-                    icon="👨‍🎓"
-                    color="primary"
-                    trend="+12% from last month"
-                />
-                <StatCard
-                    title="Teachers"
-                    value={stats?.teachers || 0}
-                    icon="👨‍🏫"
-                    color="accent"
-                    trend="+5% from last month"
-                />
-                <StatCard
-                    title="Programs"
-                    value={stats?.programs || 0}
-                    icon="📚"
-                    color="success"
-                    trend="2 new this term"
-                />
-                <StatCard
-                    title="Subjects"
-                    value={stats?.subjects || 0}
-                    icon="📖"
-                    color="warning"
-                    trend="Active courses"
-                />
-                <StatCard
-                    title="Exams"
-                    value={stats?.exams || 0}
-                    icon="📝"
-                    color="danger"
-                    trend="Upcoming"
-                />
-            </div>
+            {/* Stats Grid - Only for Admin and Teacher */}
+            {!isStudent && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <StatCard
+                        title="Students"
+                        value={stats?.students || 0}
+                        icon="👨‍🎓"
+                        color="primary"
+                        trend="+12% from last month"
+                    />
+                    <StatCard
+                        title="Teachers"
+                        value={stats?.teachers || 0}
+                        icon="👨‍🏫"
+                        color="accent"
+                        trend="+5% from last month"
+                    />
+                    <StatCard
+                        title="Programs"
+                        value={stats?.programs || 0}
+                        icon="📚"
+                        color="success"
+                        trend="2 new this term"
+                    />
+                    <StatCard
+                        title="Subjects"
+                        value={stats?.subjects || 0}
+                        icon="📖"
+                        color="warning"
+                        trend="Active courses"
+                    />
+                    <StatCard
+                        title="Exams"
+                        value={stats?.exams || 0}
+                        icon="📝"
+                        color="danger"
+                        trend="Upcoming"
+                    />
+                </div>
+            )}
 
             {/* Main Content Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -147,112 +156,116 @@ const DashboardHome = ({ setActiveTab }) => {
                     )}
                 </Card>
 
-                {/* Quick Actions */}
-                <Card>
-                    <h3 className="text-xl font-bold text-white mb-6">Quick Actions</h3>
-                    <div className="space-y-3">
-                        <QuickActionButton
-                            icon="👨‍🎓"
-                            label="Add Student"
-                            color="primary"
-                            onClick={() => setActiveTab('students')}
-                        />
-                        {userRole === 'Admin' && (
+                {/* Quick Actions - Only for Admin and Teacher */}
+                {!isStudent && (
+                    <Card>
+                        <h3 className="text-xl font-bold text-white mb-6">Quick Actions</h3>
+                        <div className="space-y-3">
                             <QuickActionButton
-                                icon="👨‍🏫"
-                                label="Add Teacher"
-                                color="accent"
-                                onClick={() => setActiveTab('teachers')}
+                                icon="👨‍🎓"
+                                label="Add Student"
+                                color="primary"
+                                onClick={() => setActiveTab('students')}
                             />
-                        )}
-                        <QuickActionButton
-                            icon="📚"
-                            label="Create Program"
-                            color="success"
-                            onClick={() => setActiveTab('programs')}
-                        />
-                        <QuickActionButton
-                            icon="📝"
-                            label="Schedule Exam"
-                            color="warning"
-                            onClick={() => setActiveTab('exams')}
-                        />
-                        <QuickActionButton
-                            icon="📢"
-                            label="Post Announcement"
-                            color="danger"
-                            onClick={() => setActiveTab('announcements')}
-                        />
-                    </div>
-                </Card>
+                            {userRole === 'Admin' && (
+                                <QuickActionButton
+                                    icon="👨‍🏫"
+                                    label="Add Teacher"
+                                    color="accent"
+                                    onClick={() => setActiveTab('teachers')}
+                                />
+                            )}
+                            <QuickActionButton
+                                icon="📚"
+                                label="Create Program"
+                                color="success"
+                                onClick={() => setActiveTab('programs')}
+                            />
+                            <QuickActionButton
+                                icon="📝"
+                                label="Schedule Exam"
+                                color="warning"
+                                onClick={() => setActiveTab('exams')}
+                            />
+                            <QuickActionButton
+                                icon="📢"
+                                label="Post Announcement"
+                                color="danger"
+                                onClick={() => setActiveTab('announcements')}
+                            />
+                        </div>
+                    </Card>
+                )}
             </div>
 
-            {/* Activity Overview */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
-                    <h3 className="text-xl font-bold text-white mb-6">Recent Activity</h3>
-                    <div className="space-y-4">
-                        <ActivityItem
-                            icon="👨‍🎓"
-                            title="New student enrolled"
-                            description="John Doe joined Computer Science program"
-                            time="2 hours ago"
-                        />
-                        <ActivityItem
-                            icon="📝"
-                            title="Exam scheduled"
-                            description="Mathematics final exam on June 15, 2026"
-                            time="5 hours ago"
-                        />
-                        <ActivityItem
-                            icon="📢"
-                            title="Announcement posted"
-                            description="Library hours extended for exam week"
-                            time="1 day ago"
-                        />
-                        <ActivityItem
-                            icon="📚"
-                            title="New course added"
-                            description="Advanced Machine Learning course created"
-                            time="2 days ago"
-                        />
-                    </div>
-                </Card>
+            {/* Activity Overview - Only for Admin and Teacher */}
+            {!isStudent && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <Card>
+                        <h3 className="text-xl font-bold text-white mb-6">Recent Activity</h3>
+                        <div className="space-y-4">
+                            <ActivityItem
+                                icon="👨‍🎓"
+                                title="New student enrolled"
+                                description="John Doe joined Computer Science program"
+                                time="2 hours ago"
+                            />
+                            <ActivityItem
+                                icon="📝"
+                                title="Exam scheduled"
+                                description="Mathematics final exam on June 15, 2026"
+                                time="5 hours ago"
+                            />
+                            <ActivityItem
+                                icon="📢"
+                                title="Announcement posted"
+                                description="Library hours extended for exam week"
+                                time="1 day ago"
+                            />
+                            <ActivityItem
+                                icon="📚"
+                                title="New course added"
+                                description="Advanced Machine Learning course created"
+                                time="2 days ago"
+                            />
+                        </div>
+                    </Card>
 
-                <Card>
-                    <h3 className="text-xl font-bold text-white mb-6">Upcoming Events</h3>
-                    <div className="space-y-4">
-                        <EventItem
-                            date="15"
-                            month="JUN"
-                            title="Final Examinations"
-                            description="All programs - Main Campus"
-                            color="danger"
-                        />
-                        <EventItem
-                            date="22"
-                            month="JUN"
-                            title="Faculty Meeting"
-                            description="Department heads meeting"
-                            color="primary"
-                        />
-                        <EventItem
-                            date="30"
-                            month="JUN"
-                            title="Semester End"
-                            description="Last day of classes"
-                            color="warning"
-                        />
-                        <EventItem
-                            date="5"
-                            month="JUL"
-                            title="Results Publication"
-                            description="Student grades release"
-                            color="success"
-                        />
-                    </div>
-                </Card>
-            </div>
+                    <Card>
+                        <h3 className="text-xl font-bold text-white mb-6">Upcoming Events</h3>
+                        <div className="space-y-4">
+                            <EventItem
+                                date="15"
+                                month="JUN"
+                                title="Final Examinations"
+                                description="All programs - Main Campus"
+                                color="danger"
+                            />
+                            <EventItem
+                                date="22"
+                                month="JUN"
+                                title="Faculty Meeting"
+                                description="Department heads meeting"
+                                color="primary"
+                            />
+                            <EventItem
+                                date="30"
+                                month="JUN"
+                                title="Semester End"
+                                description="Last day of classes"
+                                color="warning"
+                            />
+                            <EventItem
+                                date="5"
+                                month="JUL"
+                                title="Results Publication"
+                                description="Student grades release"
+                                color="success"
+                            />
+                        </div>
+                    </Card>
+                </div>
+            )}
         </div>
     );
 };

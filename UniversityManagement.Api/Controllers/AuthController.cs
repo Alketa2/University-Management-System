@@ -69,6 +69,7 @@ public class AuthController : ControllerBase
 
         return Created("", new AuthResponseDto
         {
+            UserId = user.Id,
             Email = user.Email,
             Role = user.Role,
             AccessToken = access,
@@ -107,6 +108,7 @@ public class AuthController : ControllerBase
 
         return Ok(new AuthResponseDto
         {
+            UserId = user.Id,
             Email = user.Email,
             Role = user.Role,
             AccessToken = access,
@@ -170,6 +172,7 @@ public class AuthController : ControllerBase
 
         return Ok(new AuthResponseDto
         {
+            UserId = token.AppUser.Id,
             Email = token.AppUser.Email,
             Role = token.AppUser.Role,
             AccessToken = access,

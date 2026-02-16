@@ -65,6 +65,17 @@ public class TimetableService : ITimetableService
         return timetable == null ? null : await MapToResponseDto(timetable);
     }
 
+    public async Task<List<TimetableResponseDto>> GetAllTimetablesAsync()
+    {
+        var timetables = await _timetableRepository.GetAllAsync();
+        var result = new List<TimetableResponseDto>();
+        foreach (var timetable in timetables)
+        {
+            result.Add(await MapToResponseDto(timetable));
+        }
+        return result;
+    }
+
     public async Task<List<TimetableResponseDto>> GetTimetableByProgramAsync(Guid programId, string? semester)
     {
         int? sem = null;

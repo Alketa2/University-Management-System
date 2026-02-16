@@ -2,7 +2,9 @@ import authService from './authService';
 
 class ApiClient {
     async request(url, options = {}) {
+        console.log('Request method:', options.method, 'URL:', url);
         const token = authService.getAccessToken();
+        console.log('Access token present:', !!token);
 
         const headers = {
             'Content-Type': 'application/json',
@@ -17,6 +19,8 @@ class ApiClient {
             ...options,
             headers,
         });
+
+        console.log('Fetch response status:', response.status);
 
         // Handle 401 Unauthorized - try to refresh token
         if (response.status === 401 && token) {
@@ -40,6 +44,7 @@ class ApiClient {
 
         if (!response.ok) {
             const errorText = await response.text();
+            console.error('Response error:', response.status, errorText);
             throw new Error(errorText || `Request failed with status ${response.status}`);
         }
 
@@ -52,7 +57,15 @@ class ApiClient {
     }
 
     async get(url) {
-        return this.request(url, { method: 'GET' });
+        console.log('API GET request to:', url);
+        try {
+            const result = await this.request(url, { method: 'GET' });
+            console.log('API GET response:', result);
+            return result;
+        } catch (err) {
+            console.error('API GET error:', err);
+            throw err;
+        }
     }
 
     async post(url, data) {

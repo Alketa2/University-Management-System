@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button, Card, Input, Modal, Badge, Alert, Spinner, Select } from '../ui/UIComponents';
 import apiClient from '../../utils/apiClient';
 import { API_ENDPOINTS } from '../../config/api';
+import authService from '../../utils/authService';
 
 const TimetablePage = () => {
     const [timetables, setTimetables] = useState([]);
@@ -12,6 +13,9 @@ const TimetablePage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTimetable, setSelectedTimetable] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+
+    const userRole = authService.getUserRole();
+    const isStudent = userRole === 'Student';
 
     useEffect(() => {
         fetchData();
@@ -79,12 +83,16 @@ const TimetablePage = () => {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold text-white">Timetable Management</h2>
-                    <p className="text-slate-400 mt-1">Manage class schedules and timing</p>
+                    <h2 className="text-3xl font-bold text-white">Timetable {isStudent ? 'View' : 'Management'}</h2>
+                    <p className="text-slate-400 mt-1">
+                        {isStudent ? 'View class schedules' : 'Manage class schedules and timing'}
+                    </p>
                 </div>
-                <Button onClick={() => { setSelectedTimetable(null); setIsModalOpen(true); }}>
-                    + Add Schedule
-                </Button>
+                {!isStudent && (
+                    <Button onClick={() => { setSelectedTimetable(null); setIsModalOpen(true); }}>
+                        + Add Schedule
+                    </Button>
+                )}
             </div>
 
             {error && <Alert type="error" message={error} onClose={() => setError('')} />}
@@ -164,7 +172,9 @@ const TimetablePage = () => {
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Program</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Time</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Room</th>
-                                <th className="text-right py-4 px-4 text-sm font-semibold text-slate-300">Actions</th>
+                                {!isStudent && (
+                                    <th className="text-right py-4 px-4 text-sm font-semibold text-slate-300">Actions</th>
+                                )}
                             </tr>
                         </thead>
                         <tbody>
@@ -205,27 +215,29 @@ const TimetablePage = () => {
                                                     {timetable.startTime} - {timetable.endTime}
                                                 </td>
                                                 <td className="py-4 px-4 text-slate-300">
-                                                    {timetable.roomNumber || 'TBA'}
+                                                    {timetable.room || timetable.roomNumber || 'TBA'}
                                                 </td>
-                                                <td className="py-4 px-4">
-                                                    <div className="flex items-center justify-end gap-2">
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            onClick={() => { setSelectedTimetable(timetable); setIsModalOpen(true); }}
-                                                        >
-                                                            Edit
-                                                        </Button>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            onClick={() => handleDelete(timetable.id)}
-                                                            className="text-danger-400 hover:text-danger-300"
-                                                        >
-                                                            Delete
-                                                        </Button>
-                                                    </div>
-                                                </td>
+                                                {!isStudent && (
+                                                    <td className="py-4 px-4">
+                                                        <div className="flex items-center justify-end gap-2">
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                onClick={() => { setSelectedTimetable(timetable); setIsModalOpen(true); }}
+                                                            >
+                                                                Edit
+                                                            </Button>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                onClick={() => handleDelete(timetable.id)}
+                                                                className="text-danger-400 hover:text-danger-300"
+                                                            >
+                                                                Delete
+                                                            </Button>
+                                                        </div>
+                                                    </td>
+                                                )}
                                             </tr>
                                         );
                                     })
@@ -235,15 +247,17 @@ const TimetablePage = () => {
                 </div>
             </Card>
 
-            {/* Timetable Modal */}
-            <TimetableModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                timetable={selectedTimetable}
-                programs={programs}
-                subjects={subjects}
-                onSuccess={fetchData}
-            />
+            {/* Timetable Modal - Only for Admin and Teacher */}
+            {!isStudent && (
+                <TimetableModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    timetable={selectedTimetable}
+                    programs={programs}
+                    subjects={subjects}
+                    onSuccess={fetchData}
+                />
+            )}
         </div>
     );
 };

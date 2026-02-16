@@ -75,9 +75,7 @@ public class TimetablesController : ControllerBase
     [ProducesResponseType(typeof(List<TimetableResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<TimetableResponseDto>>> GetAllTimetables()
     {
-        //  - gets all timetables
-        var timetables = new List<TimetableResponseDto>();
-        
+        var timetables = await _timetableService.GetAllTimetablesAsync();
         return Ok(timetables);
     }
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button, Card, Input, Modal, Badge, Alert, Spinner } from '../ui/UIComponents';
 import apiClient from '../../utils/apiClient';
 import { API_ENDPOINTS } from '../../config/api';
+import authService from '../../utils/authService';
 
 const ProgramsPage = () => {
     const [programs, setPrograms] = useState([]);
@@ -10,6 +11,9 @@ const ProgramsPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProgram, setSelectedProgram] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+
+    const userRole = authService.getUserRole();
+    const isStudent = userRole === 'Student';
 
     useEffect(() => {
         fetchPrograms();
@@ -67,12 +71,14 @@ const ProgramsPage = () => {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold text-white">Programs Management</h2>
-                    <p className="text-slate-400 mt-1">Manage academic programs and degrees</p>
+                    <h2 className="text-3xl font-bold text-white">{isStudent ? 'Academic Programs' : 'Programs Management'}</h2>
+                    <p className="text-slate-400 mt-1">{isStudent ? 'View academic programs and degrees' : 'Manage academic programs and degrees'}</p>
                 </div>
-                <Button onClick={() => { setSelectedProgram(null); setIsModalOpen(true); }}>
-                    + Add Program
-                </Button>
+                {!isStudent && (
+                    <Button onClick={() => { setSelectedProgram(null); setIsModalOpen(true); }}>
+                        + Add Program
+                    </Button>
+                )}
             </div>
 
             {error && <Alert type="error" message={error} onClose={() => setError('')} />}
@@ -194,36 +200,40 @@ const ProgramsPage = () => {
                                 )}
                             </div>
 
-                            <div className="flex gap-2 pt-4 border-t border-slate-800">
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => { setSelectedProgram(program); setIsModalOpen(true); }}
-                                    className="flex-1"
-                                >
-                                    Edit
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => handleDelete(program.id)}
-                                    className="flex-1 text-danger-400 hover:text-danger-300"
-                                >
-                                    Delete
-                                </Button>
-                            </div>
+                            {!isStudent && (
+                                <div className="flex gap-2 pt-4 border-t border-slate-800">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => { setSelectedProgram(program); setIsModalOpen(true); }}
+                                        className="flex-1"
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => handleDelete(program.id)}
+                                        className="flex-1 text-danger-400 hover:text-danger-300"
+                                    >
+                                        Delete
+                                    </Button>
+                                </div>
+                            )}
                         </Card>
                     ))
                 )}
             </div>
 
-            {/* Program Modal */}
-            <ProgramModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                program={selectedProgram}
-                onSuccess={fetchPrograms}
-            />
+            {/* Program Modal - Only for Admin and Teachers */}
+            {!isStudent && (
+                <ProgramModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    program={selectedProgram}
+                    onSuccess={fetchPrograms}
+                />
+            )}
         </div>
     );
 };

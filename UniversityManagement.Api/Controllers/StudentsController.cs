@@ -67,7 +67,7 @@ public class StudentsController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "RequireAdmin")]
+    [Authorize(Policy = "RequireTeacherOrAdmin")]
     [ProducesResponseType(typeof(List<StudentResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<StudentResponseDto>>> GetAllStudents()
     {

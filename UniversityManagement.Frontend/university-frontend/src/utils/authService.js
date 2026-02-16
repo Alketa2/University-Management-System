@@ -28,6 +28,7 @@ class AuthService {
         localStorage.setItem(this.TOKEN_KEY, authResponse.accessToken);
         localStorage.setItem(this.REFRESH_TOKEN_KEY, authResponse.refreshToken);
         localStorage.setItem(this.USER_KEY, JSON.stringify({
+            id: authResponse.userId || null,
             email: authResponse.email,
             role: authResponse.role,
         }));
