@@ -15,6 +15,9 @@ const GradesPage = () => {
     const [selectedGrade, setSelectedGrade] = useState(null);
     const [filterSubject, setFilterSubject] = useState('');
     const [filterStudent, setFilterStudent] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
+    const [transcriptData, setTranscriptData] = useState(null);
 
     const currentUser = authService.getUser();
     const userRole = authService.getUserRole();
@@ -102,6 +105,20 @@ const GradesPage = () => {
         }
     };
 
+    const fetchTranscript = async () => {
+        setLoading(true);
+        try {
+            const data = await apiClient.get(API_ENDPOINTS.GRADES.GPA(currentUser.studentId));
+            setTranscriptData(data);
+            setIsTranscriptOpen(true);
+        } catch (err) {
+            console.error('Transcript fetch error:', err);
+            setError('Failed to fetch transcript data');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const getLetterGradeBadge = (letterGrade) => {
         const variants = {
             'A': 'success',
@@ -153,9 +170,15 @@ const GradesPage = () => {
                         + Add Grade
                     </Button>
                 )}
+                {isStudent && (
+                    <Button variant="secondary" onClick={() => fetchTranscript()}>
+                        📄 View Transcript
+                    </Button>
+                )}
             </div>
 
             {error && <Alert type="error" message={error} onClose={() => setError('')} />}
+            {successMessage && <Alert type="success" message={successMessage} onClose={() => setSuccessMessage('')} />}
 
             {/* Filters */}
             <Card>
@@ -305,8 +328,89 @@ const GradesPage = () => {
                     students={students}
                     subjects={subjects}
                     exams={exams}
-                    onSuccess={fetchData}
+                    onSuccess={(msg) => {
+                        setSuccessMessage(msg || 'Grade saved successfully!');
+                        fetchData();
+                        // Clear message after 5 seconds
+                        setTimeout(() => setSuccessMessage(''), 5000);
+                    }}
                 />
+            )}
+
+            {/* Transcript Modal */}
+            {isTranscriptOpen && (
+                <Modal
+                    isOpen={isTranscriptOpen}
+                    onClose={() => setIsTranscriptOpen(false)}
+                    title="Official Academic Transcript"
+                    className="max-w-4xl"
+                >
+                    <div className="space-y-6 p-2 text-slate-200" id="transcript-content">
+                        <div className="flex border-b border-slate-700 pb-4 justify-between items-start">
+                            <div>
+                                <h1 className="text-2xl font-bold text-white mb-1">University Transcript</h1>
+                                <p className="text-primary-400 font-semibold">{transcriptData?.studentName || 'Student Record'}</p>
+                                <p className="text-sm text-slate-400">Student ID: {currentUser?.studentId?.substring(0, 8)}...</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-sm text-slate-400">Date Issued</p>
+                                <p className="text-white">{new Date().toLocaleDateString()}</p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-4">
+                            <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                                <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Cumulative GPA</p>
+                                <p className="text-2xl font-bold text-primary-400">{transcriptData?.cumulativeGPA}</p>
+                            </div>
+                            <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                                <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Total Credits</p>
+                                <p className="text-2xl font-bold text-white">{transcriptData?.totalCredits}</p>
+                            </div>
+                            <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                                <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Courses Passed</p>
+                                <p className="text-2xl font-bold text-success-400">{transcriptData?.grades?.filter(g => g.letterGrade !== 'F').length}</p>
+                            </div>
+                        </div>
+
+                        <table className="w-full text-sm">
+                            <thead>
+                                <tr className="border-b border-slate-700 text-slate-400">
+                                    <th className="text-left py-2 font-medium">Subject</th>
+                                    <th className="text-center py-2 font-medium">Exam</th>
+                                    <th className="text-center py-2 font-medium">Percentage</th>
+                                    <th className="text-center py-2 font-medium">Grade</th>
+                                    <th className="text-right py-2 font-medium">GP</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-800">
+                                {transcriptData?.grades?.map((g, idx) => (
+                                    <tr key={idx}>
+                                        <td className="py-3">
+                                            <p className="font-medium text-white">{g.subjectName}</p>
+                                            <p className="text-xs text-slate-500">{g.subjectCode}</p>
+                                        </td>
+                                        <td className="text-center py-3">{g.examName || 'Final'}</td>
+                                        <td className="text-center py-3">{g.percentage}%</td>
+                                        <td className="text-center py-3">
+                                            <Badge variant={getLetterGradeBadge(g.letterGrade)}>{g.letterGrade}</Badge>
+                                        </td>
+                                        <td className="text-right py-3 font-medium text-white">{g.gradePoint}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+
+                        <div className="pt-6 border-t border-slate-700 mt-auto flex justify-between items-end">
+                            <div className="text-[10px] text-slate-500 max-w-sm">
+                                This is an automated academic record generated by the University Management System. This document is for informational purposes only.
+                            </div>
+                            <Button size="sm" onClick={() => window.print()} variant="ghost" className="hidden md:flex">
+                                🖨️ Print Transcript
+                            </Button>
+                        </div>
+                    </div>
+                </Modal>
             )}
         </div>
     );
@@ -361,12 +465,27 @@ const GradeModal = ({ isOpen, onClose, grade, students, subjects, exams, onSucce
         setError('');
 
         try {
+            const score = parseFloat(formData.score);
+            const maxScore = parseFloat(formData.maxScore);
+
+            if (isNaN(score) || isNaN(maxScore)) {
+                throw new Error('Score and Max Score must be valid numbers');
+            }
+
+            if (score > maxScore) {
+                throw new Error(`Score (${score}) cannot be greater than Max Score (${maxScore})`);
+            }
+
+            if (score < 0 || maxScore <= 0) {
+                throw new Error('Score must be positive and Max Score must be greater than 0');
+            }
+
             const payload = {
                 studentId: formData.studentId,
                 subjectId: formData.subjectId,
                 examId: formData.examId || null,
-                score: parseFloat(formData.score),
-                maxScore: parseFloat(formData.maxScore),
+                score: score,
+                maxScore: maxScore,
                 comments: formData.comments || null,
                 gradedByTeacherId: currentUser?.teacherId || null,
                 academicYear: formData.academicYear,
@@ -381,7 +500,7 @@ const GradeModal = ({ isOpen, onClose, grade, students, subjects, exams, onSucce
             } else {
                 await apiClient.post(API_ENDPOINTS.GRADES.BASE, payload);
             }
-            onSuccess();
+            onSuccess(grade ? 'Grade updated successfully!' : 'Grade added successfully!');
             onClose();
         } catch (err) {
             setError(err.message || 'Failed to save grade');
@@ -389,6 +508,22 @@ const GradeModal = ({ isOpen, onClose, grade, students, subjects, exams, onSucce
             setLoading(false);
         }
     };
+
+    // Intelligent filtering for programs
+    const selectedStudent = students.find(s => s.id === formData.studentId);
+    const selectedSubject = subjects.find(s => s.id === formData.subjectId);
+
+    // Filter subjects based on student's program
+    const filteredSubjects = subjects.filter(sub => {
+        if (!formData.studentId || !selectedStudent?.primaryProgramId) return true;
+        return sub.programId === selectedStudent.primaryProgramId;
+    });
+
+    // Filter students based on subject's program
+    const filteredStudentsList = students.filter(st => {
+        if (!formData.subjectId || !selectedSubject?.programId) return true;
+        return st.primaryProgramId === selectedSubject.programId;
+    });
 
     // Filter exams by selected subject
     const filteredExams = exams.filter(e => e.subjectId === formData.subjectId);
@@ -408,7 +543,10 @@ const GradeModal = ({ isOpen, onClose, grade, students, subjects, exams, onSucce
                     onChange={(e) => setFormData({ ...formData, studentId: e.target.value })}
                     options={[
                         { value: '', label: 'Select Student' },
-                        ...students.map(s => ({ value: s.id, label: `${s.firstName} ${s.lastName}` }))
+                        ...filteredStudentsList.map(s => ({
+                            value: s.id,
+                            label: `${s.firstName} ${s.lastName} (${s.primaryProgramName || 'No Program'})`
+                        }))
                     ]}
                     required
                 />
@@ -419,7 +557,10 @@ const GradeModal = ({ isOpen, onClose, grade, students, subjects, exams, onSucce
                     onChange={(e) => setFormData({ ...formData, subjectId: e.target.value, examId: '' })}
                     options={[
                         { value: '', label: 'Select Subject' },
-                        ...subjects.map(s => ({ value: s.id, label: `${s.code} - ${s.name}` }))
+                        ...filteredSubjects.map(s => ({
+                            value: s.id,
+                            label: `${s.code} - ${s.name} (${s.programName})`
+                        }))
                     ]}
                     required
                 />

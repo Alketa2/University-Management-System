@@ -14,9 +14,33 @@ public class GradeService : IGradeService
     {
         _context = context;
     }
-
     public async Task<GradeResponseDto> CreateGradeAsync(CreateGradeDto createGradeDto)
     {
+        // 1. Strict Score Validation
+        if (createGradeDto.Score > createGradeDto.MaxScore)
+            throw new ArgumentException($"Score ({createGradeDto.Score}) cannot be greater than Max Score ({createGradeDto.MaxScore})");
+
+        if (createGradeDto.Score < 0)
+            throw new ArgumentException("Score cannot be negative");
+
+        // 2. Program Boundaries Validation
+        var student = await _context.Students
+            .Include(s => s.StudentPrograms)
+            .FirstOrDefaultAsync(s => s.Id == createGradeDto.StudentId)
+            ?? throw new KeyNotFoundException("Student not found");
+
+        var subject = await _context.Subjects
+            .FirstOrDefaultAsync(s => s.Id == createGradeDto.SubjectId)
+            ?? throw new KeyNotFoundException("Subject not found");
+
+        bool isInProgram = student.PrimaryProgramId == subject.ProgramId || 
+                          student.StudentPrograms.Any(sp => sp.ProgramId == subject.ProgramId);
+
+        if (!isInProgram)
+        {
+            throw new ArgumentException($"Departmental Boundary Violation: Student '{student.FirstName} {student.LastName}' is not enrolled in the program for subject '{subject.Name}'. Grades can only be assigned to students within their respective programs.");
+        }
+
         var grade = new Grade
         {
             StudentId = createGradeDto.StudentId,
@@ -41,8 +65,36 @@ public class GradeService : IGradeService
 
     public async Task<GradeResponseDto> UpdateGradeAsync(UpdateGradeDto updateGradeDto)
     {
+        // 1. Strict Score Validation
+        if (updateGradeDto.Score > updateGradeDto.MaxScore)
+            throw new ArgumentException($"Score ({updateGradeDto.Score}) cannot be greater than Max Score ({updateGradeDto.MaxScore})");
+
+        if (updateGradeDto.Score < 0)
+            throw new ArgumentException("Score cannot be negative");
+
         var grade = await _context.Grades.FindAsync(updateGradeDto.Id)
             ?? throw new KeyNotFoundException($"Grade with ID {updateGradeDto.Id} not found");
+
+        // 2. Program Boundaries Validation (if student or subject changed)
+        if (grade.StudentId != updateGradeDto.StudentId || grade.SubjectId != updateGradeDto.SubjectId)
+        {
+            var student = await _context.Students
+                .Include(s => s.StudentPrograms)
+                .FirstOrDefaultAsync(s => s.Id == updateGradeDto.StudentId)
+                ?? throw new KeyNotFoundException("Student not found");
+
+            var subject = await _context.Subjects
+                .FirstOrDefaultAsync(s => s.Id == updateGradeDto.SubjectId)
+                ?? throw new KeyNotFoundException("Subject not found");
+
+            bool isInProgram = student.PrimaryProgramId == subject.ProgramId || 
+                              student.StudentPrograms.Any(sp => sp.ProgramId == subject.ProgramId);
+
+            if (!isInProgram)
+            {
+                throw new ArgumentException($"Departmental Boundary Violation: Student '{student.FirstName} {student.LastName}' is not enrolled in the program for subject '{subject.Name}'.");
+            }
+        }
 
         grade.StudentId = updateGradeDto.StudentId;
         grade.SubjectId = updateGradeDto.SubjectId;

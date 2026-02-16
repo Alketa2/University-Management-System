@@ -43,8 +43,15 @@ public class GradesController : ControllerBase
             }
         }
 
-        var grade = await _gradeService.CreateGradeAsync(createGradeDto);
-        return CreatedAtAction(nameof(GetGradeById), new { id = grade.Id }, grade);
+        try
+        {
+            var grade = await _gradeService.CreateGradeAsync(createGradeDto);
+            return CreatedAtAction(nameof(GetGradeById), new { id = grade.Id }, grade);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPut("{id:guid}")]
@@ -72,6 +79,10 @@ public class GradesController : ControllerBase
         {
             var grade = await _gradeService.UpdateGradeAsync(updateGradeDto);
             return Ok(grade);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
         }
         catch (KeyNotFoundException)
         {
@@ -133,6 +144,17 @@ public class GradesController : ControllerBase
         [FromQuery] string? academicYear = null,
         [FromQuery] int? semester = null)
     {
+        // Students can only view their own GPA
+        var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+        if (userRole == "Student")
+        {
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            var student = await _context.Students.FirstOrDefaultAsync(s => s.Email == userEmail);
+
+            if (student == null || student.Id != studentId)
+                return Forbid();
+        }
+
         try
         {
             var gpa = await _gradeService.GetStudentGPAAsync(studentId, academicYear, semester);

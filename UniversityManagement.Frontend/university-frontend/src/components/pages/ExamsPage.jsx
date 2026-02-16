@@ -86,10 +86,10 @@ const ExamsPage = () => {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                     <h2 className="text-3xl font-bold text-white">{isStudent ? 'Examinations' : 'Exams Management'}</h2>
+                    <h2 className="text-3xl font-bold text-white">{isStudent ? 'Examinations' : 'Exams Management'}</h2>
                     <p className="text-slate-400 mt-1">{isStudent ? 'View scheduled examinations' : 'Schedule and manage examinations'}</p>
                 </div>
-                 {!isStudent && (
+                {!isStudent && (
                     <Button onClick={() => { setSelectedExam(null); setIsModalOpen(true); }}>
                         + Schedule Exam
                     </Button>
@@ -186,7 +186,7 @@ const ExamsPage = () => {
                         <tbody>
                             {filteredExams.length === 0 ? (
                                 <tr>
-                                  <td colSpan={isStudent ? 6 : 7} className="text-center py-12 text-slate-400">
+                                    <td colSpan={isStudent ? 6 : 7} className="text-center py-12 text-slate-400">
                                         No exams found
                                     </td>
                                 </tr>
@@ -214,11 +214,18 @@ const ExamsPage = () => {
                                                 {exam.startTime && exam.endTime ? `${exam.startTime.slice(0, 5)} - ${exam.endTime.slice(0, 5)}` : 'N/A'}
                                             </td>
                                             <td className="py-4 px-4">
-                                                <Badge variant={isUpcoming ? 'warning' : 'success'}>
-                                                    {isUpcoming ? 'Upcoming' : 'Completed'}
-                                                </Badge>
+                                                <div className="space-y-1">
+                                                    <Badge variant={isUpcoming ? 'warning' : 'success'}>
+                                                        {isUpcoming ? 'Upcoming' : 'Completed'}
+                                                    </Badge>
+                                                    {isUpcoming && (
+                                                        <p className="text-[10px] font-medium text-warning-400/80 uppercase tracking-wider ml-1">
+                                                            {formatCountdown(exam.examDate)}
+                                                        </p>
+                                                    )}
+                                                </div>
                                             </td>
-                                              {!isStudent && (
+                                            {!isStudent && (
                                                 <td className="py-4 px-4">
                                                     <div className="flex items-center justify-end gap-2">
                                                         <Button
@@ -250,7 +257,7 @@ const ExamsPage = () => {
             </Card>
 
             {/* Exam Modal */}
-           {!isStudent && (
+            {!isStudent && (
                 <ExamModal
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
@@ -313,6 +320,14 @@ const ExamModal = ({ isOpen, onClose, exam, subjects, onSuccess }) => {
         setError('');
 
         try {
+            const selectedDate = new Date(formData.examDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (selectedDate < today) {
+                throw new Error('Exam date cannot be in the past');
+            }
+
             // Convert examType number to string name as DTO expects
             const examTypeNames = { '1': 'Midterm', '2': 'Final', '3': 'Quiz', '4': 'Assignment' };
 
@@ -398,6 +413,7 @@ const ExamModal = ({ isOpen, onClose, exam, subjects, onSuccess }) => {
                     type="date"
                     value={formData.examDate}
                     onChange={(e) => setFormData({ ...formData, examDate: e.target.value })}
+                    min={new Date().toISOString().split('T')[0]}
                     required
                 />
 
@@ -446,6 +462,20 @@ const ExamModal = ({ isOpen, onClose, exam, subjects, onSuccess }) => {
             </form>
         </Modal>
     );
+};
+
+const formatCountdown = (dateString) => {
+    const examDate = new Date(dateString);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const diffTime = examDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Tomorrow';
+    if (diffDays < 0) return 'Passed';
+    return `In ${diffDays} days`;
 };
 
 export default ExamsPage;

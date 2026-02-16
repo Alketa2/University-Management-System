@@ -7,9 +7,14 @@ import authService from '../../utils/authService';
 const DashboardHome = ({ setActiveTab }) => {
     const [stats, setStats] = useState(null);
     const [announcements, setAnnouncements] = useState([]);
+    const [recentActivity, setRecentActivity] = useState([]);
+    const [upcomingEvents, setUpcomingEvents] = useState([]);
+    const [todaySchedule, setTodaySchedule] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const currentUser = authService.getUser();
     const userRole = authService.getUserRole();
-    const userName = authService.getUser()?.email?.split('@')[0] || 'User';
+    const userName = currentUser?.firstName || currentUser?.email?.split('@')[0] || 'User';
     const isStudent = userRole === 'Student';
 
     useEffect(() => {
@@ -19,12 +24,33 @@ const DashboardHome = ({ setActiveTab }) => {
     const fetchDashboardData = async () => {
         setLoading(true);
         try {
-            // Students only need announcements
+            const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const todayName = daysOfWeek[new Date().getDay()];
+
             if (isStudent) {
-                const activeAnnouncements = await apiClient.get(API_ENDPOINTS.ANNOUNCEMENTS.ACTIVE).catch(() => []);
+                const [activeAnnouncements, allExams, allTimetables] = await Promise.all([
+                    apiClient.get(API_ENDPOINTS.ANNOUNCEMENTS.ACTIVE).catch(() => []),
+                    apiClient.get(API_ENDPOINTS.EXAMS.BASE).catch(() => []),
+                    apiClient.get(API_ENDPOINTS.TIMETABLES.BASE).catch(() => []),
+                ]);
+
+                const studentProgramId = currentUser?.primaryProgramId;
+
+                // Filter exams for student's program and future dates
+                const studentExams = allExams
+                    .filter(e => (!studentProgramId || e.programId === studentProgramId) && new Date(e.date) >= new Date())
+                    .sort((a, b) => new Date(a.date) - new Date(b.date))
+                    .slice(0, 4);
+
+                // Filter schedule for today
+                const studentSchedule = allTimetables
+                    .filter(t => t.dayOfWeek === todayName && (!studentProgramId || t.programId === studentProgramId))
+                    .sort((a, b) => a.startTime.localeCompare(b.startTime));
+
                 setAnnouncements(activeAnnouncements.slice(0, 5));
+                setUpcomingEvents(studentExams);
+                setTodaySchedule(studentSchedule);
             } else {
-                // Fetch all data in parallel for admins and teachers
                 const [students, teachers, programs, subjects, exams, activeAnnouncements] = await Promise.all([
                     apiClient.get(API_ENDPOINTS.STUDENTS.BASE).catch(() => []),
                     apiClient.get(API_ENDPOINTS.TEACHERS.BASE).catch(() => []),
@@ -42,6 +68,20 @@ const DashboardHome = ({ setActiveTab }) => {
                     exams: exams.length || 0,
                 });
 
+                // Calculate recent activity
+                const activity = [
+                    ...students.slice(-2).map(s => ({ type: 'student', title: 'New student enrolled', desc: `${s.firstName} ${s.lastName} joined`, time: s.createdAt, icon: '👨‍🎓' })),
+                    ...exams.slice(-2).map(e => ({ type: 'exam', title: 'Exam scheduled', desc: `${e.name} for ${e.subjectName || 'Subject'}`, time: e.createdAt, icon: '📝' })),
+                    ...subjects.slice(-2).map(s => ({ type: 'subject', title: 'New course added', desc: s.name, time: s.createdAt, icon: '📚' }))
+                ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 4);
+
+                const futureExams = exams
+                    .filter(e => new Date(e.date) >= new Date())
+                    .sort((a, b) => new Date(a.date) - new Date(b.date))
+                    .slice(0, 4);
+
+                setRecentActivity(activity);
+                setUpcomingEvents(futureExams);
                 setAnnouncements(activeAnnouncements.slice(0, 5));
             }
         } catch (error) {
@@ -198,74 +238,73 @@ const DashboardHome = ({ setActiveTab }) => {
                 )}
             </div>
 
-            {/* Activity Overview - Only for Admin and Teacher */}
-            {!isStudent && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <Card>
-                        <h3 className="text-xl font-bold text-white mb-6">Recent Activity</h3>
-                        <div className="space-y-4">
-                            <ActivityItem
-                                icon="👨‍🎓"
-                                title="New student enrolled"
-                                description="John Doe joined Computer Science program"
-                                time="2 hours ago"
-                            />
-                            <ActivityItem
-                                icon="📝"
-                                title="Exam scheduled"
-                                description="Mathematics final exam on June 15, 2026"
-                                time="5 hours ago"
-                            />
-                            <ActivityItem
-                                icon="📢"
-                                title="Announcement posted"
-                                description="Library hours extended for exam week"
-                                time="1 day ago"
-                            />
-                            <ActivityItem
-                                icon="📚"
-                                title="New course added"
-                                description="Advanced Machine Learning course created"
-                                time="2 days ago"
-                            />
-                        </div>
-                    </Card>
+            {/* Dashboard Bottom Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Recent Activity (Staff) or Today's Schedule (Student) */}
+                <Card>
+                    <h3 className="text-xl font-bold text-white mb-6">
+                        {isStudent ? "Today's Schedule" : "Recent Activity"}
+                    </h3>
+                    <div className="space-y-4">
+                        {isStudent ? (
+                            todaySchedule.length === 0 ? (
+                                <div className="text-center py-8 text-slate-400">
+                                    <p className="text-2xl mb-2">🏖️</p>
+                                    <p>No classes scheduled for today</p>
+                                </div>
+                            ) : (
+                                todaySchedule.map((item, idx) => (
+                                    <ActivityItem
+                                        key={idx}
+                                        icon="⏰"
+                                        title={item.subjectName || 'Class'}
+                                        description={`${item.startTime} - ${item.endTime} | Room: ${item.room || 'N/A'}`}
+                                        time={item.dayOfWeek}
+                                    />
+                                ))
+                            )
+                        ) : (
+                            recentActivity.length === 0 ? (
+                                <div className="text-center py-8 text-slate-400">No recent activity</div>
+                            ) : (
+                                recentActivity.map((item, idx) => (
+                                    <ActivityItem
+                                        key={idx}
+                                        icon={item.icon}
+                                        title={item.title}
+                                        description={item.desc}
+                                        time={formatTimeAgo(item.time)}
+                                    />
+                                ))
+                            )
+                        )}
+                    </div>
+                </Card>
 
-                    <Card>
-                        <h3 className="text-xl font-bold text-white mb-6">Upcoming Events</h3>
-                        <div className="space-y-4">
-                            <EventItem
-                                date="15"
-                                month="JUN"
-                                title="Final Examinations"
-                                description="All programs - Main Campus"
-                                color="danger"
-                            />
-                            <EventItem
-                                date="22"
-                                month="JUN"
-                                title="Faculty Meeting"
-                                description="Department heads meeting"
-                                color="primary"
-                            />
-                            <EventItem
-                                date="30"
-                                month="JUN"
-                                title="Semester End"
-                                description="Last day of classes"
-                                color="warning"
-                            />
-                            <EventItem
-                                date="5"
-                                month="JUL"
-                                title="Results Publication"
-                                description="Student grades release"
-                                color="success"
-                            />
-                        </div>
-                    </Card>
-                </div>
-            )}
+                {/* Upcoming Events (Exams) */}
+                <Card>
+                    <h3 className="text-xl font-bold text-white mb-6">Upcoming Exams</h3>
+                    <div className="space-y-4">
+                        {upcomingEvents.length === 0 ? (
+                            <div className="text-center py-8 text-slate-400">No upcoming exams</div>
+                        ) : (
+                            upcomingEvents.map((event, idx) => {
+                                const eventDate = new Date(event.date);
+                                return (
+                                    <EventItem
+                                        key={idx}
+                                        date={eventDate.getDate()}
+                                        month={eventDate.toLocaleString('default', { month: 'short' }).toUpperCase()}
+                                        title={event.name}
+                                        description={`${event.subjectName || 'Subject'} | ${event.startTime || ''}`}
+                                        color={idx % 2 === 0 ? "primary" : "warning"}
+                                    />
+                                );
+                            })
+                        )}
+                    </div>
+                </Card>
+            </div>
         </div>
     );
 };
@@ -344,6 +383,18 @@ const EventItem = ({ date, month, title, description, color }) => {
             </div>
         </div>
     );
+};
+
+const formatTimeAgo = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+    return date.toLocaleDateString();
 };
 
 export default DashboardHome;

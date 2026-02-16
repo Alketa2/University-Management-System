@@ -39,9 +39,7 @@ class AuthService {
 
     // Clear authentication data
     clearAuthData() {
-        localStorage.removeItem(this.TOKEN_KEY);
-        localStorage.removeItem(this.REFRESH_TOKEN_KEY);
-        localStorage.removeItem(this.USER_KEY);
+        localStorage.clear();
     }
 
     // Check if user is authenticated
