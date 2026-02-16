@@ -51,6 +51,31 @@ public class AuthController : ControllerBase
 
         _db.Users.Add(user);
 
+        // ✅ Automatically create a profile based on role
+        if (user.Role == "Student")
+        {
+            _db.Students.Add(new Student
+            {
+                Id = Guid.NewGuid(),
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                CreatedAt = DateTime.UtcNow,
+                Status = StudentStatus.Enrolled
+            });
+        }
+        else if (user.Role == "Teacher")
+        {
+            _db.Teachers.Add(new Teacher
+            {
+                Id = Guid.NewGuid(),
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
         // create refresh token
         var (rawRefresh, refreshHash, refreshExpires) = _jwt.CreateRefreshToken();
         _db.RefreshTokens.Add(new RefreshToken
