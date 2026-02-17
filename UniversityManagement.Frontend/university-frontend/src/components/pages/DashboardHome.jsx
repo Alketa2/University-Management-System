@@ -10,6 +10,7 @@ const DashboardHome = ({ setActiveTab }) => {
     const [recentActivity, setRecentActivity] = useState([]);
     const [upcomingEvents, setUpcomingEvents] = useState([]);
     const [todaySchedule, setTodaySchedule] = useState([]);
+    const [atRiskStudents, setAtRiskStudents] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const currentUser = authService.getUser();
@@ -83,6 +84,13 @@ const DashboardHome = ({ setActiveTab }) => {
                 setRecentActivity(activity);
                 setUpcomingEvents(futureExams);
                 setAnnouncements(activeAnnouncements.slice(0, 5));
+
+                // Identify at-risk students (GPA < 2.0)
+                const atRisk = students
+                    .filter(s => s.gpa > 0 && s.gpa < 2.0)
+                    .sort((a, b) => a.gpa - b.gpa)
+                    .slice(0, 4);
+                setAtRiskStudents(atRisk);
             }
         } catch (error) {
             console.error('Error fetching dashboard data:', error);
@@ -233,6 +241,36 @@ const DashboardHome = ({ setActiveTab }) => {
                                 color="danger"
                                 onClick={() => setActiveTab('announcements')}
                             />
+                        </div>
+                    </Card>
+                )}
+                {/* At-Risk Students - Only for Admin/Teacher */}
+                {!isStudent && atRiskStudents.length > 0 && (
+                    <Card>
+                        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                            ⚠️ Students at Risk
+                        </h3>
+                        <div className="space-y-4">
+                            {atRiskStudents.map((student) => (
+                                <div
+                                    key={student.id}
+                                    className="p-4 bg-danger-500/10 border border-danger-500/20 rounded-xl flex items-center justify-between"
+                                >
+                                    <div>
+                                        <p className="font-semibold text-white">{student.firstName} {student.lastName}</p>
+                                        <p className="text-xs text-danger-400">{student.primaryProgramName}</p>
+                                    </div>
+                                    <Badge variant="danger" className="text-sm font-bold">
+                                        GPA: {student.gpa}
+                                    </Badge>
+                                </div>
+                            ))}
+                            <button
+                                onClick={() => setActiveTab('students')}
+                                className="w-full text-center text-sm text-slate-400 hover:text-white transition-colors pt-2"
+                            >
+                                View all students
+                            </button>
                         </div>
                     </Card>
                 )}

@@ -24,6 +24,14 @@ public class TimetableService : ITimetableService
 
     public async Task<TimetableResponseDto> CreateTimetableAsync(CreateTimetableDto createTimetableDto)
     {
+        await CheckForConflictsAsync(
+            (DayOfWeek)createTimetableDto.DayOfWeek,
+            createTimetableDto.StartTime,
+            createTimetableDto.EndTime,
+            createTimetableDto.Room,
+            createTimetableDto.ProgramId,
+            createTimetableDto.SubjectId);
+
         var timetable = new Timetable
         {
             ProgramId = createTimetableDto.ProgramId,
@@ -42,6 +50,15 @@ public class TimetableService : ITimetableService
 
     public async Task<TimetableResponseDto> UpdateTimetableAsync(UpdateTimetableDto updateTimetableDto)
     {
+        await CheckForConflictsAsync(
+            (DayOfWeek)updateTimetableDto.DayOfWeek,
+            updateTimetableDto.StartTime,
+            updateTimetableDto.EndTime,
+            updateTimetableDto.Room,
+            updateTimetableDto.ProgramId,
+            updateTimetableDto.SubjectId,
+            updateTimetableDto.Id);
+
         var timetable = await _timetableRepository.GetByIdAsync(updateTimetableDto.Id);
         if (timetable == null)
             throw new KeyNotFoundException($"Timetable with ID {updateTimetableDto.Id} not found.");
@@ -96,6 +113,28 @@ public class TimetableService : ITimetableService
     public async Task<bool> DeleteTimetableAsync(Guid id)
     {
         return await _timetableRepository.DeleteAsync(id);
+    }
+
+    private async Task CheckForConflictsAsync(DayOfWeek day, TimeSpan start, TimeSpan end, string? room, Guid programId, Guid subjectId, Guid? excludeId = null)
+    {
+        var conflicts = await _timetableRepository.GetOverlappingTimetablesAsync(day, start, end, room, programId, subjectId, excludeId);
+
+        if (conflicts.Any())
+        {
+            var conflict = conflicts.First();
+            var teacherId = (await _subjectRepository.GetByIdAsync(subjectId))?.TeacherId;
+
+            if (!string.IsNullOrEmpty(room) && conflict.Room == room)
+                throw new ArgumentException($"Room '{room}' is already occupied at this time by '{conflict.Subject?.Name ?? "another class"}'.");
+
+            if (conflict.ProgramId == programId)
+                throw new ArgumentException($"This program already has a scheduled class '{conflict.Subject?.Name ?? "another class"}' at this time.");
+
+            if (teacherId.HasValue && conflict.Subject?.TeacherId == teacherId)
+                throw new ArgumentException($"The assigned teacher is already teaching another class at this time.");
+
+            throw new ArgumentException("Schedule conflict detected.");
+        }
     }
 
     private async Task<TimetableResponseDto> MapToResponseDto(Timetable timetable)

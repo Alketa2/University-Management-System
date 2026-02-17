@@ -69,6 +69,13 @@ public class TeacherService : ITeacherService
         return await _teacherRepository.DeleteAsync(id);
     }
 
+    public async Task<TeacherResponseDto?> GetTeacherByEmailAsync(string email)
+    {
+        var teachers = await _teacherRepository.GetAllAsync();
+        var teacher = teachers.FirstOrDefault(t => string.Equals(t.Email, email, StringComparison.OrdinalIgnoreCase));
+        return teacher == null ? null : MapToResponseDto(teacher);
+    }
+
     private static TeacherResponseDto MapToResponseDto(Teacher teacher)
     {
         return new TeacherResponseDto

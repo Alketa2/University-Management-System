@@ -24,8 +24,15 @@ public class TimetablesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<TimetableResponseDto>> CreateTimetable([FromBody] CreateTimetableDto createTimetableDto)
     {
-        var timetable = await _timetableService.CreateTimetableAsync(createTimetableDto);
-        return CreatedAtAction(nameof(GetTimetableById), new { id = timetable.Id }, timetable);
+        try
+        {
+            var timetable = await _timetableService.CreateTimetableAsync(createTimetableDto);
+            return CreatedAtAction(nameof(GetTimetableById), new { id = timetable.Id }, timetable);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPut("{id}")]
@@ -42,6 +49,10 @@ public class TimetablesController : ControllerBase
         {
             var timetable = await _timetableService.UpdateTimetableAsync(updateTimetableDto);
             return Ok(timetable);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
         }
         catch (KeyNotFoundException)
         {

@@ -16,6 +16,7 @@ const GradesPage = () => {
     const [filterSubject, setFilterSubject] = useState('');
     const [filterStudent, setFilterStudent] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
     const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
     const [transcriptData, setTranscriptData] = useState(null);
 
@@ -166,9 +167,14 @@ const GradesPage = () => {
 
                 </div>
                 {(isAdmin || isTeacher) && (
-                    <Button onClick={() => { setSelectedGrade(null); setIsModalOpen(true); }}>
-                        + Add Grade
-                    </Button>
+                    <div className="flex gap-3">
+                        <Button variant="secondary" onClick={() => setIsBulkModalOpen(true)}>
+                            Bulk Entry
+                        </Button>
+                        <Button onClick={() => { setSelectedGrade(null); setIsModalOpen(true); }}>
+                            + Add Grade
+                        </Button>
+                    </div>
                 )}
                 {isStudent && (
                     <Button variant="secondary" onClick={() => fetchTranscript()}>
@@ -188,8 +194,10 @@ const GradesPage = () => {
                         value={filterSubject}
                         onChange={(e) => handleSubjectChange(e.target.value)}
                         options={[
-                            { value: '', label: 'All Subjects' },
-                            ...subjects.map(s => ({ value: s.id, label: `${s.code} - ${s.name}` }))
+                            { value: '', label: isTeacher ? 'Select Subject' : 'All Subjects' },
+                            ...subjects
+                                .filter(s => !isTeacher || s.teacherId === currentUser?.teacherId)
+                                .map(s => ({ value: s.id, label: `${s.code} - ${s.name}` }))
                         ]}
                     />
                     {!isStudent && (
@@ -199,7 +207,13 @@ const GradesPage = () => {
                             onChange={(e) => setFilterStudent(e.target.value)}
                             options={[
                                 { value: '', label: 'All Students' },
-                                ...students.map(s => ({ value: s.id, label: `${s.firstName} ${s.lastName}` }))
+                                ...students
+                                    .filter(s => {
+                                        if (!filterSubject) return true;
+                                        const subject = subjects.find(sub => sub.id === filterSubject);
+                                        return s.primaryProgramId === subject?.programId;
+                                    })
+                                    .map(s => ({ value: s.id, label: `${s.firstName} ${s.lastName}` }))
                             ]}
                         />
                     )}
@@ -332,6 +346,22 @@ const GradesPage = () => {
                         setSuccessMessage(msg || 'Grade saved successfully!');
                         fetchData();
                         // Clear message after 5 seconds
+                        setTimeout(() => setSuccessMessage(''), 5000);
+                    }}
+                />
+            )}
+
+            {/* Bulk Grade Modal */}
+            {(isAdmin || isTeacher) && (
+                <BulkGradeModal
+                    isOpen={isBulkModalOpen}
+                    onClose={() => setIsBulkModalOpen(false)}
+                    students={students}
+                    subjects={subjects}
+                    exams={exams}
+                    onSuccess={(msg) => {
+                        setSuccessMessage(msg || 'Bulk grades saved successfully!');
+                        fetchData();
                         setTimeout(() => setSuccessMessage(''), 5000);
                     }}
                 />
@@ -515,6 +545,10 @@ const GradeModal = ({ isOpen, onClose, grade, students, subjects, exams, onSucce
 
     // Filter subjects based on student's program
     const filteredSubjects = subjects.filter(sub => {
+        // Filter by teacher if applicable
+        if (currentUser?.role === 'Teacher' && sub.teacherId !== currentUser?.teacherId) return false;
+
+        // Filter by student's program
         if (!formData.studentId || !selectedStudent?.primaryProgramId) return true;
         return sub.programId === selectedStudent.primaryProgramId;
     });
@@ -635,6 +669,210 @@ const GradeModal = ({ isOpen, onClose, grade, students, subjects, exams, onSucce
                         {loading ? 'Saving...' : grade ? 'Update Grade' : 'Add Grade'}
                     </Button>
                     <Button type="button" variant="secondary" onClick={onClose} className="flex-1">
+                        Cancel
+                    </Button>
+                </div>
+            </form>
+        </Modal>
+    );
+};
+
+const BulkGradeModal = ({ isOpen, onClose, students, subjects, exams, onSuccess }) => {
+    const [selectedSubject, setSelectedSubject] = useState('');
+    const [selectedExam, setSelectedExam] = useState('');
+    const [academicYear, setAcademicYear] = useState(`${new Date().getFullYear()}-${new Date().getFullYear() + 1}`);
+    const [semester, setSemester] = useState('1');
+    const [bulkEntries, setBulkEntries] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const currentUser = authService.getUser();
+
+    // Prepare entries when subject changes
+    useEffect(() => {
+        if (selectedSubject) {
+            const subject = subjects.find(s => s.id === selectedSubject);
+            const filteredStudents = students.filter(s => s.primaryProgramId === subject?.programId);
+
+            setBulkEntries(filteredStudents.map(student => ({
+                studentId: student.id,
+                studentName: `${student.firstName} ${student.lastName}`,
+                score: '',
+                maxScore: '100',
+                comments: ''
+            })));
+        } else {
+            setBulkEntries([]);
+        }
+    }, [selectedSubject, subjects, students]);
+
+    const handleScoreChange = (studentId, field, value) => {
+        setBulkEntries(prev => prev.map(entry =>
+            entry.studentId === studentId ? { ...entry, [field]: value } : entry
+        ));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const entriesToSubmit = bulkEntries.filter(e => e.score !== '');
+
+        if (entriesToSubmit.length === 0) {
+            setError('Please enter at least one score.');
+            return;
+        }
+
+        setLoading(true);
+        setError('');
+
+        try {
+            // Submit each grade one by one (or implement bulk API if available)
+            // For now, we'll do sequential posts to reuse existing validation
+            const promises = entriesToSubmit.map(entry => {
+                const payload = {
+                    studentId: entry.studentId,
+                    subjectId: selectedSubject,
+                    examId: selectedExam || null,
+                    score: parseFloat(entry.score),
+                    maxScore: parseFloat(entry.maxScore),
+                    comments: entry.comments || null,
+                    gradedByTeacherId: currentUser?.teacherId || null,
+                    academicYear,
+                    semester: parseInt(semester),
+                };
+                return apiClient.post(API_ENDPOINTS.GRADES.BASE, payload);
+            });
+
+            await Promise.all(promises);
+            onSuccess(`Successfully added ${entriesToSubmit.length} grades!`);
+            onClose();
+        } catch (err) {
+            setError(err.message || 'Failed to save bulk grades');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            title="Bulk Grade Entry"
+            className="max-w-4xl"
+        >
+            {error && <Alert type="error" message={error} onClose={() => setError('')} className="mb-4" />}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                    <Select
+                        label="Subject"
+                        value={selectedSubject}
+                        onChange={(e) => setSelectedSubject(e.target.value)}
+                        options={[
+                            { value: '', label: 'Select Subject' },
+                            ...subjects
+                                .filter(s => {
+                                    if (currentUser.role === 'Teacher') {
+                                        const teacherId = currentUser?.teacherId;
+                                        // Option A: Only their subjects
+                                        // Option B: Subjects in their program (heuristic)
+                                        // Let's go with their subjects for bulk entry to be safe
+                                        return s.teacherId === teacherId;
+                                    }
+                                    return true;
+                                })
+                                .map(s => ({ value: s.id, label: `${s.code} - ${s.name}` }))
+                        ]}
+                        required
+                    />
+                    <Select
+                        label="Exam (Optional)"
+                        value={selectedExam}
+                        onChange={(e) => setSelectedExam(e.target.value)}
+                        options={[
+                            { value: '', label: 'Overall Grade' },
+                            ...exams.filter(e => e.subjectId === selectedSubject).map(e => ({ value: e.id, label: e.name }))
+                        ]}
+                    />
+                    <Input
+                        label="Academic Year"
+                        value={academicYear}
+                        onChange={(e) => setAcademicYear(e.target.value)}
+                        required
+                    />
+                    <Input
+                        label="Semester"
+                        type="number"
+                        value={semester}
+                        onChange={(e) => setSemester(e.target.value)}
+                        min="1"
+                        required
+                    />
+                </div>
+
+                {selectedSubject && (
+                    <div className="mt-4">
+                        <div className="overflow-x-auto border border-slate-700 rounded-xl">
+                            <table className="w-full text-sm">
+                                <thead className="bg-slate-800 text-slate-300">
+                                    <tr>
+                                        <th className="text-left p-3">Student</th>
+                                        <th className="text-center p-3 w-32">Score</th>
+                                        <th className="text-center p-3 w-32">Max Score</th>
+                                        <th className="text-left p-3">Comments</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-800">
+                                    {bulkEntries.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="4" className="p-8 text-center text-slate-500 italic">
+                                                No students enrolled in this program
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        bulkEntries.map((entry) => (
+                                            <tr key={entry.studentId} className="hover:bg-slate-800/30">
+                                                <td className="p-3 text-white font-medium">{entry.studentName}</td>
+                                                <td className="p-3">
+                                                    <input
+                                                        type="number"
+                                                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-center focus:ring-1 focus:ring-primary-500 outline-none"
+                                                        value={entry.score}
+                                                        onChange={(e) => handleScoreChange(entry.studentId, 'score', e.target.value)}
+                                                        placeholder="Score"
+                                                    />
+                                                </td>
+                                                <td className="p-3">
+                                                    <input
+                                                        type="number"
+                                                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-center focus:ring-1 focus:ring-primary-500 outline-none"
+                                                        value={entry.maxScore}
+                                                        onChange={(e) => handleScoreChange(entry.studentId, 'maxScore', e.target.value)}
+                                                        placeholder="Max"
+                                                    />
+                                                </td>
+                                                <td className="p-3">
+                                                    <input
+                                                        type="text"
+                                                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white focus:ring-1 focus:ring-primary-500 outline-none"
+                                                        value={entry.comments}
+                                                        onChange={(e) => handleScoreChange(entry.studentId, 'comments', e.target.value)}
+                                                        placeholder="Observation..."
+                                                    />
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
+
+                <div className="flex gap-3 pt-4 border-t border-slate-800">
+                    <Button type="submit" disabled={loading || !selectedSubject || bulkEntries.length === 0} className="flex-1">
+                        {loading ? 'Submitting...' : `Submit ${bulkEntries.filter(e => e.score !== '').length} Grades`}
+                    </Button>
+                    <Button type="button" variant="secondary" onClick={onClose} className="w-1/4">
                         Cancel
                     </Button>
                 </div>

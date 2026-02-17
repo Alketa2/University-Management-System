@@ -12,4 +12,5 @@ public interface IStudentService
     Task<bool> DeleteStudentAsync(Guid id);
     Task<bool> AdmitStudentToProgramAsync(AdmitStudentToProgramDto admitDto);
     Task<List<ProgramResponseDto>> GetStudentProgramsAsync(Guid studentId);
+    Task<StudentResponseDto?> GetStudentByEmailAsync(string email);
 }

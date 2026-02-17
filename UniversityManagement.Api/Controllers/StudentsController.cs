@@ -66,6 +66,20 @@ public class StudentsController : ControllerBase
         return Ok(student);
     }
 
+    [HttpGet("profile")]
+    [ProducesResponseType(typeof(StudentResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<StudentResponseDto>> GetProfile()
+    {
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        if (string.IsNullOrEmpty(email)) return BadRequest("Email not found in token");
+
+        var student = await _studentService.GetStudentByEmailAsync(email);
+        if (student == null) return NotFound("Student profile not found");
+
+        return Ok(student);
+    }
+
     [HttpGet]
     [Authorize(Policy = "RequireTeacherOrAdmin")]
     [ProducesResponseType(typeof(List<StudentResponseDto>), StatusCodes.Status200OK)]

@@ -72,6 +72,14 @@ const TimetablePage = () => {
             return matchesSearch && (!studentProgramId || timetable.programId === studentProgramId);
         }
 
+        // Filter results for teachers (only show their own subjects)
+        if (userRole === 'Teacher') {
+            const currentUser = authService.getUser();
+            const teacherId = currentUser?.teacherId;
+            const teacherSubjectIds = subjects.filter(s => s.teacherId === teacherId).map(s => s.id);
+            return matchesSearch && teacherSubjectIds.includes(timetable.subjectId);
+        }
+
         return matchesSearch;
     });
 
@@ -85,6 +93,13 @@ const TimetablePage = () => {
             const currentUser = authService.getUser();
             const studentProgramId = currentUser?.primaryProgramId;
             return isToday && (!studentProgramId || t.programId === studentProgramId);
+        }
+
+        if (userRole === 'Teacher') {
+            const currentUser = authService.getUser();
+            const teacherId = currentUser?.teacherId;
+            const teacherSubjectIds = subjects.filter(s => s.teacherId === teacherId).map(s => s.id);
+            return isToday && teacherSubjectIds.includes(t.subjectId);
         }
 
         return isToday;
@@ -385,7 +400,7 @@ const TimetableModal = ({ isOpen, onClose, timetable, programs, subjects, onSucc
                     <Select
                         label="Program"
                         value={formData.programId}
-                        onChange={(e) => setFormData({ ...formData, programId: e.target.value })}
+                        onChange={(e) => setFormData({ ...formData, programId: e.target.value, subjectId: '' })}
                         options={[
                             { value: '', label: 'Select Program' },
                             ...programs.map(p => ({ value: p.id, label: p.name }))
@@ -398,9 +413,12 @@ const TimetableModal = ({ isOpen, onClose, timetable, programs, subjects, onSucc
                         onChange={(e) => setFormData({ ...formData, subjectId: e.target.value })}
                         options={[
                             { value: '', label: 'Select Subject' },
-                            ...subjects.map(s => ({ value: s.id, label: `${s.code} - ${s.name}` }))
+                            ...subjects
+                                .filter(s => !formData.programId || s.programId === formData.programId)
+                                .map(s => ({ value: s.id, label: `${s.code} - ${s.name}` }))
                         ]}
                         required
+                        disabled={!formData.programId}
                     />
                 </div>
 

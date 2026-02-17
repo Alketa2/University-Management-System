@@ -69,6 +69,13 @@ const SubjectsPage = () => {
             return matchesSearch && (!studentProgramId || subject.programId === studentProgramId);
         }
 
+        // Filter by program for teachers (only show their own subjects)
+        if (userRole === 'Teacher') {
+            const currentUser = authService.getUser();
+            const teacherId = currentUser?.teacherId;
+            return matchesSearch && subject.teacherId === teacherId;
+        }
+
         return matchesSearch;
     });
 
@@ -399,7 +406,25 @@ const SubjectModal = ({ isOpen, onClose, subject, programs, teachers, onSuccess 
                     onChange={(e) => setFormData({ ...formData, teacherId: e.target.value })}
                     options={[
                         { value: '', label: 'Select Teacher' },
-                        ...teachers.filter(t => t.status === 'Active' || t.status === 1 || t.status === undefined).map(t => ({ value: t.id, label: `${t.firstName} ${t.lastName} (${t.department})` }))
+                        ...teachers
+                            .filter(t => {
+                                // Basic availability filter
+                                const isActive = t.status === 'Active' || t.status === 1 || t.status === undefined;
+                                if (!isActive) return false;
+
+                                // If a program is selected, try to match by department name (heuristic)
+                                if (formData.programId) {
+                                    const program = programs.find(p => p.id === formData.programId);
+                                    if (program) {
+                                        const programName = program.name.toLowerCase();
+                                        const deptName = t.department.toLowerCase();
+                                        // Match if department is in program name or vice-versa
+                                        return programName.includes(deptName) || deptName.includes(programName);
+                                    }
+                                }
+                                return true;
+                            })
+                            .map(t => ({ value: t.id, label: `${t.firstName} ${t.lastName} (${t.department})` }))
                     ]}
                     required
                 />

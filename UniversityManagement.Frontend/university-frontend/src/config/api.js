@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
     REGISTER: `${API_BASE_URL}/Auth/register`,
     REFRESH: `${API_BASE_URL}/Auth/refresh`,
     LOGOUT: `${API_BASE_URL}/Auth/logout`,
+    UPDATE_PROFILE: `${API_BASE_URL}/Auth/profile`,
   },
 
   // Students endpoints
@@ -16,12 +17,14 @@ export const API_ENDPOINTS = {
     BY_ID: (id) => `${API_BASE_URL}/Students/${id}`,
     PROGRAMS: (id) => `${API_BASE_URL}/Students/${id}/programs`,
     ADMIT_TO_PROGRAM: `${API_BASE_URL}/Students/admit-to-program`,
+    PROFILE: `${API_BASE_URL}/Students/profile`,
   },
 
   // Teachers endpoints
   TEACHERS: {
     BASE: `${API_BASE_URL}/Teachers`,
     BY_ID: (id) => `${API_BASE_URL}/Teachers/${id}`,
+    PROFILE: `${API_BASE_URL}/Teachers/profile`,
   },
 
   // Programs endpoints

@@ -9,4 +9,5 @@ public interface ITeacherService
     Task<TeacherResponseDto?> GetTeacherByIdAsync(Guid id);
     Task<List<TeacherResponseDto>> GetAllTeachersAsync();
     Task<bool> DeleteTeacherAsync(Guid id);
+    Task<TeacherResponseDto?> GetTeacherByEmailAsync(string email);
 }

@@ -53,10 +53,19 @@ const ExamsPage = () => {
         return subject ? subject.name : 'Unknown Subject';
     };
 
-    const filteredExams = exams.filter(exam =>
-        exam.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        getSubjectName(exam.subjectId)?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredExams = exams.filter(exam => {
+        const matchesSearch = exam.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            getSubjectName(exam.subjectId)?.toLowerCase().includes(searchTerm.toLowerCase());
+
+        if (userRole === 'Teacher') {
+            const currentUser = authService.getUser();
+            const teacherId = currentUser?.teacherId;
+            const teacherSubjectIds = subjects.filter(s => s.teacherId === teacherId).map(s => s.id);
+            return matchesSearch && teacherSubjectIds.includes(exam.subjectId);
+        }
+
+        return matchesSearch;
+    });
 
     const upcomingExams = exams.filter(exam => {
         const examDate = new Date(exam.examDate);

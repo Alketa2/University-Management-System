@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using UniversityManagement.Application.DTOs.Teacher;
 using UniversityManagement.Application.Interfaces;
 
@@ -58,6 +59,20 @@ public class TeachersController : ControllerBase
         var teacher = await _teacherService.GetTeacherByIdAsync(id);
         if (teacher == null)
             return NotFound();
+
+        return Ok(teacher);
+    }
+
+    [HttpGet("profile")]
+    [ProducesResponseType(typeof(TeacherResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<TeacherResponseDto>> GetProfile()
+    {
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        if (string.IsNullOrEmpty(email)) return BadRequest("Email not found in token");
+
+        var teacher = await _teacherService.GetTeacherByEmailAsync(email);
+        if (teacher == null) return NotFound("Teacher profile not found");
 
         return Ok(teacher);
     }

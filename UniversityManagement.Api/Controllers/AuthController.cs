@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using UniversityManagement.Application.DTOs.Auth;
 using UniversityManagement.Application.Interfaces;
 using UniversityManagement.Domain.Entities;
@@ -237,6 +238,49 @@ public class AuthController : ControllerBase
         await _db.SaveChangesAsync();
 
         return Ok("Logged out.");
+    }
+
+    [HttpPut("profile")]
+    [Authorize]
+    public async Task<IActionResult> UpdateProfile(UpdateIdentityDto dto)
+    {
+        var email = User.FindFirstValue(System.Security.Claims.ClaimTypes.Email);
+        if (string.IsNullOrEmpty(email)) return Unauthorized();
+
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+        if (user == null) return NotFound("User not found");
+
+        // Update core user
+        user.Email = dto.Email;
+        // Phone and Address are not in AppUser yet, let's skip or add them if needed.
+        // Actually Student/Teacher have them.
+        user.UpdatedAt = DateTime.UtcNow;
+
+        // Sync with Profile
+        if (user.Role == "Student")
+        {
+            var student = await _db.Students.FirstOrDefaultAsync(s => s.Email == email);
+            if (student != null)
+            {
+                student.Email = dto.Email;
+                student.Phone = dto.Phone;
+                student.Address = dto.Address;
+                student.UpdatedAt = DateTime.UtcNow;
+            }
+        }
+        else if (user.Role == "Teacher")
+        {
+            var teacher = await _db.Teachers.FirstOrDefaultAsync(t => t.Email == email);
+            if (teacher != null)
+            {
+                teacher.Email = dto.Email;
+                teacher.Phone = dto.Phone;
+                teacher.UpdatedAt = DateTime.UtcNow;
+            }
+        }
+
+        await _db.SaveChangesAsync();
+        return Ok(new { message = "Profile updated successfully" });
     }
 
     private async Task<(Guid? StudentId, Guid? TeacherId, Guid? PrimaryProgramId)> GetProfileInfoAsync(Guid userId, string role)

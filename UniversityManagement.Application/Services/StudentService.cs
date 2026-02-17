@@ -12,15 +12,18 @@ public class StudentService : IStudentService
     private readonly IRepository<Student> _studentRepository;
     private readonly IStudentProgramRepository _studentProgramRepository;
     private readonly IRepository<Program> _programRepository;
+    private readonly IRepository<Grade> _gradeRepository;
 
     public StudentService(
         IRepository<Student> studentRepository,
         IStudentProgramRepository studentProgramRepository,
-        IRepository<Program> programRepository)
+        IRepository<Program> programRepository,
+        IRepository<Grade> gradeRepository)
     {
         _studentRepository = studentRepository;
         _studentProgramRepository = studentProgramRepository;
         _programRepository = programRepository;
+        _gradeRepository = gradeRepository;
     }
 
     public async Task<StudentResponseDto> CreateStudentAsync(CreateStudentDto createStudentDto)
@@ -87,6 +90,13 @@ public class StudentService : IStudentService
         return await _studentRepository.DeleteAsync(id);
     }
 
+    public async Task<StudentResponseDto?> GetStudentByEmailAsync(string email)
+    {
+        var students = await _studentRepository.GetAllAsync();
+        var student = students.FirstOrDefault(s => string.Equals(s.Email, email, StringComparison.OrdinalIgnoreCase));
+        return student == null ? null : await MapToResponseDtoAsync(student);
+    }
+
     public async Task<bool> AdmitStudentToProgramAsync(AdmitStudentToProgramDto admitDto)
     {
         var student = await _studentRepository.GetByIdAsync(admitDto.StudentId);
@@ -130,6 +140,11 @@ public class StudentService : IStudentService
             primaryProgramName = program?.Name;
         }
 
+        // Calculate live GPA
+        var grades = await _gradeRepository.GetAllAsync();
+        var studentGrades = grades.Where(g => g.StudentId == student.Id).ToList();
+        var gpa = studentGrades.Any() ? studentGrades.Average(g => g.GradePoint) : 0;
+
         return new StudentResponseDto
         {
             Id = student.Id,
@@ -143,6 +158,7 @@ public class StudentService : IStudentService
             Status = student.Status.ToString(),
             PrimaryProgramId = student.PrimaryProgramId,
             PrimaryProgramName = primaryProgramName,
+            GPA = Math.Round(gpa, 2),
             CreatedAt = student.CreatedAt,
             UpdatedAt = student.UpdatedAt
         };
