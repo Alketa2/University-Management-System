@@ -3,6 +3,7 @@ import { Button, Card, Input, Modal, Badge, Alert, Spinner, Select } from '../ui
 import apiClient from '../../utils/apiClient';
 import { API_ENDPOINTS } from '../../config/api';
 import authService from '../../utils/authService';
+import CourseResourceModal from '../common/CourseResourceModal';
 
 const SubjectsPage = () => {
     const [subjects, setSubjects] = useState([]);
@@ -13,6 +14,8 @@ const SubjectsPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedSubject, setSelectedSubject] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isResourceModalOpen, setIsResourceModalOpen] = useState(false);
+    const [resourceSubject, setResourceSubject] = useState(null);
 
     const userRole = authService.getUserRole();
     const isStudent = userRole === 'Student';
@@ -180,9 +183,7 @@ const SubjectsPage = () => {
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Credits</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Semester</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Status</th>
-                                {!isStudent && (
-                                    <th className="text-right py-4 px-4 text-sm font-semibold text-slate-300">Actions</th>
-                                )}
+                                <th className="text-right py-4 px-4 text-sm font-semibold text-slate-300">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -212,27 +213,37 @@ const SubjectsPage = () => {
                                                 {subject.isActive !== false ? 'Active' : 'Inactive'}
                                             </Badge>
                                         </td>
-                                        {!isStudent && (
-                                            <td className="py-4 px-4">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() => { setSelectedSubject(subject); setIsModalOpen(true); }}
-                                                    >
-                                                        Edit
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() => handleDelete(subject.id)}
-                                                        className="text-danger-400 hover:text-danger-300"
-                                                    >
-                                                        Delete
-                                                    </Button>
-                                                </div>
-                                            </td>
-                                        )}
+                                        <td className="py-4 px-4">
+                                            <div className="flex items-center justify-end gap-2">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => { setResourceSubject(subject); setIsResourceModalOpen(true); }}
+                                                    className="text-primary-400 hover:bg-primary-600/10"
+                                                >
+                                                    Materials
+                                                </Button>
+                                                {!isStudent && (
+                                                    <>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            onClick={() => { setSelectedSubject(subject); setIsModalOpen(true); }}
+                                                        >
+                                                            Edit
+                                                        </Button>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            onClick={() => handleDelete(subject.id)}
+                                                            className="text-danger-400 hover:text-danger-300"
+                                                        >
+                                                            Delete
+                                                        </Button>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </td>
 
                                     </tr>
                                 ))
@@ -253,6 +264,12 @@ const SubjectsPage = () => {
                     onSuccess={fetchData}
                 />
             )}
+
+            <CourseResourceModal
+                isOpen={isResourceModalOpen}
+                onClose={() => setIsResourceModalOpen(false)}
+                subject={resourceSubject}
+            />
 
         </div>
     );

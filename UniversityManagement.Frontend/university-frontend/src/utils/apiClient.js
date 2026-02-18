@@ -2,7 +2,8 @@ import authService from './authService';
 
 class ApiClient {
     async request(url, options = {}) {
-        console.log('Request method:', options.method, 'URL:', url);
+        console.log('Request method:', options.method, 'Full URL:', url);
+        // If url is relative, concatenate but here it should be absolute from services
         const token = authService.getAccessToken();
         console.log('Access token present:', !!token);
 
@@ -15,10 +16,16 @@ class ApiClient {
             headers['Authorization'] = `Bearer ${token}`;
         }
 
-        let response = await fetch(url, {
-            ...options,
-            headers,
-        });
+        let response;
+        try {
+            response = await fetch(url, {
+                ...options,
+                headers,
+            });
+        } catch (err) {
+            console.error('Network error for URL:', url, err);
+            throw new Error(`Network error (is the backend running on ${url.split('/api')[0]}?): ${err.message}`);
+        }
 
         console.log('Fetch response status:', response.status);
 
@@ -44,8 +51,8 @@ class ApiClient {
 
         if (!response.ok) {
             const errorText = await response.text();
-            console.error('Response error:', response.status, errorText);
-            throw new Error(errorText || `Request failed with status ${response.status}`);
+            console.error('Response error:', response.status, errorText, 'for URL:', url);
+            throw new Error(errorText || `Request failed with status ${response.status} for ${url}`);
         }
 
         // Handle 204 No Content

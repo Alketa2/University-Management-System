@@ -12,6 +12,7 @@ using UniversityManagement.Application.Services;
 using UniversityManagement.Domain.Entities;
 using UniversityManagement.Domain.Interfaces;
 using UniversityManagement.Infrastructure.Data;
+using UniversityManagement.Infrastructure.Data.Mongo;
 using UniversityManagement.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -162,6 +163,9 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// MongoDB Context
+builder.Services.AddSingleton<MongoDbContext>();
+
 // CORS - Allow frontend origins
 builder.Services.AddCors(options =>
 {
@@ -189,6 +193,10 @@ builder.Services.AddScoped<IExamRepository, ExamRepository>();
 builder.Services.AddScoped<ITimetableRepository, TimetableRepository>();
 builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
 
+// Mongo Repositories
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<ICourseResourceRepository, CourseResourceRepository>();
+
 // Services
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IProgramService, ProgramService>();
@@ -198,6 +206,10 @@ builder.Services.AddScoped<IExamService, ExamService>();
 builder.Services.AddScoped<ITimetableService, TimetableService>();
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 builder.Services.AddScoped<IGradeService, GradeService>();
+
+// Mongo Services
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<ICourseResourceService, CourseResourceService>();
 
 var app = builder.Build();
 
