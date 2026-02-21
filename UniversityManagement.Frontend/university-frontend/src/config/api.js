@@ -11,6 +11,14 @@ export const API_ENDPOINTS = {
     UPDATE_PROFILE: `${API_BASE_URL}/Auth/profile`,
   },
 
+  // Users management (Admin only)
+  USERS: {
+    BASE: `${API_BASE_URL}/Users`,
+    UPDATE_ROLE: (id) => `${API_BASE_URL}/Users/${id}/role`,
+    TOGGLE_STATUS: (id) => `${API_BASE_URL}/Users/${id}/status`,
+    DELETE: (id) => `${API_BASE_URL}/Users/${id}`,
+  },
+
   // Students endpoints
   STUDENTS: {
     BASE: `${API_BASE_URL}/Students`,

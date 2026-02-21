@@ -95,7 +95,7 @@ const StudentsPage = () => {
                         <div>
                             <p className="text-sm text-slate-400">Active</p>
                             <p className="text-3xl font-bold text-success-400 mt-1">
-                                {students.filter(s => s.isActive !== false).length}
+                                {students.filter(s => s.status === 'Active' || s.status === 'Enrolled').length}
                             </p>
                         </div>
                         <div className="w-12 h-12 bg-success-600/20 rounded-xl flex items-center justify-center text-2xl">
@@ -108,7 +108,7 @@ const StudentsPage = () => {
                         <div>
                             <p className="text-sm text-slate-400">Inactive</p>
                             <p className="text-3xl font-bold text-slate-400 mt-1">
-                                {students.filter(s => s.isActive === false).length}
+                                {students.filter(s => s.status !== 'Active' && s.status !== 'Enrolled').length}
                             </p>
                         </div>
                         <div className="w-12 h-12 bg-slate-700/50 rounded-xl flex items-center justify-center text-2xl">
@@ -172,8 +172,8 @@ const StudentsPage = () => {
                                         <td className="py-4 px-4 text-slate-300">{student.email}</td>
                                         <td className="py-4 px-4 text-slate-300">{student.phone || 'N/A'}</td>
                                         <td className="py-4 px-4">
-                                            <Badge variant={student.isActive !== false ? 'success' : 'default'}>
-                                                {student.isActive !== false ? 'Active' : 'Inactive'}
+                                            <Badge variant={student.status === 'Active' || student.status === 'Enrolled' ? 'success' : 'default'}>
+                                                {student.status || 'Enrolled'}
                                             </Badge>
                                         </td>
                                         <td className="py-4 px-4 text-slate-300">
@@ -274,13 +274,18 @@ const StudentModal = ({ isOpen, onClose, student, onSuccess }) => {
         setError('');
 
         try {
+            const payload = {
+                ...formData,
+                primaryProgramId: formData.primaryProgramId || null
+            };
+
             if (student) {
                 await apiClient.put(API_ENDPOINTS.STUDENTS.BY_ID(student.id), {
                     id: student.id,
-                    ...formData,
+                    ...payload,
                 });
             } else {
-                await apiClient.post(API_ENDPOINTS.STUDENTS.BASE, formData);
+                await apiClient.post(API_ENDPOINTS.STUDENTS.BASE, payload);
             }
             onSuccess();
             onClose();
@@ -335,12 +340,14 @@ const StudentModal = ({ isOpen, onClose, student, onSuccess }) => {
                     type="date"
                     value={formData.dateOfBirth}
                     onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
+                    required
                 />
 
                 <Input
                     label="Address"
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    required
                 />
 
                 <Select

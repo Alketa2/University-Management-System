@@ -16,6 +16,7 @@ const Sidebar = ({ activeTab, setActiveTab, userRole }) => {
         { id: 'timetable', label: 'Timetable', icon: '📅', roles: ['Admin', 'Teacher', 'Student'] },
         { id: 'announcements', label: 'Announcements', icon: '📢', roles: ['Admin', 'Teacher', 'Student'] },
         { id: 'profile', label: 'My Profile', icon: '👤', roles: ['Admin', 'Teacher', 'Student'] },
+        { id: 'users', label: 'Users Management', icon: '👥', roles: ['Admin'] },
     ];
 
     const filteredMenuItems = menuItems.filter(item => item.roles.includes(userRole));

@@ -96,7 +96,7 @@ const TeachersPage = () => {
                         <div>
                             <p className="text-sm text-slate-400">Active</p>
                             <p className="text-3xl font-bold text-success-400 mt-1">
-                                {teachers.filter(t => t.isActive !== false).length}
+                                {teachers.filter(t => t.status === 'Active' || t.status === 1 || t.status === '1').length}
                             </p>
                         </div>
                         <div className="w-12 h-12 bg-success-600/20 rounded-xl flex items-center justify-center text-2xl">
@@ -177,8 +177,8 @@ const TeachersPage = () => {
                                         </td>
                                         <td className="py-4 px-4 text-slate-300">{teacher.phone || 'N/A'}</td>
                                         <td className="py-4 px-4">
-                                            <Badge variant={teacher.isActive !== false ? 'success' : 'default'}>
-                                                {teacher.isActive !== false ? 'Active' : 'Inactive'}
+                                            <Badge variant={teacher.status === 'Active' || teacher.status === 1 || teacher.status === '1' ? 'success' : 'default'}>
+                                                {teacher.status === 1 || teacher.status === '1' ? 'Active' : (teacher.status || 'Active')}
                                             </Badge>
                                         </td>
                                         <td className="py-4 px-4">
@@ -329,6 +329,7 @@ const TeacherModal = ({ isOpen, onClose, teacher, onSuccess }) => {
                     type="date"
                     value={formData.hireDate}
                     onChange={(e) => setFormData({ ...formData, hireDate: e.target.value })}
+                    required
                 />
 
                 <div className="flex gap-3 pt-4">

@@ -11,6 +11,7 @@ import GradesPage from './components/pages/GradesPage';
 import TimetablePage from './components/pages/TimetablePage';
 import AnnouncementsPage from './components/pages/AnnouncementsPage';
 import ProfilePage from './components/pages/ProfilePage';
+import UsersPage from './components/pages/UsersPage';
 import authService from './utils/authService';
 import './index.css';
 
@@ -77,6 +78,8 @@ function App() {
             return <AnnouncementsPage />;
           case 'profile':
             return <ProfilePage />;
+          case 'users':
+            return <UsersPage />;
           default:
             return <DashboardHome setActiveTab={setActiveTab} />;
         }

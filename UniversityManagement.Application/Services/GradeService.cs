@@ -9,10 +9,12 @@ namespace UniversityManagement.Application.Services;
 public class GradeService : IGradeService
 {
     private readonly UniversityDbContext _context;
+    private readonly INotificationService _notificationService;
 
-    public GradeService(UniversityDbContext context)
+    public GradeService(UniversityDbContext context, INotificationService notificationService)
     {
         _context = context;
+        _notificationService = notificationService;
     }
     public async Task<GradeResponseDto> CreateGradeAsync(CreateGradeDto createGradeDto)
     {
@@ -59,6 +61,33 @@ public class GradeService : IGradeService
 
         _context.Grades.Add(grade);
         await _context.SaveChangesAsync();
+
+        // 3. Send Notification to Student
+        try
+        {
+            var appUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == student.Email);
+            if (appUser != null)
+            {
+                await _notificationService.CreateNotificationAsync(new Notification
+                {
+                    Title = "New Grade Posted",
+                    Message = $"A new grade has been posted for {subject.Name}: {grade.LetterGrade} ({grade.Percentage}%)",
+                    Type = "Success",
+                    RecipientId = appUser.Id.ToString(),
+                    RecipientRole = "Student",
+                    Metadata = new Dictionary<string, string>
+                    {
+                        { "SubjectId", subject.Id.ToString() },
+                        { "GradeId", grade.Id.ToString() }
+                    }
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            // Don't fail the grade creation if notification fails 
+            Console.WriteLine($"Failed to send notification: {ex.Message}");
+        }
 
         return await MapToResponseDto(grade);
     }
