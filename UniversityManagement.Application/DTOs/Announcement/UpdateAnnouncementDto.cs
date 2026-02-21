@@ -8,6 +8,7 @@ public class UpdateAnnouncementDto
     public string TargetAudience { get; set; } = string.Empty;
     public Guid? ProgramId { get; set; }
     public Guid? SubjectId { get; set; }
+    public Guid TeacherId { get; set; }
     public DateTime? ExpiryDate { get; set; }
     public bool IsActive { get; set; }
 }

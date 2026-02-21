@@ -3,6 +3,7 @@ using UniversityManagement.Application.DTOs.Grade;
 using UniversityManagement.Application.Interfaces;
 using UniversityManagement.Domain.Entities;
 using UniversityManagement.Infrastructure.Data;
+using UniversityManagement.Domain.MongoEntities;
 
 namespace UniversityManagement.Application.Services;
 
@@ -139,6 +140,39 @@ public class GradeService : IGradeService
         CalculateGradeMetrics(grade);
 
         await _context.SaveChangesAsync();
+
+        // 3. Send Notification to Student
+        try
+        {
+            var student = await _context.Students.FindAsync(grade.StudentId);
+            var subject = await _context.Subjects.FindAsync(grade.SubjectId);
+            
+            if (student != null && subject != null)
+            {
+                var appUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == student.Email);
+                if (appUser != null)
+                {
+                    await _notificationService.CreateNotificationAsync(new Notification
+                    {
+                        Title = "Grade Updated",
+                        Message = $"Your grade for {subject.Name} has been updated to: {grade.LetterGrade} ({grade.Percentage}%)",
+                        Type = "Info",
+                        RecipientId = appUser.Id.ToString(),
+                        RecipientRole = "Student",
+                        Metadata = new Dictionary<string, string>
+                        {
+                            { "SubjectId", subject.Id.ToString() },
+                            { "GradeId", grade.Id.ToString() }
+                        }
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to send update notification: {ex.Message}");
+        }
+
         return await MapToResponseDto(grade);
     }
 

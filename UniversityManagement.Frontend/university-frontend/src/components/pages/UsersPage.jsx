@@ -8,6 +8,10 @@ const UsersPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [editFormData, setEditFormData] = useState({ firstName: '', lastName: '', email: '' });
+    const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
         fetchUsers();
@@ -40,6 +44,31 @@ const UsersPage = () => {
             setUsers(users.map(u => u.id === userId ? { ...u, isActive: result.isActive } : u));
         } catch (err) {
             setError(err.message || 'Failed to update status');
+        }
+    };
+
+    const handleEditClick = (user) => {
+        setSelectedUser(user);
+        setEditFormData({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email
+        });
+        setIsEditModalOpen(true);
+    };
+
+    const handleUpdateUser = async (e) => {
+        e.preventDefault();
+        setUpdating(true);
+        try {
+            const updatedUser = await apiClient.put(API_ENDPOINTS.USERS.UPDATE(selectedUser.id), editFormData);
+            setUsers(users.map(u => u.id === selectedUser.id ? { ...u, ...updatedUser } : u));
+            setIsEditModalOpen(false);
+            setSelectedUser(null);
+        } catch (err) {
+            setError(err.message || 'Failed to update user');
+        } finally {
+            setUpdating(false);
         }
     };
 
@@ -143,7 +172,15 @@ const UsersPage = () => {
                                             {new Date(user.createdAt).toLocaleDateString()}
                                         </td>
                                         <td className="py-4 px-4">
-                                            <div className="flex items-center justify-end">
+                                            <div className="flex items-center justify-end gap-2">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => handleEditClick(user)}
+                                                    className="text-primary-400 hover:text-primary-300"
+                                                >
+                                                    Edit
+                                                </Button>
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
@@ -161,6 +198,71 @@ const UsersPage = () => {
                     </table>
                 </div>
             </Card>
+
+            {/* Edit User Modal */}
+            {isEditModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+                    <Card className="w-full max-w-md">
+                        <div className="p-6 space-y-6">
+                            <div className="flex justify-between items-center">
+                                <h3 className="text-xl font-bold text-white">Edit User</h3>
+                                <button
+                                    onClick={() => setIsEditModalOpen(false)}
+                                    className="text-slate-400 hover:text-white"
+                                >
+                                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleUpdateUser} className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-400 mb-1">First Name</label>
+                                    <Input
+                                        value={editFormData.firstName}
+                                        onChange={(e) => setEditFormData({ ...editFormData, firstName: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-400 mb-1">Last Name</label>
+                                    <Input
+                                        value={editFormData.lastName}
+                                        onChange={(e) => setEditFormData({ ...editFormData, lastName: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-400 mb-1">Email</label>
+                                    <Input
+                                        type="email"
+                                        value={editFormData.email}
+                                        onChange={(e) => setEditFormData({ ...editFormData, email: e.target.value })}
+                                        required
+                                    />
+                                </div>
+
+                                <div className="flex justify-end gap-3 pt-4">
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        onClick={() => setIsEditModalOpen(false)}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        loading={updating}
+                                    >
+                                        Save Changes
+                                    </Button>
+                                </div>
+                            </form>
+                        </div>
+                    </Card>
+                </div>
+            )}
         </div>
     );
 };

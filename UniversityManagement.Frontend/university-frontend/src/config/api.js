@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
   // Users management (Admin only)
   USERS: {
     BASE: `${API_BASE_URL}/Users`,
+    UPDATE: (id) => `${API_BASE_URL}/Users/${id}`,
     UPDATE_ROLE: (id) => `${API_BASE_URL}/Users/${id}/role`,
     TOGGLE_STATUS: (id) => `${API_BASE_URL}/Users/${id}/status`,
     DELETE: (id) => `${API_BASE_URL}/Users/${id}`,

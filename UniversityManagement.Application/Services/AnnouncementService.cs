@@ -91,6 +91,8 @@ namespace UniversityManagement.Application.Services
             if (updateAnnouncementDto.SubjectId.HasValue)
                 existing.SubjectId = updateAnnouncementDto.SubjectId;
 
+            existing.TeacherId = updateAnnouncementDto.TeacherId;
+
             // ExpiryDate may be nullable 
             existing.ExpiryDate = updateAnnouncementDto.ExpiryDate;
 

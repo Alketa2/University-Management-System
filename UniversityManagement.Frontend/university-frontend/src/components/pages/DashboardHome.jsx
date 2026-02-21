@@ -39,8 +39,8 @@ const DashboardHome = ({ setActiveTab }) => {
 
                 // Filter exams for student's program and future dates
                 const studentExams = allExams
-                    .filter(e => (!studentProgramId || e.programId === studentProgramId) && new Date(e.date) >= new Date())
-                    .sort((a, b) => new Date(a.date) - new Date(b.date))
+                    .filter(e => (!studentProgramId || e.programId === studentProgramId) && new Date(e.examDate) >= new Date())
+                    .sort((a, b) => new Date(a.examDate) - new Date(b.examDate))
                     .slice(0, 4);
 
                 // Filter schedule for today
@@ -70,18 +70,25 @@ const DashboardHome = ({ setActiveTab }) => {
                 });
 
                 // Calculate recent activity
-                const activity = [
-                    ...students.slice(-2).map(s => ({ type: 'student', title: 'New student enrolled', desc: `${s.firstName} ${s.lastName} joined`, time: s.createdAt, icon: '👨‍🎓' })),
-                    ...exams.slice(-2).map(e => ({ type: 'exam', title: 'Exam scheduled', desc: `${e.name} for ${e.subjectName || 'Subject'}`, time: e.createdAt, icon: '📝' })),
-                    ...subjects.slice(-2).map(s => ({ type: 'subject', title: 'New course added', desc: s.name, time: s.createdAt, icon: '📚' }))
-                ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 4);
+                const activityMap = [
+                    ...students.map(s => ({ type: 'student', title: 'New student enrolled', desc: `${s.firstName} ${s.lastName} joined`, time: s.createdAt || s.enrollmentDate, icon: '👨‍🎓' })),
+                    ...teachers.map(t => ({ type: 'teacher', title: 'New faculty member', desc: `${t.firstName} ${t.lastName} joined`, time: t.createdAt || t.hireDate, icon: '👨‍🏫' })),
+                    ...programs.map(p => ({ type: 'program', title: 'New program created', desc: p.name, time: p.createdAt || p.startDate, icon: '🏛️' })),
+                    ...subjects.map(s => ({ type: 'subject', title: 'New course added', desc: s.name, time: s.createdAt, icon: '📚' })),
+                    ...exams.map(e => ({ type: 'exam', title: 'Exam scheduled', desc: `${e.name} for ${e.subjectName || 'Subject'}`, time: e.createdAt, icon: '📝' })),
+                ];
+
+                const sortedActivity = activityMap
+                    .filter(item => item.time)
+                    .sort((a, b) => new Date(b.time) - new Date(a.time))
+                    .slice(0, 6);
 
                 const futureExams = exams
-                    .filter(e => new Date(e.date) >= new Date())
-                    .sort((a, b) => new Date(a.date) - new Date(b.date))
+                    .filter(e => e.examDate && new Date(e.examDate) >= new Date())
+                    .sort((a, b) => new Date(a.examDate) - new Date(b.examDate))
                     .slice(0, 4);
 
-                setRecentActivity(activity);
+                setRecentActivity(sortedActivity);
                 setUpcomingEvents(futureExams);
                 setAnnouncements(activeAnnouncements.slice(0, 5));
 
@@ -327,7 +334,7 @@ const DashboardHome = ({ setActiveTab }) => {
                             <div className="text-center py-8 text-slate-400">No upcoming exams</div>
                         ) : (
                             upcomingEvents.map((event, idx) => {
-                                const eventDate = new Date(event.date);
+                                const eventDate = new Date(event.examDate);
                                 return (
                                     <EventItem
                                         key={idx}
