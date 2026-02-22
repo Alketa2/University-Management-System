@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using UniversityManagement.Application.DTOs.Subject;
 using UniversityManagement.Application.DTOs.Subjects;
 using UniversityManagement.Application.Interfaces;
 using UniversityManagement.Domain.Entities;
@@ -21,16 +23,40 @@ namespace UniversityManagement.Application.Services
             _db = db;
         }
 
-        public Task<List<Subject>> GetAllAsync()
-            => _subjectRepository.GetAllAsync();
+        public async Task<List<SubjectResponseDto>> GetAllAsync()
+        {
+            var subjects = await _db.Subjects
+                .Include(s => s.Program)
+                .Include(s => s.Teacher)
+                .AsNoTracking()
+                .ToListAsync();
 
-        public Task<Subject?> GetByIdAsync(Guid id)
-            => _subjectRepository.GetByIdAsync(id);
+            return subjects.Select(MapToResponseDto).ToList();
+        }
 
-        public Task<List<Subject>> GetByProgramIdAsync(Guid programId)
-            => _subjectRepository.GetByProgramIdAsync(programId);
+        public async Task<SubjectResponseDto?> GetByIdAsync(Guid id)
+        {
+            var subject = await _db.Subjects
+                .Include(s => s.Program)
+                .Include(s => s.Teacher)
+                .FirstOrDefaultAsync(s => s.Id == id);
 
-        public async Task<Subject> CreateAsync(CreateSubjectDto dto)
+            return subject == null ? null : MapToResponseDto(subject);
+        }
+
+        public async Task<List<SubjectResponseDto>> GetByProgramIdAsync(Guid programId)
+        {
+            var subjects = await _db.Subjects
+                .Include(s => s.Program)
+                .Include(s => s.Teacher)
+                .Where(s => s.ProgramId == programId)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return subjects.Select(MapToResponseDto).ToList();
+        }
+
+        public async Task<SubjectResponseDto> CreateAsync(CreateSubjectDto dto)
         {
             // FK checks (clean error instead of crash)
             var programExists = await _db.Programs.AnyAsync(p => p.Id == dto.ProgramId);
@@ -54,12 +80,14 @@ namespace UniversityManagement.Application.Services
             };
 
             await _subjectRepository.AddAsync(subject);
-            return subject;
+
+            // Reload to get navigation properties for the DTO
+            return (await GetByIdAsync(subject.Id))!;
         }
 
-        public async Task<Subject?> UpdateAsync(Guid id, UpdateSubjectDto dto)
+        public async Task<SubjectResponseDto?> UpdateAsync(Guid id, UpdateSubjectDto dto)
         {
-            var subject = await _subjectRepository.GetByIdAsync(id);
+            var subject = await _db.Subjects.FirstOrDefaultAsync(s => s.Id == id);
             if (subject == null) return null;
 
             subject.Name = dto.Name.Trim();
@@ -70,7 +98,8 @@ namespace UniversityManagement.Application.Services
             subject.UpdatedAt = DateTime.UtcNow;
 
             await _subjectRepository.UpdateAsync(subject);
-            return subject;
+            
+            return await GetByIdAsync(id);
         }
 
         public async Task<bool> DeleteAsync(Guid id)
@@ -80,6 +109,26 @@ namespace UniversityManagement.Application.Services
 
             await _subjectRepository.DeleteAsync(subject);
             return true;
+        }
+
+        private SubjectResponseDto MapToResponseDto(Subject subject)
+        {
+            return new SubjectResponseDto
+            {
+                Id = subject.Id,
+                Name = subject.Name,
+                Code = subject.Code,
+                Description = subject.Description,
+                Credits = subject.Credits,
+                ProgramId = subject.ProgramId,
+                ProgramName = subject.Program?.Name ?? "Unknown",
+                TeacherId = subject.TeacherId,
+                TeacherName = subject.Teacher != null ? $"{subject.Teacher.FirstName} {subject.Teacher.LastName}" : "Unknown",
+                Semester = subject.Semester,
+                IsActive = subject.IsActive,
+                CreatedAt = subject.CreatedAt,
+                UpdatedAt = subject.UpdatedAt
+            };
         }
     }
 }

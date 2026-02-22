@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Input, Alert } from '../ui/UIComponents';
+import { Button, Input, Alert, Card, Badge } from '../ui/UIComponents';
 import authService from '../../utils/authService';
 
 const Login = ({ onLoginSuccess }) => {
@@ -29,25 +29,31 @@ const Login = ({ onLoginSuccess }) => {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-            {/* Background effects */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.15),_transparent_50%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.15),_transparent_50%)]" />
-
-            <div className="relative w-full max-w-md animate-scale-in">
-                {/* Logo/Header */}
+        <div className="min-h-screen flex items-center justify-center p-6 bg-slate-950">
+            <div className="relative w-full max-w-md z-10">
+                {/* Simplified Branding Section */}
                 <div className="text-center mb-8">
-                    <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-600/20 text-primary-400 shadow-glow mb-4">
-                        <span className="text-3xl font-bold">UM</span>
+                    <div className="inline-flex mb-6">
+                        <div className="h-20 w-20 items-center justify-center flex rounded-2xl bg-primary-600 shadow-lg">
+                            <span className="text-4xl font-black text-white">U</span>
+                        </div>
                     </div>
-                    <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-                    <p className="text-slate-400">Sign in to your university account</p>
+
+                    <div className="flex justify-center mb-4">
+                        <Badge variant="primary" className="px-4 py-1">university</Badge>
+                    </div>
+
+                    <h1 className="text-4xl font-black text-white tracking-tight mb-2">
+                        Welcome Back
+                    </h1>
+                    <p className="text-slate-500 text-xs tracking-widest uppercase font-bold">Sign in to your university account</p>
                 </div>
 
-                {/* Login Form */}
-                <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-8 backdrop-blur-sm">
+                {/* Authentication Card */}
+                <Card className="p-8 border border-slate-800 bg-slate-900">
                     {error && <Alert type="error" message={error} onClose={() => setError('')} className="mb-6" />}
 
-                    <form onSubmit={handleLogin} className="space-y-5">
+                    <form onSubmit={handleLogin} className="space-y-6">
                         <Input
                             label="Email Address"
                             type="email"
@@ -66,38 +72,38 @@ const Login = ({ onLoginSuccess }) => {
                             required
                         />
 
-                        <div className="flex items-center justify-between text-sm">
-                            <label className="flex items-center text-slate-400 cursor-pointer">
-                                <input type="checkbox" className="mr-2 rounded" />
-                                Remember me
+                        <div className="flex items-center justify-between">
+                            <label className="flex items-center text-slate-500 text-[10px] font-bold uppercase tracking-wider cursor-pointer">
+                                <input type="checkbox" className="mr-2 w-4 h-4 rounded border-slate-700 bg-slate-800 text-primary-600 focus:ring-primary-600" />
+                                <span>Remember me</span>
                             </label>
-                            <button type="button" className="text-primary-400 hover:text-primary-300 transition-colors">
+                            <button type="button" className="text-[10px] font-bold uppercase tracking-wider text-slate-500 hover:text-primary-400 transition-colors">
                                 Forgot password?
                             </button>
                         </div>
 
-                        <Button type="submit" className="w-full" disabled={loading}>
+                        <Button type="submit" className="w-full h-14 text-xs tracking-widest uppercase font-bold" disabled={loading}>
                             {loading ? 'Signing in...' : 'Sign In'}
                         </Button>
                     </form>
 
-                    <div className="mt-6 text-center">
-                        <p className="text-slate-400">
+                    <div className="mt-8 pt-6 border-t border-slate-800 text-center">
+                        <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">
                             Don't have an account?{' '}
                             <button
                                 type="button"
                                 onClick={() => setShowRegister(true)}
-                                className="text-primary-400 hover:text-primary-300 font-semibold transition-colors"
+                                className="text-primary-400 hover:text-white transition-colors ml-1 font-bold"
                             >
                                 Sign up
                             </button>
                         </p>
                     </div>
-                </div>
+                </Card>
 
                 {/* Footer info */}
-                <div className="mt-6 text-center text-sm text-slate-500">
-                    <p>University Management System </p>
+                <div className="mt-8 text-center">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-700">University Management System</p>
                 </div>
             </div>
         </div>
@@ -140,7 +146,6 @@ const Register = ({ onBack, onRegisterSuccess }) => {
                 formData.lastName,
                 formData.email,
                 formData.password
-                
             );
             onRegisterSuccess();
         } catch (err) {
@@ -151,27 +156,34 @@ const Register = ({ onBack, onRegisterSuccess }) => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.15),_transparent_50%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.15),_transparent_50%)]" />
-
-            <div className="relative w-full max-w-md animate-scale-in">
+        <div className="min-h-screen flex items-center justify-center p-6 bg-slate-950">
+            <div className="relative w-full max-w-lg z-10">
                 <div className="text-center mb-8">
-                    <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-600/20 text-primary-400 shadow-glow mb-4">
-                        <span className="text-3xl font-bold">UM</span>
+                    <div className="inline-flex mb-6">
+                        <div className="h-20 w-20 items-center justify-center flex rounded-2xl bg-accent-600 shadow-lg">
+                            <span className="text-4xl font-black text-white">U</span>
+                        </div>
                     </div>
-                    <h1 className="text-3xl font-bold text-white mb-2">Create Account</h1>
-                    <p className="text-slate-400">Join the university management system</p>
+
+                    <div className="flex justify-center mb-4">
+                        <Badge variant="warning" className="px-4 py-1">university</Badge>
+                    </div>
+
+                    <h1 className="text-4xl font-black text-white tracking-tight mb-2">
+                        Create Account
+                    </h1>
+                    <p className="text-slate-500 text-xs tracking-widest uppercase font-bold">Join the university management system</p>
                 </div>
 
-                <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-8 backdrop-blur-sm">
+                <Card className="p-8 border border-slate-800 bg-slate-900">
                     {error && <Alert type="error" message={error} onClose={() => setError('')} className="mb-6" />}
 
-                    <form onSubmit={handleRegister} className="space-y-5">
+                    <form onSubmit={handleRegister} className="space-y-6">
                         <div className="grid grid-cols-2 gap-4">
                             <Input
                                 label="First Name"
                                 name="firstName"
-                                placeholder="First name"
+                                placeholder="Name"
                                 value={formData.firstName}
                                 onChange={handleChange}
                                 required
@@ -179,7 +191,7 @@ const Register = ({ onBack, onRegisterSuccess }) => {
                             <Input
                                 label="Last Name"
                                 name="lastName"
-                                placeholder="Last name"
+                                placeholder="Surname"
                                 value={formData.lastName}
                                 onChange={handleChange}
                                 required
@@ -190,49 +202,53 @@ const Register = ({ onBack, onRegisterSuccess }) => {
                             label="Email Address"
                             type="email"
                             name="email"
-                            placeholder="Enter your email"
+                            placeholder="user@gmail.com"
                             value={formData.email}
                             onChange={handleChange}
                             required
                         />
 
-                        <Input
-                            label="Password"
-                            type="password"
-                            name="password"
-                            placeholder="Create a password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
+                        <div className="grid grid-cols-2 gap-4">
+                            <Input
+                                label="Password"
+                                type="password"
+                                name="password"
+                                placeholder="••••••"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                            />
+                            <Input
+                                label="Confirm Password"
+                                type="password"
+                                name="confirmPassword"
+                                placeholder="••••••"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
 
-                        <Input
-                            label="Confirm Password"
-                            type="password"
-                            name="confirmPassword"
-                            placeholder="Confirm your password"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            required
-                        />
-
-                        <Button type="submit" className="w-full" disabled={loading}>
+                        <Button type="submit" className="w-full h-14 text-xs tracking-widest uppercase font-bold" disabled={loading}>
                             {loading ? 'Creating account...' : 'Create Account'}
                         </Button>
                     </form>
 
-                    <div className="mt-6 text-center">
-                        <p className="text-slate-400">
+                    <div className="mt-8 pt-6 border-t border-slate-800 text-center">
+                        <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">
                             Already have an account?{' '}
                             <button
                                 type="button"
                                 onClick={onBack}
-                                className="text-primary-400 hover:text-primary-300 font-semibold transition-colors"
+                                className="text-primary-400 hover:text-white transition-colors ml-1 font-bold"
                             >
                                 Sign in
                             </button>
                         </p>
                     </div>
+                </Card>
+                <div className="mt-8 text-center">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-700">University Management System</p>
                 </div>
             </div>
         </div>

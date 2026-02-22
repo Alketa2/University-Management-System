@@ -7,6 +7,7 @@ public class TimetableResponseDto
     public string ProgramName { get; set; } = string.Empty;
     public Guid SubjectId { get; set; }
     public string SubjectName { get; set; } = string.Empty;
+    public string TeacherName { get; set; } = string.Empty;
     public int DayOfWeek { get; set; }
     public string DayOfWeekName { get; set; } = string.Empty;
     public TimeSpan StartTime { get; set; }

@@ -12,6 +12,10 @@ const resourceService = {
 
     deleteResource: async (id) => {
         return await apiClient.delete(`${API_BASE_URL}/CourseResources/${id}`);
+    },
+
+    updateResource: async (id, resourceData) => {
+        return await apiClient.put(`${API_BASE_URL}/CourseResources/${id}`, resourceData);
     }
 };
 

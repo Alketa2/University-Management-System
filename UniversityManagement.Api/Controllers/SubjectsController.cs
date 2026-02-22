@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UniversityManagement.Application.DTOs.Subject;
 using UniversityManagement.Application.DTOs.Subjects;
 using UniversityManagement.Application.Interfaces;
 
@@ -18,10 +19,13 @@ namespace UniversityManagement.Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<SubjectResponseDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
             => Ok(await _service.GetAllAsync());
 
         [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(SubjectResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
             var subject = await _service.GetByIdAsync(id);
@@ -30,11 +34,14 @@ namespace UniversityManagement.Api.Controllers
         }
 
         [HttpGet("program/{programId:guid}")]
+        [ProducesResponseType(typeof(List<SubjectResponseDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetByProgram(Guid programId)
             => Ok(await _service.GetByProgramIdAsync(programId));
 
         [HttpPost]
         [Authorize(Policy = "RequireTeacherOrAdmin")]
+        [ProducesResponseType(typeof(SubjectResponseDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] CreateSubjectDto dto)
         {
             try
@@ -51,6 +58,8 @@ namespace UniversityManagement.Api.Controllers
         
         [HttpPut("{id:guid}")]
         [Authorize(Policy = "RequireTeacherOrAdmin")]
+        [ProducesResponseType(typeof(SubjectResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateSubjectDto dto)
         {
             var updated = await _service.UpdateAsync(id, dto);
@@ -61,6 +70,8 @@ namespace UniversityManagement.Api.Controllers
        
         [HttpDelete("{id:guid}")]
         [Authorize(Policy = "RequireTeacherOrAdmin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(Guid id)
         {
             var ok = await _service.DeleteAsync(id);

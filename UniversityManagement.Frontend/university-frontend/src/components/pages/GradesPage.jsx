@@ -47,7 +47,9 @@ const GradesPage = () => {
             const examsData = results[1];
             const studentsData = isStudent ? [] : results[2];
 
-            setSubjects(subjectsData);
+            setSubjects(isStudent && currentUser?.primaryProgramId
+                ? subjectsData.filter(s => s.programId === currentUser.primaryProgramId)
+                : subjectsData);
             setExams(examsData);
 
             // Load grades if a subject is selected
@@ -77,7 +79,10 @@ const GradesPage = () => {
         }
     };
 
-    const handleSubjectChange = async (subjectId) => {
+    const handleSubjectChange = async (subId) => {
+        // Handle "undefined" string if it comes from the select component
+        const subjectId = subId === 'undefined' ? '' : subId;
+
         setFilterSubject(subjectId);
         if (isStudent) {
             return;
@@ -131,22 +136,29 @@ const GradesPage = () => {
         return variants[letterGrade] || 'default';
     };
 
-    const filteredGrades = grades.filter(grade =>
-        (!filterStudent || grade.studentId === filterStudent) &&
-        (!filterSubject || grade.subjectId === filterSubject)
-    );
+    const filteredGrades = grades.filter(grade => {
+        const matchesStudent = !filterStudent || grade.studentId === filterStudent;
+        const matchesSubject = !filterSubject || filterSubject === 'undefined' || grade.subjectId === filterSubject;
+
+        if (isStudent && currentUser?.primaryProgramId) {
+            const subject = subjects.find(s => s.id === grade.subjectId);
+            return matchesStudent && matchesSubject && (!subject || subject.programId === currentUser.primaryProgramId);
+        }
+
+        return matchesStudent && matchesSubject;
+    });
 
     // Grade distribution stats
     const gradeDistribution = {
-        A: grades.filter(g => g.letterGrade === 'A').length,
-        B: grades.filter(g => g.letterGrade === 'B').length,
-        C: grades.filter(g => g.letterGrade === 'C').length,
-        D: grades.filter(g => g.letterGrade === 'D').length,
-        F: grades.filter(g => g.letterGrade === 'F').length,
+        A: filteredGrades.filter(g => g.letterGrade === 'A').length,
+        B: filteredGrades.filter(g => g.letterGrade === 'B').length,
+        C: filteredGrades.filter(g => g.letterGrade === 'C').length,
+        D: filteredGrades.filter(g => g.letterGrade === 'D').length,
+        F: filteredGrades.filter(g => g.letterGrade === 'F').length,
     };
 
-    const averageGPA = grades.length > 0
-        ? (grades.reduce((sum, g) => sum + g.gradePoint, 0) / grades.length).toFixed(2)
+    const averageGPA = filteredGrades.length > 0
+        ? (filteredGrades.reduce((sum, g) => sum + g.gradePoint, 0) / filteredGrades.length).toFixed(2)
         : '0.00';
 
     if (loading) {
@@ -196,7 +208,13 @@ const GradesPage = () => {
                         options={[
                             { value: '', label: isTeacher ? 'Select Subject' : 'All Subjects' },
                             ...subjects
-                                .filter(s => !isTeacher || s.teacherId === currentUser?.teacherId)
+                                .filter(s => {
+                                    if (isTeacher) return s.teacherId === currentUser?.teacherId;
+                                    if (isStudent && currentUser?.primaryProgramId) {
+                                        return s.programId === currentUser.primaryProgramId;
+                                    }
+                                    return true;
+                                })
                                 .map(s => ({ value: s.id, label: `${s.code} - ${s.name}` }))
                         ]}
                     />
@@ -209,9 +227,23 @@ const GradesPage = () => {
                                 { value: '', label: 'All Students' },
                                 ...students
                                     .filter(s => {
-                                        if (!filterSubject) return true;
-                                        const subject = subjects.find(sub => sub.id === filterSubject);
-                                        return s.primaryProgramId === subject?.programId;
+                                        // 1. If subject is selected, only show students from that subject's program
+                                        if (filterSubject && filterSubject !== 'undefined') {
+                                            const subject = subjects.find(sub => sub.id === filterSubject);
+                                            return s.primaryProgramId === subject?.programId;
+                                        }
+
+                                        // 2. For teachers, if no subject selected, only show students from programs they teach in
+                                        if (isTeacher) {
+                                            const teacherProgramIds = Array.from(new Set(subjects
+                                                .filter(sub => sub.teacherId === currentUser?.teacherId)
+                                                .map(sub => sub.programId)
+                                            ));
+                                            return teacherProgramIds.includes(s.primaryProgramId);
+                                        }
+
+                                        // 3. For admins/others, show all students
+                                        return true;
                                     })
                                     .map(s => ({ value: s.id, label: `${s.firstName} ${s.lastName}` }))
                             ]}
@@ -555,8 +587,22 @@ const GradeModal = ({ isOpen, onClose, grade, students, subjects, exams, onSucce
 
     // Filter students based on subject's program
     const filteredStudentsList = students.filter(st => {
-        if (!formData.subjectId || !selectedSubject?.programId) return true;
-        return st.primaryProgramId === selectedSubject.programId;
+        // 1. If subject is selected, only show students from that subject's program
+        if (formData.subjectId && selectedSubject?.programId) {
+            return st.primaryProgramId === selectedSubject.programId;
+        }
+
+        // 2. For teachers, only show students from programs they teach in
+        if (currentUser?.role === 'Teacher') {
+            const teacherProgramIds = Array.from(new Set(subjects
+                .filter(sub => sub.teacherId === currentUser?.teacherId)
+                .map(sub => sub.programId)
+            ));
+            return teacherProgramIds.includes(st.primaryProgramId);
+        }
+
+        // 3. For admins/others, show all students
+        return true;
     });
 
     // Filter exams by selected subject
@@ -574,7 +620,10 @@ const GradeModal = ({ isOpen, onClose, grade, students, subjects, exams, onSucce
                 <Select
                     label="Student"
                     value={formData.studentId}
-                    onChange={(e) => setFormData({ ...formData, studentId: e.target.value })}
+                    onChange={(e) => {
+                        const val = e.target.value === 'undefined' ? '' : e.target.value;
+                        setFormData({ ...formData, studentId: val });
+                    }}
                     options={[
                         { value: '', label: 'Select Student' },
                         ...filteredStudentsList.map(s => ({
@@ -588,7 +637,10 @@ const GradeModal = ({ isOpen, onClose, grade, students, subjects, exams, onSucce
                 <Select
                     label="Subject"
                     value={formData.subjectId}
-                    onChange={(e) => setFormData({ ...formData, subjectId: e.target.value, examId: '' })}
+                    onChange={(e) => {
+                        const val = e.target.value === 'undefined' ? '' : e.target.value;
+                        setFormData({ ...formData, subjectId: val, examId: '' });
+                    }}
                     options={[
                         { value: '', label: 'Select Subject' },
                         ...filteredSubjects.map(s => ({
@@ -602,7 +654,10 @@ const GradeModal = ({ isOpen, onClose, grade, students, subjects, exams, onSucce
                 <Select
                     label="Exam (Optional)"
                     value={formData.examId}
-                    onChange={(e) => setFormData({ ...formData, examId: e.target.value })}
+                    onChange={(e) => {
+                        const val = e.target.value === 'undefined' ? '' : e.target.value;
+                        setFormData({ ...formData, examId: val });
+                    }}
                     options={[
                         { value: '', label: 'Overall Grade' },
                         ...filteredExams.map(e => ({ value: e.id, label: e.name }))
@@ -766,7 +821,10 @@ const BulkGradeModal = ({ isOpen, onClose, students, subjects, exams, onSuccess 
                     <Select
                         label="Subject"
                         value={selectedSubject}
-                        onChange={(e) => setSelectedSubject(e.target.value)}
+                        onChange={(e) => {
+                            const val = e.target.value === 'undefined' ? '' : e.target.value;
+                            setSelectedSubject(val);
+                        }}
                         options={[
                             { value: '', label: 'Select Subject' },
                             ...subjects

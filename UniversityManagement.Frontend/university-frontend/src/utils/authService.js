@@ -28,13 +28,28 @@ class AuthService {
         localStorage.setItem(this.TOKEN_KEY, authResponse.accessToken);
         localStorage.setItem(this.REFRESH_TOKEN_KEY, authResponse.refreshToken);
         localStorage.setItem(this.USER_KEY, JSON.stringify({
-            id: authResponse.userId || null,
+            userId: authResponse.userId || null,
             email: authResponse.email,
+            firstName: authResponse.firstName,
+            lastName: authResponse.lastName,
+            phone: authResponse.phone,
+            address: authResponse.address,
             role: authResponse.role,
             primaryProgramId: authResponse.primaryProgramId || null,
             studentId: authResponse.studentId || null,
             teacherId: authResponse.teacherId || null,
         }));
+    }
+
+    // Update stored user data
+    updateUserData(newData) {
+        const currentUser = this.getUser();
+        if (currentUser) {
+            localStorage.setItem(this.USER_KEY, JSON.stringify({
+                ...currentUser,
+                ...newData
+            }));
+        }
     }
 
     // Clear authentication data

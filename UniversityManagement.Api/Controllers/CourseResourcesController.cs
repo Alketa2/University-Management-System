@@ -44,6 +44,21 @@ public class CourseResourcesController : ControllerBase
     }
 
     [Authorize(Roles = "Admin,Teacher")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(string id, CourseResource resource)
+    {
+        try
+        {
+            await _resourceService.UpdateResourceAsync(id, resource);
+            return Ok(resource);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = "Error updating resource", details = ex.Message });
+        }
+    }
+
+    [Authorize(Roles = "Admin,Teacher")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {

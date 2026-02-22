@@ -28,8 +28,18 @@ const ExamsPage = () => {
                 apiClient.get(API_ENDPOINTS.EXAMS.BASE),
                 apiClient.get(API_ENDPOINTS.SUBJECTS.BASE)
             ]);
-            setExams(examsData);
-            setSubjects(subjectsData);
+            const currentUser = authService.getUser();
+            const studentProgramId = currentUser?.primaryProgramId;
+
+            if (isStudent && studentProgramId) {
+                const programSubjects = subjectsData.filter(s => s.programId === studentProgramId);
+                const programSubjectIds = programSubjects.map(s => s.id);
+                setExams(examsData.filter(e => programSubjectIds.includes(e.subjectId)));
+                setSubjects(programSubjects);
+            } else {
+                setExams(examsData);
+                setSubjects(subjectsData);
+            }
         } catch (err) {
             setError(err.message || 'Failed to fetch data');
         } finally {
@@ -182,7 +192,6 @@ const ExamsPage = () => {
                         <thead>
                             <tr className="border-b border-slate-800">
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Name</th>
-                                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Type</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Subject</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Date</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Time</th>
@@ -211,9 +220,6 @@ const ExamsPage = () => {
                                                 {exam.location && (
                                                     <p className="text-sm text-slate-400 mt-1">📍 {exam.location}</p>
                                                 )}
-                                            </td>
-                                            <td className="py-4 px-4">
-                                                <Badge variant="default">{getExamTypeLabel(exam.examType)}</Badge>
                                             </td>
                                             <td className="py-4 px-4 text-slate-300">{getSubjectName(exam.subjectId)}</td>
                                             <td className="py-4 px-4">
@@ -400,18 +406,6 @@ const ExamModal = ({ isOpen, onClose, exam, subjects, onSuccess }) => {
                         options={[
                             { value: '', label: 'Select Subject' },
                             ...subjects.map(s => ({ value: s.id, label: `${s.code} - ${s.name}` }))
-                        ]}
-                        required
-                    />
-                    <Select
-                        label="Exam Type"
-                        value={formData.examType}
-                        onChange={(e) => setFormData({ ...formData, examType: e.target.value })}
-                        options={[
-                            { value: '1', label: 'Midterm' },
-                            { value: '2', label: 'Final' },
-                            { value: '3', label: 'Quiz' },
-                            { value: '4', label: 'Assignment' }
                         ]}
                         required
                     />

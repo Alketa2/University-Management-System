@@ -1,19 +1,19 @@
 export const Button = ({ children, variant = 'primary', size = 'md', className = '', onClick, type = 'button', disabled = false }) => {
-    const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed';
+    const baseStyles = 'inline-flex items-center justify-center font-bold rounded-2xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95';
 
     const variants = {
-        primary: 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg shadow-primary-600/30 focus:ring-primary-500',
-        secondary: 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 focus:ring-slate-500',
-        success: 'bg-success-600 hover:bg-success-700 text-white shadow-lg shadow-success-600/30 focus:ring-success-500',
-        danger: 'bg-danger-600 hover:bg-danger-700 text-white shadow-lg shadow-danger-600/30 focus:ring-danger-500',
-        outline: 'border-2 border-primary-600 text-primary-400 hover:bg-primary-600/10 focus:ring-primary-500',
-        ghost: 'text-slate-300 hover:bg-slate-800 hover:text-white focus:ring-slate-500',
+        primary: 'bg-primary-600 hover:bg-primary-500 text-white shadow-lg shadow-primary-600/20 hover:shadow-primary-600/40 focus:ring-primary-500',
+        secondary: 'bg-white/5 hover:bg-white/10 text-white border border-white/10 focus:ring-slate-500 backdrop-blur-md',
+        success: 'bg-success-600 hover:bg-success-500 text-white shadow-lg shadow-success-600/20 focus:ring-success-500',
+        danger: 'bg-danger-600 hover:bg-danger-500 text-white shadow-lg shadow-danger-600/20 focus:ring-danger-500',
+        outline: 'border-2 border-primary-500/50 text-white hover:bg-primary-500/10 focus:ring-primary-500',
+        ghost: 'text-slate-400 hover:text-white hover:bg-white/5 focus:ring-slate-500',
     };
 
     const sizes = {
-        sm: 'px-3 py-1.5 text-sm',
-        md: 'px-5 py-2.5 text-base',
-        lg: 'px-6 py-3 text-lg',
+        sm: 'px-4 py-2 text-xs tracking-wider uppercase',
+        md: 'px-6 py-3 text-sm tracking-widest uppercase',
+        lg: 'px-8 py-4 text-base tracking-widest uppercase',
     };
 
     return (
@@ -32,17 +32,17 @@ export const Input = ({ label, error, className = '', ...props }) => {
     return (
         <div className="w-full">
             {label && (
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-slate-500 mb-3 ml-1">
                     {label}
                 </label>
             )}
             <input
-                className={`w-full px-4 py-2.5 bg-slate-900 border ${error ? 'border-danger-500' : 'border-slate-700'
-                    } rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${className}`}
+                className={`w-full px-5 py-4 bg-white/5 border ${error ? 'border-danger-500' : 'border-white/10'
+                    } rounded-2xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 backdrop-blur-lg ${className}`}
                 {...props}
             />
             {error && (
-                <p className="mt-1.5 text-sm text-danger-400">{error}</p>
+                <p className="mt-2 text-xs font-bold text-danger-400 ml-1">{error}</p>
             )}
         </div>
     );
@@ -52,23 +52,23 @@ export const Select = ({ label, error, options, className = '', ...props }) => {
     return (
         <div className="w-full">
             {label && (
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-slate-500 mb-3 ml-1">
                     {label}
                 </label>
             )}
             <select
-                className={`w-full px-4 py-2.5 bg-slate-900 border ${error ? 'border-danger-500' : 'border-slate-700'
-                    } rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${className}`}
+                className={`w-full px-5 py-4 bg-white/5 border ${error ? 'border-danger-500' : 'border-white/10'
+                    } rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 backdrop-blur-lg appearance-none ${className}`}
                 {...props}
             >
                 {options.map((option) => (
-                    <option key={option.value} value={option.value}>
+                    <option key={option.value} value={option.value} className="bg-slate-900">
                         {option.label}
                     </option>
                 ))}
             </select>
             {error && (
-                <p className="mt-1.5 text-sm text-danger-400">{error}</p>
+                <p className="mt-2 text-xs font-bold text-danger-400 ml-1">{error}</p>
             )}
         </div>
     );
@@ -77,8 +77,8 @@ export const Select = ({ label, error, options, className = '', ...props }) => {
 export const Card = ({ children, className = '', hover = false }) => {
     return (
         <div
-            className={`bg-slate-900/70 border border-slate-800 rounded-2xl p-6 ${hover ? 'hover:border-slate-700 hover:shadow-lg transition-all duration-300' : ''
-                } ${className}`}
+            className={`glass-card rounded-[2rem] p-8 ${hover ? 'hover:scale-[1.02] hover:shadow-glow-primary' : ''
+                } transition-all duration-500 ${className}`}
         >
             {children}
         </div>
@@ -87,15 +87,15 @@ export const Card = ({ children, className = '', hover = false }) => {
 
 export const Badge = ({ children, variant = 'default', className = '' }) => {
     const variants = {
-        default: 'bg-slate-800 text-slate-300',
-        primary: 'bg-primary-600/20 text-primary-400 border border-primary-600/30',
-        success: 'bg-success-600/20 text-success-400 border border-success-600/30',
-        warning: 'bg-warning-600/20 text-warning-400 border border-warning-600/30',
-        danger: 'bg-danger-600/20 text-danger-400 border border-danger-600/30',
+        default: 'bg-white/5 text-slate-400 border border-white/10',
+        primary: 'bg-primary-500/10 text-primary-400 border border-primary-500/20 shadow-glow',
+        success: 'bg-success-500/10 text-success-400 border border-success-500/20',
+        warning: 'bg-warning-500/10 text-warning-400 border border-warning-500/20',
+        danger: 'bg-danger-500/10 text-danger-400 border border-danger-500/20',
     };
 
     return (
-        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${variants[variant]} ${className}`}>
+        <span className={`inline-flex items-center px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest ${variants[variant]} ${className}`}>
             {children}
         </span>
     );

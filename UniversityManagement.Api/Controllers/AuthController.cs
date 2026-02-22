@@ -101,6 +101,10 @@ public class AuthController : ControllerBase
             StudentId = studentId,
             TeacherId = teacherId,
             Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Phone = user.Phone,
+            Address = user.Address,
             Role = user.Role,
             AccessToken = access,
             AccessTokenExpiresAtUtc = accessExpires,
@@ -145,6 +149,10 @@ public class AuthController : ControllerBase
             StudentId = studentId,
             TeacherId = teacherId,
             Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Phone = user.Phone,
+            Address = user.Address,
             Role = user.Role,
             AccessToken = access,
             AccessTokenExpiresAtUtc = accessExpires,
@@ -214,6 +222,10 @@ public class AuthController : ControllerBase
             StudentId = studentId,
             TeacherId = teacherId,
             Email = token.AppUser.Email,
+            FirstName = token.AppUser.FirstName,
+            LastName = token.AppUser.LastName,
+            Phone = token.AppUser.Phone,
+            Address = token.AppUser.Address,
             Role = token.AppUser.Role,
             AccessToken = access,
             AccessTokenExpiresAtUtc = accessExpires,
@@ -251,9 +263,11 @@ public class AuthController : ControllerBase
         if (user == null) return NotFound("User not found");
 
         // Update core user
+        user.FirstName = dto.FirstName;
+        user.LastName = dto.LastName;
         user.Email = dto.Email;
-        // Phone and Address are not in AppUser yet, let's skip or add them if needed.
-        // Actually Student/Teacher have them.
+        user.Phone = dto.Phone;
+        user.Address = dto.Address;
         user.UpdatedAt = DateTime.UtcNow;
 
         // Sync with Profile
@@ -262,6 +276,8 @@ public class AuthController : ControllerBase
             var student = await _db.Students.FirstOrDefaultAsync(s => s.Email == email);
             if (student != null)
             {
+                student.FirstName = dto.FirstName;
+                student.LastName = dto.LastName;
                 student.Email = dto.Email;
                 student.Phone = dto.Phone;
                 student.Address = dto.Address;
@@ -273,6 +289,8 @@ public class AuthController : ControllerBase
             var teacher = await _db.Teachers.FirstOrDefaultAsync(t => t.Email == email);
             if (teacher != null)
             {
+                teacher.FirstName = dto.FirstName;
+                teacher.LastName = dto.LastName;
                 teacher.Email = dto.Email;
                 teacher.Phone = dto.Phone;
                 teacher.UpdatedAt = DateTime.UtcNow;

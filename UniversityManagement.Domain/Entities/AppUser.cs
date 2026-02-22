@@ -21,6 +21,12 @@ public class AppUser : BaseEntity
 
     [Required, MaxLength(50)]
     public string Role { get; set; } = "Student";
+    
+    [MaxLength(20)]
+    public string? Phone { get; set; }
+    
+    [MaxLength(500)]
+    public string? Address { get; set; }
 
     public bool IsActive { get; set; } = true;
 

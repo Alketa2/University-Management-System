@@ -64,16 +64,14 @@
   --color-danger-800: #991b1b;
   --color-danger-900: #7f1d1d;
 
-  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
-  --shadow-glow-lg: 0 0 40px rgba(99, 102, 241, 0.4);
-  --shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.2);
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 25px rgba(14, 165, 233, 0.2);
+  --shadow-glow-primary: 0 0 50px rgba(14, 165, 233, 0.5);
+  --shadow-premium: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  --shadow-glass: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 
-  --animate-fade-in: fadeIn 0.3s ease-in-out;
-  --animate-slide-up: slideUp 0.4s ease-out;
-  --animate-slide-down: slideDown 0.4s ease-out;
-  --animate-scale-in: scaleIn 0.3s ease-out;
-  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-fade-in: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-up: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-float: float 6s ease-in-out infinite;
 }
 
 @layer base {
@@ -87,40 +85,98 @@
 
   body {
     margin: 0;
-    background-color: rgb(2 6 23);
+    background: radial-gradient(circle at top right, #0f172a, #020617),
+      radial-gradient(circle at bottom left, #1e1b4b, #020617);
     color: white;
     font-family: var(--font-sans);
+    min-height: 100vh;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@utility glass-panel {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-glass);
+}
+
+@utility glass-card {
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow-premium);
+  position: relative;
+  overflow: hidden;
+}
+
+@utility mesh-gradient {
+  background-color: #020617;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.3) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(217, 70, 239, 0.25) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.25) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(217, 70, 239, 0.3) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+@utility noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+@utility gradient-text {
+  background: linear-gradient(135deg,
+      #38bdf8 0%,
+      #e879f9 50%,
+      #38bdf8 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradientFlow 6s linear infinite;
+}
+
+@utility animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@utility animate-spin-slow {
+  animation: spin 8s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
   }
 
-  .gradient-text {
-    background: linear-gradient(to right, var(--color-primary-400), var(--color-accent-400), var(--color-primary-600));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
   }
 
-  .shadow-glow {
-    box-shadow: var(--shadow-glow);
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% center;
   }
 
-  .shadow-glow-lg {
-    box-shadow: var(--shadow-glow-lg);
-  }
-
-  .shadow-premium {
-    box-shadow: var(--shadow-premium);
-  }
-
-  .shadow-card {
-    box-shadow: var(--shadow-card);
+  100% {
+    background-position: 200% center;
   }
 }
 

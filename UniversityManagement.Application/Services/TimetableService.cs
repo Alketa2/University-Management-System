@@ -11,15 +11,18 @@ public class TimetableService : ITimetableService
     private readonly ITimetableRepository _timetableRepository;
     private readonly IRepository<Program> _programRepository;
     private readonly IRepository<Subject> _subjectRepository;
+    private readonly IRepository<Teacher> _teacherRepository;
 
     public TimetableService(
         ITimetableRepository timetableRepository,
         IRepository<Program> programRepository,
-        IRepository<Subject> subjectRepository)
+        IRepository<Subject> subjectRepository,
+        IRepository<Teacher> teacherRepository)
     {
         _timetableRepository = timetableRepository;
         _programRepository = programRepository;
         _subjectRepository = subjectRepository;
+        _teacherRepository = teacherRepository;
     }
 
     public async Task<TimetableResponseDto> CreateTimetableAsync(CreateTimetableDto createTimetableDto)
@@ -141,6 +144,16 @@ public class TimetableService : ITimetableService
     {
         var program = await _programRepository.GetByIdAsync(timetable.ProgramId);
         var subject = await _subjectRepository.GetByIdAsync(timetable.SubjectId);
+        string teacherName = string.Empty;
+
+        if (subject != null)
+        {
+            var teacher = await _teacherRepository.GetByIdAsync(subject.TeacherId);
+            if (teacher != null)
+            {
+                teacherName = $"{teacher.FirstName} {teacher.LastName}";
+            }
+        }
 
         return new TimetableResponseDto
         {
@@ -149,6 +162,7 @@ public class TimetableService : ITimetableService
             ProgramName = program?.Name ?? string.Empty,
             SubjectId = timetable.SubjectId,
             SubjectName = subject?.Name ?? string.Empty,
+            TeacherName = teacherName,
             DayOfWeek = (int)timetable.DayOfWeek,
             DayOfWeekName = timetable.DayOfWeek.ToString(),
             StartTime = timetable.StartTime,

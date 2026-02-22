@@ -38,10 +38,20 @@ const ProfilePage = () => {
                 // Admin might not have a student/teacher profile
                 const user = authService.getUser();
                 setProfile({
+                    id: user.userId, // use userId from auth token info if available
                     firstName: user.firstName,
                     lastName: user.lastName,
                     email: user.email,
+                    phone: user.phone || '',
+                    address: user.address || '',
                     role: user.role
+                });
+                setFormData({
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    phone: user.phone || '',
+                    address: user.address || '',
                 });
             }
         } catch (err) {
@@ -74,6 +84,7 @@ const ProfilePage = () => {
                 }
 
                 setProfile(formData);
+                authService.updateUserData(formData);
                 setIsEditing(false);
             }
         } catch (err) {
@@ -149,13 +160,13 @@ const ProfilePage = () => {
                             label="First Name"
                             value={formData?.firstName || ''}
                             onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                            disabled={!isEditing || true} // Don't allow name change in self-service usually
+                            disabled={!isEditing}
                         />
                         <Input
                             label="Last Name"
                             value={formData?.lastName || ''}
                             onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                            disabled={!isEditing || true}
+                            disabled={!isEditing}
                         />
                         <Input
                             label="Email Address"

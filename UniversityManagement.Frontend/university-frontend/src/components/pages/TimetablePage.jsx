@@ -61,9 +61,18 @@ const TimetablePage = () => {
     };
 
     const filteredTimetables = timetables.filter(timetable => {
-        const matchesSearch = getProgramName(timetable.programId)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            getSubjectName(timetable.subjectId)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            timetable.dayOfWeek?.toLowerCase().includes(searchTerm.toLowerCase());
+        const programTitle = (timetable.programName || getProgramName(timetable.programId) || '').toString().toLowerCase();
+        const subjectTitle = (timetable.subjectName || getSubjectName(timetable.subjectId) || '').toString().toLowerCase();
+        const dayText = (timetable.dayOfWeekName || timetable.dayOfWeek || '').toString().toLowerCase();
+        const teacherText = (timetable.teacherName || '').toString().toLowerCase();
+        const roomText = (timetable.room || timetable.roomNumber || '').toString().toLowerCase();
+        const searchLower = (searchTerm || '').toLowerCase();
+
+        const matchesSearch = programTitle.includes(searchLower) ||
+            subjectTitle.includes(searchLower) ||
+            dayText.includes(searchLower) ||
+            teacherText.includes(searchLower) ||
+            roomText.includes(searchLower);
 
         // Filter by program for students
         if (isStudent) {
@@ -87,7 +96,7 @@ const TimetablePage = () => {
     const todayName = daysOfWeek[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
 
     const todayClasses = timetables.filter(t => {
-        const isToday = t.dayOfWeek === todayName;
+        const isToday = (t.dayOfWeekName || t.dayOfWeek) === todayName;
 
         if (isStudent) {
             const currentUser = authService.getUser();
@@ -204,6 +213,7 @@ const TimetablePage = () => {
                             <tr className="border-b border-slate-800">
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Day</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Subject</th>
+                                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Teacher</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Program</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Time</th>
                                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-300">Room</th>
@@ -222,12 +232,14 @@ const TimetablePage = () => {
                             ) : (
                                 filteredTimetables
                                     .sort((a, b) => {
-                                        const dayOrder = daysOfWeek.indexOf(a.dayOfWeek) - daysOfWeek.indexOf(b.dayOfWeek);
+                                        const dayA = a.dayOfWeekName || a.dayOfWeek;
+                                        const dayB = b.dayOfWeekName || b.dayOfWeek;
+                                        const dayOrder = daysOfWeek.indexOf(dayA) - daysOfWeek.indexOf(dayB);
                                         if (dayOrder !== 0) return dayOrder;
-                                        return (a.startTime || '').localeCompare(b.startTime || '');
+                                        return (a.startTime || '').toString().localeCompare((b.startTime || '').toString());
                                     })
                                     .map((timetable) => {
-                                        const isToday = timetable.dayOfWeek === todayName;
+                                        const isToday = (timetable.dayOfWeekName || timetable.dayOfWeek) === todayName;
 
                                         return (
                                             <tr
@@ -237,16 +249,19 @@ const TimetablePage = () => {
                                             >
                                                 <td className="py-4 px-4">
                                                     <Badge variant={isToday ? 'primary' : 'default'}>
-                                                        {timetable.dayOfWeek || 'N/A'}
+                                                        {timetable.dayOfWeekName || timetable.dayOfWeek || 'N/A'}
                                                     </Badge>
                                                 </td>
                                                 <td className="py-4 px-4">
-                                                    <p className="font-medium text-white">{getSubjectName(timetable.subjectId)}</p>
+                                                    <p className="font-medium text-white">{timetable.subjectName || getSubjectName(timetable.subjectId)}</p>
                                                 </td>
                                                 <td className="py-4 px-4 text-slate-300">
-                                                    {getProgramName(timetable.programId)}
+                                                    {timetable.teacherName || 'N/A'}
                                                 </td>
                                                 <td className="py-4 px-4 text-slate-300">
+                                                    {timetable.programName || getProgramName(timetable.programId)}
+                                                </td>
+                                                <td className="py-4 px-4 text-slate-300 text-sm">
                                                     {timetable.startTime} - {timetable.endTime}
                                                 </td>
                                                 <td className="py-4 px-4 text-slate-300">
